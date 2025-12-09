@@ -42,7 +42,18 @@ const services = [
 const Page = () => {
   return (
     <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-foreground">Our Services</h1>
+         <div className="text-center mb-12 mt-5">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+              <Wrench className="w-4 h-4" />
+              Our Services
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Premium Car Care Services
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              From routine maintenance to complex repairs, we've got your car covered with expert service and genuine parts.
+            </p>
+          </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, index) => (
                 <ServiceCard key={index} {...service} />
