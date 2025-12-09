@@ -27,10 +27,10 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-[#0F52BA] ${
+                className={`text-sm font-medium transition-colors hover:text-primary ${
                   item.href === "/"
-                    ? "text-[#0F52BA] underline underline-offset-4"
-                    : "text-[#222222]"
+                    ? "text-primary underline underline-offset-4"
+                    : "text-foreground"
                 }`}
               >
                 {item.label}
@@ -43,11 +43,11 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="h-9 w-9">
               <Moon className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" className="text-[#222222]">
+            <Button variant="ghost" className="text-foreground">
               <LogIn className="h-4 w-4 mr-2" />
               Login
             </Button>
-            <Button className="bg-[#0F52BA] hover:bg-[#0F52BA]/90 text-white">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
               Get Started
             </Button>
           </div>

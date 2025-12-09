@@ -1,7 +1,7 @@
 export function HeroIllustration() {
   return (
     <div className="relative w-full h-full flex items-center justify-center">
-      <div className="relative w-full max-w-lg aspect-square bg-gradient-to-br from-[#639FAB]/20 to-[#89BD2C]/10 rounded-3xl p-8 flex items-center justify-center">
+      <div className="relative w-full max-w-lg aspect-square bg-gradient-to-br from-secondary/20 to-primary/10 rounded-3xl p-8 flex items-center justify-center">
         {/* SVG Illustration */}
         <svg
           viewBox="0 0 400 400"
@@ -11,8 +11,8 @@ export function HeroIllustration() {
           {/* Background elements */}
           <defs>
             <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#639FAB" />
-              <stop offset="100%" stopColor="#0F52BA" />
+              <stop offset="0%" stopColor="#0F52BA" />
+              <stop offset="100%" stopColor="#89BD2C" />
             </linearGradient>
           </defs>
 
@@ -69,7 +69,7 @@ export function HeroIllustration() {
             width="40"
             height="80"
             rx="5"
-            fill="#0F52BA"
+            fill="#89BD2C"
           />
           {/* Toolbox in trunk */}
           <rect
@@ -96,7 +96,7 @@ export function HeroIllustration() {
               width="30"
               height="50"
               rx="5"
-              fill="#639FAB"
+              fill="#0F52BA"
             />
             
             {/* Arms */}
