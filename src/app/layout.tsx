@@ -12,6 +12,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "MyMechanika",
   description: "Your trusted partner for all your mechanical needs.",
+   icons: {
+    icon: "/icon.png"
+  },
 };
 
 export default function RootLayout({
