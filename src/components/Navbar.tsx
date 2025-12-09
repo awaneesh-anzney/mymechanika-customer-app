@@ -4,6 +4,7 @@ import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { Moon, LogIn } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -14,6 +15,8 @@ const navItems = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,7 +31,7 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
-                  item.href === "/"
+                  pathname === item.href
                     ? "text-primary underline underline-offset-4"
                     : "text-foreground"
                 }`}
