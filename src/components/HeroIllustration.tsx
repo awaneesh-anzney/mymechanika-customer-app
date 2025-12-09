@@ -48,7 +48,7 @@ export function HeroIllustration() {
 
   return (
     <div className="relative w-full h-full flex items-center justify-center p-4">
-      <div className="relative w-full max-w-lg aspect-square bg-linear-to-br from-secondary/20 to-primary/10 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="relative w-full h-128 bg-linear-to-br from-secondary/20 to-primary/10 rounded-3xl overflow-hidden shadow-2xl">
         {/* Slides */}
         <div className="absolute inset-0 w-full h-full">
           {slides.map((slide, index) => (
