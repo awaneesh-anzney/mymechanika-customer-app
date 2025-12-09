@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import LocationSearch from "./locations/LocationSearch";
 
 export function HeroSection() {
   return (
@@ -31,35 +32,13 @@ export function HeroSection() {
       </div>
 
       {/* Location Input */}
-      <div className="flex flex-col sm:flex-row gap-3 max-w-2xl">
-        <div className="flex-1 relative">
-          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary" />
-          <Input
-            type="text"
-            placeholder="Enter your location..."
-            className="pl-10 h-12 border-gray-300 focus:border-primary focus:ring-primary"
-          />
-        </div>
-        <Select>
-          <SelectTrigger className="w-full sm:w-[120px] h-12 border-gray-300">
-            <SelectValue placeholder="Detect" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="auto">Auto Detect</SelectItem>
-            <SelectItem value="manual">Manual</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button className="h-12 bg-primary hover:bg-primary/90 text-primary-foreground px-6">
-          <Search className="h-5 w-5 mr-2" />
-          Find Services
-        </Button>
-      </div>
-
+       <LocationSearch />
+       
       {/* CTA Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
         <Button
           size="lg"
-          className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground px-8 h-12"
+          className="bg-linear-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground px-8 h-12"
         >
           Book Service
           <ArrowRight className="h-5 w-5 ml-2" />

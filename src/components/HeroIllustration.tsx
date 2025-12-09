@@ -1,186 +1,110 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+import CarImage from "@/assets/car-image.png";
+import CarImage1 from "@/assets/car-image1.png";
+import CarImage2 from "@/assets/car-image2.png";
+
+const slides = [
+  {
+    id: 1,
+    image: CarImage,
+    alt: "Professional Car Service",
+  },
+  {
+    id: 2,
+    image: CarImage1,
+    alt: "Expert Mechanics",
+  },
+  {
+    id: 3,
+    image: CarImage2,
+    alt: "Quality Auto Parts",
+  },
+];
+
 export function HeroIllustration() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
-      <div className="relative w-full max-w-lg aspect-square bg-gradient-to-br from-secondary/20 to-primary/10 rounded-3xl p-8 flex items-center justify-center">
-        {/* SVG Illustration */}
-        <svg
-          viewBox="0 0 400 400"
-          className="w-full h-full"
-          xmlns="http://www.w3.org/2000/svg"
+    <div className="relative w-full h-full flex items-center justify-center p-4">
+      <div className="relative w-full max-w-lg aspect-square bg-gradient-to-br from-secondary/20 to-primary/10 rounded-3xl overflow-hidden shadow-2xl">
+        {/* Slides */}
+        <div className="absolute inset-0 w-full h-full">
+          {slides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={cn(
+                "absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out flex items-center justify-center p-6",
+                index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
+              )}
+            >
+              <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-sm">
+                <Image
+                  src={slide.image}
+                  alt={slide.alt}
+                  fill
+                  className="object-cover"
+                  priority={index === 0}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Manual Controls */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-primary shadow-lg transition-all hover:scale-110"
+          aria-label="Previous slide"
         >
-          {/* Background elements */}
-          <defs>
-            <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0F52BA" />
-              <stop offset="100%" stopColor="#89BD2C" />
-            </linearGradient>
-          </defs>
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-primary shadow-lg transition-all hover:scale-110"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
 
-          {/* Car Body */}
-          <rect
-            x="80"
-            y="200"
-            width="240"
-            height="120"
-            rx="20"
-            fill="url(#carGradient)"
-          />
-          
-          {/* Car Hood */}
-          <rect
-            x="80"
-            y="180"
-            width="100"
-            height="40"
-            rx="15"
-            fill="url(#carGradient)"
-          />
-
-          {/* Car Windows */}
-          <rect
-            x="100"
-            y="190"
-            width="80"
-            height="50"
-            rx="8"
-            fill="#FFFFFF"
-            opacity="0.3"
-          />
-          <rect
-            x="200"
-            y="190"
-            width="80"
-            height="50"
-            rx="8"
-            fill="#FFFFFF"
-            opacity="0.3"
-          />
-
-          {/* Car Wheels */}
-          <circle cx="130" cy="320" r="25" fill="#222222" />
-          <circle cx="130" cy="320" r="15" fill="#FFFFFF" />
-          <circle cx="270" cy="320" r="25" fill="#222222" />
-          <circle cx="270" cy="320" r="15" fill="#FFFFFF" />
-
-          {/* Trunk (open) */}
-          <rect
-            x="320"
-            y="200"
-            width="40"
-            height="80"
-            rx="5"
-            fill="#89BD2C"
-          />
-          {/* Toolbox in trunk */}
-          <rect
-            x="330"
-            y="210"
-            width="20"
-            height="25"
-            rx="3"
-            fill="#222222"
-          />
-          {/* Plant in trunk */}
-          <circle cx="340" cy="250" r="8" fill="#89BD2C" />
-          <rect x="338" y="250" width="4" height="15" fill="#89BD2C" />
-
-          {/* Mechanic */}
-          <g transform="translate(50, 150)">
-            {/* Head */}
-            <circle cx="0" cy="0" r="20" fill="#FFDBAC" />
-            
-            {/* Body (shirt) */}
-            <rect
-              x="-15"
-              y="20"
-              width="30"
-              height="50"
-              rx="5"
-              fill="#0F52BA"
-            />
-            
-            {/* Arms */}
-            <rect
-              x="-25"
-              y="25"
-              width="12"
-              height="40"
-              rx="6"
-              fill="#639FAB"
-            />
-            <rect
-              x="13"
-              y="25"
-              width="12"
-              height="40"
-              rx="6"
-              fill="#639FAB"
-            />
-            
-            {/* Hands holding tablet */}
-            <rect
-              x="-5"
-              y="60"
-              width="10"
-              height="8"
-              rx="2"
-              fill="#FFDBAC"
-            />
-            <rect
-              x="5"
-              y="60"
-              width="10"
-              height="8"
-              rx="2"
-              fill="#FFDBAC"
-            />
-            
-            {/* Tablet */}
-            <rect
-              x="-8"
-              y="55"
-              width="16"
-              height="20"
-              rx="2"
-              fill="#FFFFFF"
-              stroke="#222222"
-              strokeWidth="1"
-            />
-            <rect
-              x="-6"
-              y="58"
-              width="12"
-              height="14"
-              rx="1"
-              fill="#0F52BA"
-              opacity="0.3"
-            />
-            
-            {/* Legs */}
-            <rect
-              x="-12"
-              y="70"
-              width="10"
-              height="40"
-              rx="5"
-              fill="#0F52BA"
-            />
-            <rect
-              x="2"
-              y="70"
-              width="10"
-              height="40"
-              rx="5"
-              fill="#0F52BA"
-            />
-            
-            {/* Apron */}
-            <path
-              d="M -15 25 L -15 70 L 15 70 L 15 25 L 0 30 Z"
-              fill="#0F52BA"
-            />
-          </g>
-        </svg>
+        {/* Sliding Indicator Bar */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+          <div className="flex gap-2">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={cn(
+                  "h-1.5 rounded-full transition-all duration-500",
+                  index === currentSlide
+                    ? "w-8 bg-primary"
+                    : "w-2 bg-primary/30 hover:bg-primary/50"
+                )}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
