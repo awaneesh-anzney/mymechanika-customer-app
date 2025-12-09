@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { HeroIllustration } from "@/components/HeroIllustration";
+import Footer from "@/components/footer/footer";
 
 export default function Home() {
   return (
@@ -19,6 +20,10 @@ export default function Home() {
             <div className="hidden lg:flex items-center justify-center">
               <HeroIllustration />
             </div>
+          </div>
+          <div className="mt-12 lg:mt-24">
+            {/* Footer */}
+            <Footer />
           </div>
         </div>
       </main>
