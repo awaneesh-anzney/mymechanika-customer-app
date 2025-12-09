@@ -13,8 +13,11 @@ import {
 } from "@/components/ui/select";
 import LocationSearch from "./locations/LocationSearch";
 import RateView from "./RateView";
+import { useRouter } from "next/navigation";
 
 export function HeroSection() {
+
+  const router = useRouter();
 
   return (
     <div className="flex flex-col gap-8">
@@ -48,6 +51,7 @@ export function HeroSection() {
           size="lg"
           variant="outline"
           className="border-2 border-foreground text-foreground hover:bg-foreground hover:text-background px-8 h-12"
+          onClick={() => router.push("/services")}
         >
           View All Services
         </Button>
