@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import CarImage from "@/assets/car-image.png";
 import CarImage1 from "@/assets/car-image1.png";
 import CarImage2 from "@/assets/car-image2.png";
+import { Button } from "./ui/button";
 
 const slides = [
   {
@@ -47,7 +48,7 @@ export function HeroIllustration() {
 
   return (
     <div className="relative w-full h-full flex items-center justify-center p-4">
-      <div className="relative w-full max-w-lg aspect-square bg-gradient-to-br from-secondary/20 to-primary/10 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="relative w-full max-w-lg aspect-square bg-linear-to-br from-secondary/20 to-primary/10 rounded-3xl overflow-hidden shadow-2xl">
         {/* Slides */}
         <div className="absolute inset-0 w-full h-full">
           {slides.map((slide, index) => (
@@ -72,26 +73,26 @@ export function HeroIllustration() {
         </div>
 
         {/* Manual Controls */}
-        <button
+        <Button
           onClick={prevSlide}
           className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-primary shadow-lg transition-all hover:scale-110"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={nextSlide}
           className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-primary shadow-lg transition-all hover:scale-110"
           aria-label="Next slide"
         >
           <ChevronRight className="w-6 h-6" />
-        </button>
+        </Button>
 
         {/* Sliding Indicator Bar */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
           <div className="flex gap-2">
             {slides.map((_, index) => (
-              <button
+              <Button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={cn(

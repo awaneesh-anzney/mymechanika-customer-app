@@ -12,8 +12,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import LocationSearch from "./locations/LocationSearch";
+import RateView from "./RateView";
 
 export function HeroSection() {
+
   return (
     <div className="flex flex-col gap-8">
       {/* Trust Badge */}
@@ -33,7 +35,6 @@ export function HeroSection() {
 
       {/* Location Input */}
        <LocationSearch />
-       
       {/* CTA Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
         <Button
@@ -51,6 +52,12 @@ export function HeroSection() {
           View All Services
         </Button>
       </div>
+
+      {/* Rating */}
+      <div className="-mt-10 flex items-center gap-2">
+        <RateView />
+      </div>  
+
     </div>
   );
 }
