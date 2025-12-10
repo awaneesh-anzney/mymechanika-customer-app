@@ -3,6 +3,9 @@ import { HeroSection } from "@/components/HeroSection";
 import { HeroIllustration } from "@/components/HeroIllustration";
 import Footer from "@/components/footer/footer";
 import { Navbar } from "@/components/Navbar";
+import  WhyChoose  from "@/components/WhyChoose";
+
+
 
 export default function Home() {
   return (
@@ -17,6 +20,10 @@ export default function Home() {
            <div className="w-full lg:w-1/2 flex justify-center">
              <HeroIllustration />
            </div>
+       </div>
+       {/* Why Choose Us */}
+       <div className="w-full">
+         <WhyChoose />
        </div>
        {/* Footer */}
        <div className="mt-12 lg:mt-24">

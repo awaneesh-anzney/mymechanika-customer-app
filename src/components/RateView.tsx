@@ -18,7 +18,7 @@ const RateView = () => {
                 className="text-center p-6 rounded-2xl bg-card border border-border shadow-soft animate-scale-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="text-3xl md:text-4xl font-bold gradient-text mb-2">
+                <div className="text-3xl md:text-4xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
                   {stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
