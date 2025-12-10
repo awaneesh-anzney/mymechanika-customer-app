@@ -11,7 +11,7 @@ const RateView = () => {
 
   return (
     <div>
-       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 lg:mt-24">
+       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 md:mt-16 lg:mt-24">
             {stats.map((stat, index) => (
               <div
                 key={index}

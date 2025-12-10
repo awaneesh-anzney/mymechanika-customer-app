@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">  
             <Navbar />    
-       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+       <div className="flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 py-12 lg:py-20 gap-12 lg:gap-8">
            {/* Left Hero Section */}
            <div className="w-full lg:w-1/2">
              <HeroSection />
