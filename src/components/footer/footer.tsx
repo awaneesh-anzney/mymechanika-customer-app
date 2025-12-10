@@ -41,8 +41,7 @@ const Footer = () => {
                 <Car className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-bold">
-                <span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">MY</span>
-                <span className="text-foreground">mechanika</span>
+                <span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">MyMechanika</span>
               </span>
             </Link>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm">
@@ -118,7 +117,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-border mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 MYmechanika. All rights reserved.
+            © 2024 MyMechanika. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">

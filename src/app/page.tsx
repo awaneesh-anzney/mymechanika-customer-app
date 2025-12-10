@@ -4,6 +4,7 @@ import { HeroIllustration } from "@/components/HeroIllustration";
 import Footer from "@/components/footer/footer";
 import { Navbar } from "@/components/Navbar";
 import  WhyChoose  from "@/components/WhyChoose";
+import AppDownload from "@/components/appdownload/AppDownload";
 
 
 
@@ -24,6 +25,10 @@ export default function Home() {
        {/* Why Choose Us */}
        <div className="w-full">
          <WhyChoose />
+       </div>
+       {/* App Download */}
+       <div className="w-full pt-5">
+         <AppDownload />
        </div>
        {/* Footer */}
        <div className="mt-12 lg:mt-24">
