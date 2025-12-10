@@ -1,5 +1,4 @@
-import Footer from '@/components/footer/footer';
-import { Navbar } from '@/components/Navbar';
+
 import React from 'react';
 
 export default function PublicLayout({
@@ -9,9 +8,7 @@ export default function PublicLayout({
 }) {
   return (
     <>
-      <Navbar />
       {children}
-      <Footer />
     </>
   );
 }
