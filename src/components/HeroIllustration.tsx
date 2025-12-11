@@ -75,14 +75,14 @@ export function HeroIllustration() {
         {/* Manual Controls */}
         <Button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-primary shadow-lg transition-all hover:scale-110"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-background/80 hover:bg-background text-primary shadow-lg transition-all hover:scale-110"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-6 h-6" />
         </Button>
         <Button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-primary shadow-lg transition-all hover:scale-110"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-background/80 hover:bg-background text-primary shadow-lg transition-all hover:scale-110"
           aria-label="Next slide"
         >
           <ChevronRight className="w-6 h-6" />
