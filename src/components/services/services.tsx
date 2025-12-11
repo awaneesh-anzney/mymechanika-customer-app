@@ -29,12 +29,12 @@ const ServiceCard = ({
     <div
       className={`group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 ${
         featured
-          ? "bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border-2 border-primary/30"
+          ? "bg-linear-to-br from-primary/10 via-secondary/10 to-accent/10 border-2 border-primary/30"
           : "bg-card border border-border hover:border-primary/30"
       } shadow-soft hover:shadow-lg`}
     >
       {featured && (
-        <span className="absolute -top-3 left-6 px-3 py-1 text-xs font-semibold gradient-bg text-primary-foreground rounded-full">
+        <span className="absolute -top-3 left-6 px-3 py-1 text-xs font-semibold bg-linear-to-br from-primary to-secondary text-primary-foreground rounded-full shadow-md z-10">
           Popular
         </span>
       )}
@@ -43,8 +43,8 @@ const ServiceCard = ({
         <div
           className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${
             featured
-              ? "gradient-bg"
-              : "bg-primary/10 group-hover:gradient-bg"
+              ? "bg-linear-to-br from-primary to-secondary"
+              : "bg-primary/10 group-hover:bg-linear-to-br group-hover:from-primary group-hover:to-secondary"
           }`}
         >
           <Icon
