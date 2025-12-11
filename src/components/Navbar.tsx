@@ -5,7 +5,8 @@ import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { Moon, LogIn, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Router from "next/router";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -17,6 +18,7 @@ const navItems = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -48,11 +50,23 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="h-9 w-9">
               <Moon className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" className="text-foreground">
+            <Button
+             variant="ghost" 
+             className="text-foreground"
+             onClick={()=>{
+              router.push("/login")
+             }}
+             >
+
               <LogIn className="h-4 w-4 mr-2" />
               Login
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button 
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            onClick={()=>{
+              router.push("/register")
+            }}
+            >
               Get Started
             </Button>
           </div>
@@ -95,11 +109,21 @@ export function Navbar() {
             
             <div className="h-px bg-gray-100 my-4" />
             
-            <Button variant="ghost" className="justify-start px-0 hover:bg-transparent text-foreground">
+            <Button variant="ghost" 
+            className="justify-start px-0 hover:bg-transparent text-foreground"
+            onClick={()=>{
+              router.push("/login")
+            }}
+            >
               <LogIn className="h-4 w-4 mr-2" />
               Login
             </Button>
-            <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button 
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            onClick={()=>{
+              router.push("/register")
+            }}
+            >
               Get Started
             </Button>
           </div>
