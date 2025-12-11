@@ -85,11 +85,11 @@ const faqs = [
   return (
     <div>
         {/* Hero Section */}
-     <div className="absolute inset-0 overflow-hidden">
+     <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl" />
         </div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 relative py-12 md:py-24">
           <div className="text-center max-w-3xl mx-auto animate-slide-up">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
               <Headphones className="w-4 h-4" />
@@ -105,7 +105,7 @@ const faqs = [
         </div>
          {/* Contact Info Cards */}
          <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-16">
             {contactInfo.map((info, index) => (
               <div
                 key={index}
@@ -123,7 +123,7 @@ const faqs = [
           </div>
 
           {/* Contact Form & FAQ */}
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Contact Form */}
             <div className="animate-slide-up">
               <div className="flex items-center gap-3 mb-6">
@@ -217,12 +217,12 @@ const faqs = [
         </div>
 
         {/* Map Section */}
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 pb-10">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-foreground mb-2">Find Us</h2>
             <p className="text-muted-foreground">Visit our head office or any of our 1000+ service centers</p>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-border shadow-soft h-[400px]">
+          <div className="rounded-2xl overflow-hidden border border-border shadow-soft h-[300px] md:h-[400px]">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.9554486648047!2d77.6309395!3d12.9141417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae148bfe1a4a65%3A0x2c694c3f2cb35884!2sHSR%20Layout%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
               width="100%"
