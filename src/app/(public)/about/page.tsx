@@ -92,7 +92,7 @@ const milestones = [
                 Revolutionizing Car Service in India
               </h2>
               <p className="text-muted-foreground mb-4">
-                Founded in 2018, MYmechanika started with a simple mission: to bring transparency and convenience to car servicing. We noticed that car owners often faced hidden charges, poor quality parts, and unreliable service providers.
+                Founded in 2018, MyMechanika started with a simple mission: to bring transparency and convenience to car servicing. We noticed that car owners often faced hidden charges, poor quality parts, and unreliable service providers.
               </p>
               <p className="text-muted-foreground mb-4">
                 We set out to change this by building a network of certified mechanics, partnering with OEM suppliers, and creating a technology platform that gives car owners complete visibility into their service.
@@ -164,10 +164,10 @@ const milestones = [
                 className="flex items-start gap-6 mb-8 animate-slide-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="flex-shrink-0 w-20 text-right">
+                <div className="shrink-0 w-20 text-right">
                   <span className="text-lg font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">{milestone.year}</span>
                 </div>
-                <div className="flex-shrink-0 flex flex-col items-center">
+                <div className="shrink-0 flex flex-col items-center">
                   <div className="w-4 h-4 rounded-full bg-linear-to-br from-primary to-secondary" />
                   {index < milestones.length - 1 && (
                     <div className="w-0.5 h-16 bg-border" />
