@@ -53,7 +53,7 @@ export function Navbar() {
              variant="ghost" 
              className="text-foreground"
              onClick={()=>{
-              router.push("/login")
+              router.push("/auth")
              }}
              >
 
@@ -63,7 +63,7 @@ export function Navbar() {
             <Button 
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={()=>{
-              router.push("/register")
+              router.push("/auth?mode=register")
             }}
             >
               Get Started
@@ -111,7 +111,7 @@ export function Navbar() {
             <Button variant="ghost" 
             className="justify-start px-0 hover:bg-transparent text-foreground"
             onClick={()=>{
-              router.push("/login")
+              router.push("/auth")
             }}
             >
               <LogIn className="h-4 w-4 mr-2" />
@@ -120,7 +120,7 @@ export function Navbar() {
             <Button 
             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={()=>{
-              router.push("/register")
+              router.push("/auth?mode=register")
             }}
             >
               Get Started
