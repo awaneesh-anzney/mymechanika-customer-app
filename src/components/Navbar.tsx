@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Moon, LogIn, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import Router from "next/router";
 
 const navItems = [
   { label: "Home", href: "/" },
