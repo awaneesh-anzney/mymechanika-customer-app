@@ -37,6 +37,7 @@ const services = [
     rating: 4.8,
     duration: "3h",
     icon: Thermometer,
+    featured: true,
   },
   {
     title: "Wheel Care",
