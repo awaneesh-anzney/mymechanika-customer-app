@@ -76,7 +76,7 @@ const milestones = [
               Your Trusted <span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">Car Care Partner</span>
             </h1>
             <p className="text-lg text-muted-foreground">
-              MYmechanika is India's leading car service platform, dedicated to making car maintenance simple, affordable, and hassle-free for millions of car owners.
+              MyMechanika is India's leading car service platform, dedicated to making car maintenance simple, affordable, and hassle-free for millions of car owners.
             </p>
           </div>
         </div>
