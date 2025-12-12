@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import DashboardSidebar from "./DashboardSidebar";
 import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,13 +16,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DashboardSidebar
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
-        mobileOpen={mobileOpen}
-        setMobileOpen={setMobileOpen}
-      />
-
       {/* Main Content */}
       <div className={cn(
         "min-h-screen transition-all duration-300",

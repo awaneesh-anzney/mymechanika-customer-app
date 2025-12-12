@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-// Trigger rebuild
 import { usePathname } from "next/navigation";
 import {
     LayoutDashboard,
@@ -17,8 +16,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
+// Define your routes here
 const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
     { icon: Car, label: "My Vehicles", path: "/dashboard/vehicles" },
@@ -29,14 +28,14 @@ const menuItems = [
     { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 
-interface DashboardSidebarProps {
+interface SidebarProps {
     collapsed: boolean;
     setCollapsed: (collapsed: boolean) => void;
     mobileOpen: boolean;
     setMobileOpen: (open: boolean) => void;
 }
 
-const DashboardSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }: DashboardSidebarProps) => {
+const Sidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }: SidebarProps) => {
     const pathname = usePathname();
 
     return (
@@ -63,7 +62,7 @@ const DashboardSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }
                 {/* Logo */}
                 <div className="h-16 flex items-center justify-between px-4 border-b border-border">
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
                             <Wrench className="w-5 h-5 text-primary-foreground" />
                         </div>
                         {(!collapsed || mobileOpen) && (
@@ -113,7 +112,7 @@ const DashboardSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }
                                                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                         )}
                                     >
-                                        <item.icon className={cn("w-5 h-5 flex-shrink-0", isActive && "text-primary-foreground")} />
+                                        <item.icon className={cn("w-5 h-5 shrink-0", isActive && "text-primary-foreground")} />
 
                                         {/* Label: Hidden if collapsed on desktop, visible on mobile */}
                                         <span className={cn(
@@ -155,4 +154,4 @@ const DashboardSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }
     );
 };
 
-export default DashboardSidebar;
+export default Sidebar;
