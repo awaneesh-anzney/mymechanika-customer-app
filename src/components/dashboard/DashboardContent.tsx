@@ -125,7 +125,7 @@ const DashboardContent = () => {
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="flex items-start gap-4">
-                                <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center flex-shrink-0">
+                                <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center shrink-0">
                                     <Car className="w-8 h-8 text-secondary" />
                                 </div>
                                 <div>
@@ -147,7 +147,7 @@ const DashboardContent = () => {
                                         className="h-full bg-primary rounded-full transition-all duration-1000 ease-out relative"
                                         style={{ width: `${activeService.progress}%` }}
                                     >
-                                        <div className="absolute top-0 right-0 bottom-0 w-full bg-gradient-to-l from-white/20 to-transparent"></div>
+                                        <div className="absolute top-0 right-0 bottom-0 w-full bg-linear-to-l from-white/20 to-transparent"></div>
                                     </div>
                                 </div>
                                 <p className="text-sm text-muted-foreground italic">
