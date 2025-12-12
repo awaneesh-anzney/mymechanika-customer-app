@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Car, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft } from "lucide-rea
 
 
 
-const page = () => {
+const AuthContent = () => {
 
   const searchParams = useSearchParams();
   const [isLogin, setIsLogin] = useState(true);
@@ -243,4 +243,12 @@ href="/"
   )
 }
 
-export default page
+const Page = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <AuthContent />
+    </Suspense>
+  )
+}
+
+export default Page
