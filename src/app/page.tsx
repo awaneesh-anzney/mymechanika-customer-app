@@ -10,7 +10,7 @@ import AppDownload from "@/components/appdownload/AppDownload";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">  
+    <div className="min-h-screen bg-background">  
             <Navbar />    
        <div className="flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 py-12 lg:py-20 gap-12 lg:gap-8">
            {/* Left Hero Section */}

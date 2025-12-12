@@ -9,12 +9,15 @@ A modern, responsive customer-facing web application for MyMechanika, built with
 - **UI Components:** [Shadcn UI](https://ui.shadcn.com/)
 - **Icons:** [Lucide React](https://lucide.dev/)
 - **Fonts:** [Poppins](https://fonts.google.com/specimen/Poppins) (via `next/font/google`)
+- **Theme Management:** [next-themes](https://github.com/pacocoursey/next-themes)
 - **Containerization:** Docker
 
 ## ✨ Features
 
 - **Modern UI/UX:** Clean, professional interface with consistent branding (Green `#89BD2C` & Blue `#0F52BA`).
-- **Service Booking:** Browse and book various car maintenance services.
+- **Dark Mode Support:** Fully integrated dark mode with system preference detection and toggle functionality, retaining brand identity.
+- **Service Booking:** Browse and book various car maintenance services including AC Repair, Detailing, and more.
+- **User Authentication:** Responsive Login and Registration pages.
 - **Responsive Design:** Fully optimized for mobile, tablet, and desktop devices.
 - **Interactive Elements:** Image sliders, hover effects, and smooth transitions.
 - **Global Theming:** Consistent design tokens for colors, typography, and spacing.
@@ -68,9 +71,10 @@ A modern, responsive customer-facing web application for MyMechanika, built with
 mymechanika-customer-app/
 ├── src/
 │   ├── app/                 # Next.js App Router
+│   │   ├── (auths)/         # Authentication routes (Login/Register)
 │   │   ├── (public)/        # Public routes (e.g., /services)
 │   │   ├── globals.css      # Global styles & Tailwind theme
-│   │   ├── layout.tsx       # Root layout
+│   │   ├── layout.tsx       # Root layout with ThemeProvider
 │   │   └── page.tsx         # Home page
 │   ├── assets/              # Static assets (images)
 │   ├── components/          # React components
@@ -78,6 +82,7 @@ mymechanika-customer-app/
 │   │   ├── locations/       # Location related components
 │   │   ├── services/        # Service card & listing components
 │   │   ├── ui/              # Reusable UI components (Shadcn)
+│   │   ├── theme-provider.tsx # Theme context provider
 │   │   ├── HeroSection.tsx  # Landing page hero
 │   │   ├── Navbar.tsx       # Main navigation
 │   │   └── ...
@@ -91,12 +96,12 @@ mymechanika-customer-app/
 
 ## 🎨 Color Palette
 
-The application uses a defined color scheme available as CSS variables:
+The application uses a defined color scheme available as CSS variables, adapted for both Light and Dark modes:
 
 - **Primary:** `#89BD2C` (Green)
-- **Secondary:** `#0F52BA` (Blue)
-- **Background:** `#FFFFFF` (White)
-- **Foreground:** `#222222` (Dark Gray)
+- **Secondary:** `#0F52BA` (Blue) / `#639FAB` (Teal in Dark Mode)
+- **Background:** `#FFFFFF` (Light) / `oklch(0.145 0 0)` (Dark)
+- **Foreground:** `#222222` (Dark Gray) / `oklch(0.985 0 0)` (White)
 
 ## 📜 Scripts
 

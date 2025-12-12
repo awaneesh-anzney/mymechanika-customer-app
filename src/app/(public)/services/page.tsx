@@ -1,6 +1,6 @@
 import React from 'react'
 import ServiceCard from '@/components/services/services'
-import { Car, Wrench, Battery, Shield } from "lucide-react";
+import { Car, Wrench, Battery, Shield, Thermometer, CircleDashed, Sparkles, PaintBucket } from "lucide-react";
 
 const services = [
   {
@@ -29,7 +29,43 @@ const services = [
     duration: "45m",
     icon: Wrench,
   },
-    {
+  {
+    title: "AC Service & Repair",
+    description: "Deep cleaning, gas top-up, and cooling system inspection for peak performance.",
+    price: "$199",
+    originalPrice: "$249",
+    rating: 4.8,
+    duration: "3h",
+    icon: Thermometer,
+    featured: true,
+  },
+  {
+    title: "Wheel Care",
+    description: "Wheel alignment, balancing, and tyre rotation for a smoother, safer ride.",
+    price: "$79",
+    rating: 4.7,
+    duration: "1h",
+    icon: CircleDashed,
+  },
+  {
+    title: "Car Spa & Detailing",
+    description: "Interior deep cleaning, exterior polishing, and ceramic coating for a showroom shine.",
+    price: "$249",
+    originalPrice: "$299",
+    rating: 4.9,
+    duration: "4h",
+    icon: Sparkles,
+    featured: true,
+  },
+  {
+    title: "Denting & Painting",
+    description: "Professional scratch removal and premium paint services to restore your car's look.",
+    price: "$299",
+    rating: 4.8,
+    duration: "24h",
+    icon: PaintBucket,
+  },
+  {
     title: "Battery Replacement",
     description: "Testing and replacement of old batteries with high-quality new ones.",
     price: "$129",

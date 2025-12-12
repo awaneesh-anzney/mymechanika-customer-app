@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
-import { Moon, LogIn, Menu, X } from "lucide-react";
+import { Moon, Sun, LogIn, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import Router from "next/router";
+import { useTheme } from "next-themes";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -20,9 +20,14 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const { setTheme, theme, resolvedTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -47,14 +52,16 @@ export function Navbar() {
 
           {/* Desktop Right Side Actions */}
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-              <Moon className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
             </Button>
             <Button
              variant="ghost" 
              className="text-foreground"
              onClick={()=>{
-              router.push("/login")
+              router.push("/auth")
              }}
              >
 
@@ -64,7 +71,7 @@ export function Navbar() {
             <Button 
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={()=>{
-              router.push("/register")
+              router.push("/auth?mode=register")
             }}
             >
               Get Started
@@ -73,8 +80,10 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-               <Moon className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
+               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+               <span className="sr-only">Toggle theme</span>
             </Button>
             <Button
               variant="ghost"
@@ -90,7 +99,7 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white px-4 py-6 shadow-lg h-screen overflow-y-auto pb-20">
+        <div className="md:hidden border-t border-border bg-background px-4 py-6 shadow-lg h-screen overflow-y-auto pb-20">
           <div className="flex flex-col space-y-4">
             {navItems.map((item) => (
               <Link
@@ -107,12 +116,12 @@ export function Navbar() {
               </Link>
             ))}
             
-            <div className="h-px bg-gray-100 my-4" />
+            <div className="h-px bg-border my-4" />
             
             <Button variant="ghost" 
             className="justify-start px-0 hover:bg-transparent text-foreground"
             onClick={()=>{
-              router.push("/login")
+              router.push("/auth")
             }}
             >
               <LogIn className="h-4 w-4 mr-2" />
@@ -121,7 +130,7 @@ export function Navbar() {
             <Button 
             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={()=>{
-              router.push("/register")
+              router.push("/auth?mode=register")
             }}
             >
               Get Started

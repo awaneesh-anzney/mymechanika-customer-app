@@ -20,12 +20,12 @@ import { Button } from "@/components/ui/button";
 // Define your routes here
 const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-    { icon: Car, label: "My Vehicles", path: "/dashboard/vehicles" },
-    { icon: Calendar, label: "Book Service", path: "/dashboard/book" },
-    { icon: History, label: "Service History", path: "/dashboard/history" },
-    { icon: MessageSquare, label: "Messages", path: "/dashboard/messages" },
-    { icon: User, label: "Profile", path: "/dashboard/profile" },
-    { icon: Settings, label: "Settings", path: "/dashboard/settings" },
+    { icon: Car, label: "My Vehicles", path: "/my-vehicles" },
+    { icon: Calendar, label: "Book Service", path: "/my-booking" },
+    { icon: History, label: "Service History", path: "/my-history" },
+    { icon: MessageSquare, label: "Messages", path: "/my-messages" },
+    { icon: User, label: "Profile", path: "/my-profile" },
+    { icon: Settings, label: "Settings", path: "/my-settings" },
 ];
 
 interface SidebarProps {
