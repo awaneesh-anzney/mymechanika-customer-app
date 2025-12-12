@@ -1,9 +1,9 @@
 import React from 'react'
+import DashboardContent from '@/components/dashboard/DashboardContent'
 
 const page = () => {
   return (
-    <div className='mt-20 p-4'>
-    </div>
+    <DashboardContent />
   )
 }
 
