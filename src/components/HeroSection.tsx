@@ -58,7 +58,7 @@ export function HeroSection() {
       </div>
 
       {/* Rating */}
-      <div className="mt-2 md:-mt-10 flex items-center gap-2">
+      <div className="mt-4 flex items-center gap-2">
         <RateView />
       </div>  
 
