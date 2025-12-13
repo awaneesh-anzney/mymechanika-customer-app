@@ -5,6 +5,7 @@ import Footer from "@/components/footer/footer";
 import { Navbar } from "@/components/Navbar";
 import  WhyChoose  from "@/components/WhyChoose";
 import AppDownload from "@/components/appdownload/AppDownload";
+import RateView from "@/components/RateView";
 
 
 
@@ -24,12 +25,19 @@ export default function Home() {
                <HeroIllustration />
              </div>
            </div>
-         </div>
-         
-         {/* Why Choose Us */}
-         <div className="w-full">
-           <WhyChoose />
-         </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="w-full border-y border-border/50 bg-card/50 backdrop-blur-sm">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+            <RateView />
+          </div>
+        </div>
+        
+        {/* Why Choose Us */}
+        <div className="w-full pt-8 lg:pt-15">
+          <WhyChoose />
+        </div>
          {/* App Download */}
          <div className="w-full pt-5">
            <AppDownload />
