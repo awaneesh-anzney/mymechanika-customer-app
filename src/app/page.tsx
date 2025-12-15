@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import  WhyChoose  from "@/components/WhyChoose";
 import AppDownload from "@/components/appdownload/AppDownload";
 import RateView from "@/components/RateView";
+import HowItWorks from "@/components/HowItWorks";
 
 
 
@@ -33,7 +34,10 @@ export default function Home() {
             <RateView />
           </div>
         </div>
-        
+        {/* How It Works */}
+        <div className="w-full pt-8 lg:pt-15">
+          <HowItWorks />
+        </div>
         {/* Why Choose Us */}
         <div className="w-full pt-8 lg:pt-15">
           <WhyChoose />
