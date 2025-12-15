@@ -56,7 +56,7 @@ const HowItWorks = () => {
         {/* Steps */}
         <div className="relative">
           {/* Connection Line - Desktop */}
-          <div className="absolute left-0 right-0 top-12 hidden h-0.5 bg-gradient-to-r from-primary/10 via-primary/50 to-primary/10 lg:block -z-10" />
+          <div className="absolute left-0 right-0 top-12 hidden h-0.5 bg-linear-to-r from-primary/10 via-primary/50 to-primary/10 lg:block -z-10" />
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
             {steps.map((step, index) => (

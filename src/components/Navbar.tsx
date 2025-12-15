@@ -11,7 +11,6 @@ import { useTheme } from "next-themes";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "Dashboard", href: "/dashboard" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
