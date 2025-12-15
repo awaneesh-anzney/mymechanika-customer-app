@@ -1,5 +1,5 @@
 import React from 'react'
-import { Car, Calendar, Truck, Wrench, CheckCircle2, ArrowDown } from "lucide-react";
+import { Car, Calendar, Truck, Wrench, CheckCircle2, ArrowDown, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 
@@ -71,6 +71,13 @@ const HowItWorks = () => {
                   </span>
                   <step.icon className="h-8 w-8 text-primary transition-transform duration-300 group-hover:scale-110" />
                 </div>
+
+                {/* Desktop Arrow */}
+                {index < steps.length - 1 && (
+                  <div className="hidden lg:block absolute top-12 -right-4 -translate-y-1/2 transform text-primary/40 z-0">
+                    <ArrowRight className="h-6 w-6" />
+                  </div>
+                )}
 
                 <h3 className="mb-2 text-lg font-semibold text-foreground">
                   {step.title}
