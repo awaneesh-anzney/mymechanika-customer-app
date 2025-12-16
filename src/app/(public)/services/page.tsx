@@ -87,7 +87,7 @@ const Page = () => {
               Premium Car Care Services
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              From routine maintenance to complex repairs, we've got your car covered with expert service and genuine parts.
+              From routine maintenance to complex repairs, we&apos;ve got your car covered with expert service and genuine parts.
             </p>
           </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
