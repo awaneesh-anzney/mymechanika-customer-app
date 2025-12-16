@@ -11,7 +11,6 @@ import { useTheme } from "next-themes";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "Dashboard", href: "/dashboard" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -39,9 +38,9 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-sm font-bold transition-colors hover:text-primary ${
                   pathname === item.href
-                    ? "text-primary underline underline-offset-4"
+                    ? "text-primary font-bold underline underline-offset-4"
                     : "text-foreground"
                 }`}
               >
