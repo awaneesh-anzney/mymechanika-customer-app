@@ -9,10 +9,12 @@ import {
     MessageSquare,
     Phone,
     MapPin,
-    MoreHorizontal
+    MoreHorizontal,
+    Plus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Define interfaces for data structure to avoid "hardcoding" look and feel in the component body
@@ -110,168 +112,166 @@ const DashboardContent = () => {
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                {/* Main Content Column */}
-                <div className="xl:col-span-2 space-y-6">
-                    {/* Active Service Card */}
-                    <Card className="shadow-sm border-border overflow-hidden relative group">
-                        <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-lg font-display font-bold">Active Service</CardTitle>
-                            <div className="flex items-center gap-2">
-                                <span className="animate-pulse w-2 h-2 rounded-full bg-primary"></span>
-                                <span className="text-sm font-medium text-primary">{activeService.tag}</span>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-2">
+                {/* Row 1, Col 1-2: Active Service */}
+                <Card className="lg:col-span-2 shadow-sm border-border/60 overflow-hidden relative group h-full">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
+                        <CardTitle className="text-lg font-display font-bold">Active Service</CardTitle>
+                        <div className="flex items-center gap-2">
+                            <span className="animate-pulse w-2 h-2 rounded-full bg-primary"></span>
+                            <span className="text-sm font-medium text-primary">{activeService.tag}</span>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="space-y-5 px-5 pb-5">
+                        <div className="flex items-center gap-5">
+                            <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center shrink-0">
+                                <Car className="w-7 h-7 text-secondary" />
                             </div>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="flex items-start gap-4">
-                                <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center shrink-0">
-                                    <Car className="w-8 h-8 text-secondary" />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-xl text-foreground">{activeService.vehicle}</h3>
-                                    <p className="text-muted-foreground flex items-center gap-1">
-                                        <MapPin className="w-4 h-4" /> {activeService.service}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="space-y-3">
-                                <div className="flex justify-between text-sm">
-                                    <span className="font-medium text-muted-foreground">Service Progress</span>
-                                    <span className="font-bold text-primary">{activeService.progress}%</span>
-                                </div>
-                                {/* Progress Bar */}
-                                <div className="h-2.5 w-full bg-muted/50 rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-primary rounded-full transition-all duration-1000 ease-out relative"
-                                        style={{ width: `${activeService.progress}%` }}
-                                    >
-                                        <div className="absolute top-0 right-0 bottom-0 w-full bg-linear-to-l from-white/20 to-transparent"></div>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-muted-foreground italic">
-                                    "{activeService.status}"
+                            <div>
+                                <h3 className="font-bold text-xl text-foreground leading-tight">{activeService.vehicle}</h3>
+                                <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
+                                    <MapPin className="w-3.5 h-3.5" /> {activeService.service}
                                 </p>
                             </div>
+                        </div>
 
-                            <Button className="w-full bg-secondary hover:bg-secondary/90 text-white shadow-sm" size="lg">
-                                Track Live Status <ArrowRight className="w-4 h-4 ml-2" />
-                            </Button>
-                        </CardContent>
-                    </Card>
-
-                    {/* Recent Bookings Section */}
-                    <Card className="shadow-sm border-border">
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <CardTitle className="text-lg font-display font-bold">Recent History</CardTitle>
-                            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">View All</Button>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm text-left">
-                                    <thead className="text-xs text-muted-foreground uppercase bg-muted/30">
-                                        <tr>
-                                            <th className="px-4 py-3 rounded-l-lg">Booking ID</th>
-                                            <th className="px-4 py-3">Service</th>
-                                            <th className="px-4 py-3">Date</th>
-                                            <th className="px-4 py-3">Status</th>
-                                            <th className="px-4 py-3 rounded-r-lg text-right">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {recentBookings.map((booking) => (
-                                            <tr key={booking.id} className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors">
-                                                <td className="px-4 py-4 font-medium">{booking.id}</td>
-                                                <td className="px-4 py-4">{booking.service}</td>
-                                                <td className="px-4 py-4 text-muted-foreground">{booking.date}</td>
-                                                <td className="px-4 py-4">
-                                                    <span className="px-2 py-1 rounded-full text-[10px] font-bold bg-primary/10 text-primary">
-                                                        {booking.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-4 text-right font-medium">{booking.amount}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                        <div className="space-y-2.5">
+                            <div className="flex justify-between text-sm">
+                                <span className="font-medium text-muted-foreground">Service Progress</span>
+                                <span className="font-bold text-primary">{activeService.progress}%</span>
                             </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Right Column */}
-                <div className="space-y-6">
-                    {/* Quick Actions */}
-                    <Card className="shadow-sm border-border">
-                        <CardHeader>
-                            <CardTitle className="text-lg font-display font-bold">Quick Actions</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-3">
-                            {[
-                                { label: "Book Now", icon: Calendar, path: "/dashboard/book", color: "text-primary" },
-                                { label: "Vehicles", icon: Car, path: "/dashboard/vehicles", color: "text-secondary" },
-                                { label: "Help", icon: Phone, path: "/dashboard/support", color: "text-chart-5" },
-                                { label: "Chat", icon: MessageSquare, path: "/dashboard/messages", color: "text-chart-2" },
-                            ].map((action, i) => (
-                                <Button
-                                    key={i}
-                                    variant="outline"
-                                    className="h-24 flex flex-col items-center justify-center gap-2 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+                            <div className="h-2 w-full bg-muted/50 rounded-full overflow-hidden">
+                                <div
+                                    className="h-full bg-primary rounded-full transition-all duration-1000 ease-out relative"
+                                    style={{ width: `${activeService.progress}%` }}
                                 >
-                                    <div className="p-2 rounded-full bg-background shadow-sm group-hover:scale-110 transition-transform duration-300">
-                                        <action.icon className={cn("w-6 h-6", action.color)} />
-                                    </div>
-                                    <span className="font-medium text-xs">{action.label}</span>
-                                </Button>
-                            ))}
-                        </CardContent>
-                    </Card>
+                                    <div className="absolute top-0 right-0 bottom-0 w-full bg-linear-to-l from-white/20 to-transparent"></div>
+                                </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground italic">
+                                "{activeService.status}"
+                            </p>
+                        </div>
 
-                    {/* Upcoming Services */}
-                    <Card className="shadow-sm border-border">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-lg font-display font-bold">Upcoming</CardTitle>
-                            <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="w-4 h-4" /></Button>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            {upcomingServices.map((service) => (
-                                <div key={service.id} className="group relative p-4 rounded-xl border border-border bg-card hover:shadow-md transition-all duration-300">
-                                    {/* Decoration line */}
-                                    <div className="absolute left-0 top-4 bottom-4 w-1 bg-primary rounded-r-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <Button className="w-full bg-primary hover:bg-primary/90 text-white shadow-sm mt-2" size="lg">
+                            Track Live Status <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                    </CardContent>
+                </Card>
 
-                                    <div className="flex justify-between items-start mb-2 pl-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                                <service.icon className="w-5 h-5" />
+                {/* Row 1, Col 3: Quick Actions */}
+                <Card className="shadow-sm border-border/60 h-full flex flex-col">
+                    <CardHeader className="py-4 px-5">
+                        <CardTitle className="text-base font-display font-bold">Quick Actions</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-2 gap-2.5 px-4 pb-4 flex-1">
+                        {[
+                            { label: "Book Now", icon: Calendar, path: "/dashboard/book", color: "text-primary" },
+                            { label: "Vehicles", icon: Car, path: "/dashboard/vehicles", color: "text-secondary" },
+                            { label: "Help", icon: Phone, path: "/dashboard/support", color: "text-chart-5" },
+                            { label: "Chat", icon: MessageSquare, path: "/dashboard/messages", color: "text-chart-2" },
+                        ].map((action, i) => (
+                            <Button
+                                key={i}
+                                variant="outline"
+                                className="h-full min-h-[5rem] flex flex-col items-center justify-center gap-1.5 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+                            >
+                                <div className="p-1.5 rounded-full bg-background shadow-xs group-hover:scale-110 transition-transform duration-300">
+                                    <action.icon className={cn("w-5 h-5", action.color)} />
+                                </div>
+                                <span className="font-medium text-[11px]">{action.label}</span>
+                            </Button>
+                        ))}
+                    </CardContent>
+                </Card>
+
+                {/* Row 2, Col 1-2: Recent History */}
+                <Card className="lg:col-span-2 shadow-sm border-border/60 h-full">
+                    <CardHeader className="flex flex-row items-center justify-between py-4 px-5">
+                        <CardTitle className="text-lg font-display font-bold">Recent History</CardTitle>
+                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary h-8 text-xs">View All</Button>
+                    </CardHeader>
+                    <CardContent className="px-0 pb-2">
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm text-left">
+                                <thead className="text-xs text-muted-foreground uppercase bg-muted/30 border-y border-border/50">
+                                    <tr>
+                                        <th className="px-5 py-3 font-medium">Service</th>
+                                        <th className="px-5 py-3 font-medium">Date</th>
+                                        <th className="px-5 py-3 font-medium">Status</th>
+                                        <th className="px-5 py-3 font-medium text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-border/40">
+                                    {recentBookings.map((booking) => (
+                                        <tr key={booking.id} className="hover:bg-muted/20 transition-colors">
+                                            <td className="px-5 py-3.5 font-medium">{booking.service}</td>
+                                            <td className="px-5 py-3.5 text-muted-foreground text-xs">{booking.date}</td>
+                                            <td className="px-5 py-3.5">
+                                                <span className={cn(
+                                                    "px-2 py-0.5 rounded-full text-[10px] font-bold border",
+                                                    booking.status === "Completed" ? "bg-green-500/10 text-green-700 border-green-200" : "bg-muted text-muted-foreground border-border"
+                                                )}>
+                                                    {booking.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-5 py-3.5 text-right font-medium">{booking.amount}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Row 2, Col 3: Upcoming Services */}
+                <Card className="shadow-sm border-border/60 h-full flex flex-col">
+                    <CardHeader className="flex flex-row items-center justify-between py-4 px-5">
+                        <CardTitle className="text-base font-display font-bold">Upcoming</CardTitle>
+                        <Button variant="ghost" size="icon" className="h-7 w-7"><MoreHorizontal className="w-4 h-4" /></Button>
+                    </CardHeader>
+                    <CardContent className="space-y-3 px-4 pb-4 flex-1">
+                        {upcomingServices.map((service) => (
+                            <div key={service.id} className="group relative p-3 rounded-lg border border-border/60 bg-card hover:border-primary/30 hover:shadow-xs transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary/80 rounded-l-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                <div className="flex justify-between items-start gap-3">
+                                    <div className="flex items-start gap-3 w-full">
+                                        <div className="p-2 rounded-md bg-secondary/10 text-secondary shrink-0 mt-0.5">
+                                            <service.icon className="w-4 h-4" />
+                                        </div>
+                                        <div className="space-y-1 w-full">
+                                            <div className="flex justify-between items-start w-full">
+                                                <h4 className="font-semibold text-sm text-foreground leading-none">{service.service}</h4>
+                                                <Badge variant="outline" className="text-[9px] h-4 px-1.5 font-normal border-border/50 bg-background/50">
+                                                    {service.status}
+                                                </Badge>
                                             </div>
-                                            <div>
-                                                <h4 className="font-bold text-sm text-foreground">{service.service}</h4>
-                                                <p className="text-xs text-muted-foreground">{service.vehicle}</p>
+                                            <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                                                <Car className="w-3 h-3" /> {service.vehicle}
+                                            </p>
+                                            <div className="flex items-center text-[10px] font-medium text-muted-foreground/90 pt-1">
+                                                <Calendar className="w-3 h-3 mr-1.5 text-primary/70" />
+                                                {service.date}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="mt-3 pl-2 flex items-center justify-between">
-                                        <p className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                                            <Clock className="w-3.5 h-3.5" /> {service.date}
-                                        </p>
-                                        <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                                            {service.status}
-                                        </span>
-                                    </div>
                                 </div>
-                            ))}
-                            {upcomingServices.length === 0 && (
-                                <div className="text-center py-8">
-                                    <p className="text-muted-foreground">No upcoming services</p>
-                                </div>
-                            )}
-                            <Button variant="outline" className="w-full mt-2 border-dashed">
-                                + Schedule Service
+                            </div>
+                        ))}
+                        {upcomingServices.length === 0 && (
+                            <div className="text-center py-6">
+                                <p className="text-xs text-muted-foreground">No upcoming services</p>
+                            </div>
+                        )}
+                        <div className="mt-auto pt-2">
+                            <Button variant="outline" size="sm" className="w-full border-dashed h-8 text-xs hover:border-primary/50 hover:text-primary transition-colors">
+                                <Plus className="w-3.5 h-3.5 mr-1.5" /> Schedule Service
                             </Button>
-                        </CardContent>
-                    </Card>
-                </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );
