@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 
 interface DashNavProps {
   setMobileOpen: (open: boolean) => void;
+  title?: string;
+  subtitle?: string;
 }
 
-const DashNav = ({ setMobileOpen }: DashNavProps) => {
+const DashNav = ({ setMobileOpen, title = "Dashboard", subtitle = "Welcome back, John!" }: DashNavProps) => {
   return (
     <header className="h-16 bg-card border-b border-border flex items-center justify-between px-4 md:px-6 sticky top-0 z-40">
       <div className="flex items-center gap-4">
@@ -23,8 +25,10 @@ const DashNav = ({ setMobileOpen }: DashNavProps) => {
         </Button>
 
         <div>
-          <h1 className="font-display font-bold text-xl text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground hidden md:block">Welcome back, John!</p>
+          <h1 className="font-display font-bold text-xl text-foreground">{title}</h1>
+          {subtitle ? (
+            <p className="text-sm text-muted-foreground hidden md:block">{subtitle}</p>
+          ) : null}
         </div>
       </div>
 
