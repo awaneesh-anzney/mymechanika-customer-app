@@ -1,7 +1,7 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
+import { Check, Car, Wrench, MapPin, CalendarCheck2 } from "lucide-react"
 import { services, workshops, vehicles } from "../constants"
 
 type Props = {
@@ -47,27 +47,39 @@ export default function ConfirmStep({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="p-4 bg-secondary rounded-xl space-y-4">
-          <div className="flex justify-between items-center pb-4 border-b border-border">
-            <span className="text-muted-foreground">Vehicle</span>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between rounded-lg bg-muted p-4">
+            <div className="flex items-center gap-3">
+              <Car className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Vehicle</span>
+            </div>
             <span className="font-medium text-foreground">{vehicleLabel || "—"}</span>
           </div>
-          <div className="flex justify-between items-center pb-4 border-b border-border">
-            <span className="text-muted-foreground">Services</span>
+          <div className="flex items-center justify-between rounded-lg bg-muted p-4">
+            <div className="flex items-center gap-3">
+              <Wrench className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Services</span>
+            </div>
             <span className="font-medium text-foreground">{serviceNames || "—"}</span>
           </div>
-          <div className="flex justify-between items-center pb-4 border-b border-border">
-            <span className="text-muted-foreground">Workshop</span>
+          <div className="flex items-center justify-between rounded-lg bg-muted p-4">
+            <div className="flex items-center gap-3">
+              <MapPin className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Workshop</span>
+            </div>
             <span className="font-medium text-foreground">{workshopName || "—"}</span>
           </div>
-          <div className="flex justify-between items-center pb-4 border-b border-border">
-            <span className="text-muted-foreground">Date & Time</span>
+          <div className="flex items-center justify-between rounded-lg bg-muted p-4">
+            <div className="flex items-center gap-3">
+              <CalendarCheck2 className="w-5 h-5 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Date & Time</span>
+            </div>
             <span className="font-medium text-foreground">
               {selectedDate ? selectedDate.toLocaleDateString() : "—"} {selectedTime ? `at ${selectedTime}` : ""}
             </span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Estimated Total</span>
+          <div className="flex items-center justify-between rounded-lg bg-primary/10 p-4">
+            <span className="text-sm text-muted-foreground">Estimated Total</span>
             <span className="font-bold text-xl text-primary">{formatCurrency(total)}</span>
           </div>
         </div>
