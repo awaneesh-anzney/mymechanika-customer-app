@@ -1,6 +1,7 @@
 "use client";
 
 import { Bell, Search, Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -8,7 +9,33 @@ interface DashNavProps {
   setMobileOpen: (open: boolean) => void;
 }
 
+const getPageConfig = (pathname: string) => {
+  if (pathname.startsWith('/my-vehicles')) {
+    return { title: 'My Vehicles', subtitle: 'Manage your registered vehicles' };
+  }
+  if (pathname.startsWith('/my-profile')) {
+    return { title: 'My Profile', subtitle: 'Manage your personal information' };
+  }
+  if (pathname.startsWith('/my-booking')) {
+    return { title: 'Book Service', subtitle: 'Schedule a new service' };
+  }
+  if (pathname.startsWith('/my-history')) {
+    return { title: 'Service History', subtitle: 'View past services and invoices' };
+  }
+  if (pathname.startsWith('/my-messages')) {
+    return { title: 'Messages', subtitle: 'Chat with support or mechanics' };
+  }
+  if (pathname.startsWith('/my-settings')) {
+    return { title: 'Settings', subtitle: 'App preferences and configurations' };
+  }
+  // Default to Dashboard
+  return { title: 'Dashboard', subtitle: 'Welcome back, John!' };
+};
+
 const DashNav = ({ setMobileOpen }: DashNavProps) => {
+  const pathname = usePathname();
+  const { title, subtitle } = getPageConfig(pathname);
+
   return (
     <header className="h-16 bg-card border-b border-border flex items-center justify-between px-4 md:px-6 sticky top-0 z-40">
       <div className="flex items-center gap-4">
@@ -23,8 +50,8 @@ const DashNav = ({ setMobileOpen }: DashNavProps) => {
         </Button>
 
         <div>
-          <h1 className="font-display font-bold text-xl text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground hidden md:block">Welcome back, John!</p>
+          <h1 className="font-display font-bold text-xl text-foreground">{title}</h1>
+          <p className="text-sm text-muted-foreground hidden md:block">{subtitle}</p>
         </div>
       </div>
 
