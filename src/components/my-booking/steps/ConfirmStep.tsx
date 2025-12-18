@@ -27,7 +27,8 @@ export default function ConfirmStep({
   onBack,
   onConfirm,
 }: Props) {
-  const vehicleLabel = vehicles.find((v) => v.id === selectedVehicle)?.label ?? ""
+  const selectedVeh = vehicles.find((v) => v.id === selectedVehicle)
+  const vehicleLabel = selectedVeh ? `${selectedVeh.make} ${selectedVeh.model} ${selectedVeh.year} (${selectedVeh.plate})` : ""
   const serviceNames = selectedServices
     .map((id) => services.find((s) => s.id === id)?.name)
     .filter(Boolean)
@@ -83,4 +84,3 @@ export default function ConfirmStep({
     </Card>
   )
 }
-

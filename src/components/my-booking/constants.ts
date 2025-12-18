@@ -21,8 +21,34 @@ export const timeSlots: string[] = [
 ]
 
 export const vehicles: Vehicle[] = [
-  { id: "toyota", label: "Toyota Camry 2021 (ABC 1234)" },
-  { id: "honda", label: "Honda Civic 2020 (XYZ 5678)" },
-  { id: "ford", label: "Ford Focus 2019 (DEF 9012)" },
+  {
+    id: "toyota",
+    label: "Toyota Camry 2021 (ABC 1234)",
+    make: "Toyota",
+    model: "Camry",
+    year: 2021,
+    plate: "ABC 1234",
+    fuelType: "Petrol",
+    image: "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?auto=format&fit=crop&w=500&q=80",
+  },
+  {
+    id: "honda",
+    label: "Honda Civic 2020 (XYZ 5678)",
+    make: "Honda",
+    model: "Civic",
+    year: 2020,
+    plate: "XYZ 5678",
+    fuelType: "CNG",
+    image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=500&q=80",
+  },
+  {
+    id: "ford",
+    label: "Ford Focus 2019 (DEF 9012)",
+    make: "Ford",
+    model: "Focus",
+    year: 2019,
+    plate: "DEF 9012",
+    fuelType: "Diesel",
+    image: "https://images.unsplash.com/photo-1503376763036-066120622c74?auto=format&fit=crop&w=500&q=80",
+  },
 ]
-

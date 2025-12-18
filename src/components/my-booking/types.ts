@@ -16,5 +16,10 @@ export type Workshop = {
 export type Vehicle = {
   id: string
   label: string
+  make: string
+  model: string
+  year: number
+  plate: string
+  fuelType: string
+  image: string
 }
-
