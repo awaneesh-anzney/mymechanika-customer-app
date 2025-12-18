@@ -1,114 +1,156 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Car, Wrench, Shield, Thermometer, Battery, CircleDashed, Clock, ArrowRight, PaintBucket, Sparkles, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-import CarImage from "@/assets/car-image.png";
-import CarImage1 from "@/assets/car-image1.png";
-import CarImage2 from "@/assets/car-image2.png";
-import { Button } from "./ui/button";
-
-const slides = [
+const heroServices = [
   {
-    id: 1,
-    image: CarImage,
-    alt: "Professional Car Service",
+    title: "Maintenance",
+    price: "SAR 199",
+    time: "45m",
+    icon: Car,
+    description: "Keep your car running smoothly with our comprehensive maintenance package.",
+    features: ["Fluid Top-up", "Filter Check", "Safety Inspection"]
   },
   {
-    id: 2,
-    image: CarImage1,
-    alt: "Expert Mechanics",
+    title: "Brake Service",
+    price: "SAR 299",
+    time: "2h",
+    icon: Shield,
+    featured: true,
+    description: "Ensure your safety with expert brake inspection and servicing.",
+    features: ["Pad Replacement", "Rotor Check", "Fluid Flush"]
   },
   {
-    id: 3,
-    image: CarImage2,
-    alt: "Quality Auto Parts",
+    title: "Diagnostics",
+    price: "SAR 149",
+    time: "30m",
+    icon: Wrench,
+    description: "Identify issues quickly with our advanced computer diagnostics.",
+    features: ["Engine Scan", "Sensor Check", "Detailed Report"]
+  },
+  {
+    title: "AC Service",
+    price: "SAR 399",
+    time: "3h",
+    icon: Thermometer,
+    description: "Stay cool with our complete air conditioning system service.",
+    features: ["Gas Refill", "Leak Test", "Filter Cleaning"]
+  },
+  {
+    title: "Battery",
+    price: "SAR 249",
+    time: "45m",
+    icon: Battery,
+    description: "Reliable battery replacement and health check services.",
+    features: ["Voltage Test", "Terminal Clean", "Replacement"]
+  },
+  {
+    title: "Tyres",
+    price: "SAR 199",
+    time: "1h",
+    icon: CircleDashed,
+    description: "Professional tyre services for a smoother, safer ride.",
+    features: ["Alignment", "Balancing", "Rotation"]
+  },
+  {
+    title: "Oil Change",
+    price: "SAR 99",
+    time: "30m",
+    icon: PaintBucket,
+    description: "Premium oil change service to protect your engine.",
+    features: ["Synthetic Oil", "Filter Change", "Fluid Check"]
+  },
+  {
+    title: "Detailing",
+    price: "SAR 499",
+    time: "4h",
+    icon: Sparkles,
+    description: "Restore your car's showroom shine inside and out.",
+    features: ["Wash & Wax", "Interior Deep Clean", "Polishing"]
+  },
+  {
+    title: "Emergency",
+    price: "SAR 150",
+    time: "20m",
+    icon: AlertTriangle,
+    description: "24/7 roadside assistance when you need it most.",
+    features: ["Jump Start", "Flat Tyre", "Fuel Delivery"]
   },
 ];
 
 export function HeroIllustration() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
   return (
-    <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4">
-      <div className="relative w-full h-64 sm:h-96 lg:h-128 bg-linear-to-br from-secondary/20 to-primary/10 rounded-3xl overflow-hidden shadow-2xl">
-        {/* Slides */}
-        <div className="absolute inset-0 w-full h-full">
-          {slides.map((slide, index) => (
-            <div
-              key={slide.id}
-              className={cn(
-                "absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out flex items-center justify-center p-6",
-                index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
-              )}
-            >
-              <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-sm">
-                <Image
-                  src={slide.image}
-                  alt={slide.alt}
-                  fill
-                  className="object-cover"
-                  priority={index === 0}
-                />
+    <div className="w-full flex justify-center lg:justify-end">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-2xl">
+        {heroServices.map((service, index) => (
+          <div
+            key={index}
+            className={cn(
+              "group relative h-[160px] flex flex-col p-3 rounded-xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-card overflow-hidden",
+              service.featured 
+                ? "border-primary/50 bg-linear-to-br from-primary/5 to-transparent shadow-sm" 
+                : "border-border hover:border-primary/30"
+            )}
+          >
+            {/* Default View */}
+            <div className="absolute inset-0 p-3 flex flex-col justify-between transition-opacity duration-300 group-hover:opacity-0">
+              <div className="flex items-start justify-between">
+                <div className={cn(
+                  "p-2 rounded-lg transition-colors",
+                  service.featured ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+                )}>
+                  <service.icon className="w-5 h-5" />
+                </div>
+                <div className="flex items-center gap-1 text-[10px] font-medium text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-md">
+                  <Clock className="w-3 h-3" />
+                  <span>{service.time}</span>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="font-bold text-foreground text-sm mb-1 line-clamp-1">
+                  {service.title}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-primary text-sm">
+                    {service.price}
+                  </span>
+                  <Button size="icon" variant="ghost" className="h-6 w-6 rounded-full -mr-1">
+                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                  </Button>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Manual Controls */}
-        <Button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-background/80 hover:bg-background text-primary shadow-lg transition-all hover:scale-110"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </Button>
-        <Button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-background/80 hover:bg-background text-primary shadow-lg transition-all hover:scale-110"
-          aria-label="Next slide"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </Button>
+            {/* Hover View (Details) */}
+            <div className="absolute inset-0 p-3 bg-card/95 backdrop-blur-md flex flex-col opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-bold text-foreground text-xs">{service.title}</h3>
+                <span className="font-bold text-primary text-xs">{service.price}</span>
+              </div>
+              
+              <p className="text-[10px] text-muted-foreground leading-tight mb-2 line-clamp-2">
+                {service.description}
+              </p>
+              
+              <ul className="space-y-1 mb-auto">
+                {service.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-center text-[10px] text-foreground/80">
+                    <div className="w-1 h-1 rounded-full bg-primary mr-1.5" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
 
-        {/* Sliding Indicator Bar */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-          <div className="flex gap-2">
-            {slides.map((_, index) => (
-              <Button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={cn(
-                  "h-1.5 rounded-full transition-all duration-500",
-                  index === currentSlide
-                    ? "w-8 bg-primary"
-                    : "w-2 bg-primary/30 hover:bg-primary/50"
-                )}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
+              <Button size="sm" className="w-full h-7 text-xs mt-2 rounded-lg">
+                Book Now
+              </Button>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
 }
-
-

@@ -40,8 +40,8 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-xl bg-linear-to-br from-primary to-secondary flex items-center justify-center">
                 <Car className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">
-                <span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">MyMechanika</span>
+              <span className="text-xl font-bold text-secondary">
+                MyMechanika
               </span>
             </Link>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm">
