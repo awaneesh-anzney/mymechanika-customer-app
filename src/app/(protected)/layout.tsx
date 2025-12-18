@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import DashNav from "@/components/dashboard/DashNav";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export default function Layout({
   children,
@@ -12,6 +13,20 @@ export default function Layout({
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+
+  const header = useMemo(() => {
+    if (pathname?.startsWith("/service-history")) {
+      return {
+        title: "Service History",
+        subtitle: "View all your past vehicle services",
+      };
+    }
+    return {
+      title: "Dashboard",
+      subtitle: "Welcome back, John!",
+    };
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,7 +45,11 @@ export default function Layout({
         // Desktop: dynamic margin based on collapse state
         collapsed ? "md:ml-20" : "md:ml-64"
       )}>
-        <DashNav setMobileOpen={setMobileOpen} />
+        <DashNav
+          setMobileOpen={setMobileOpen}
+          title={header.title}
+          subtitle={header.subtitle}
+        />
 
         {/* Content */}
         <main className="p-4 md:p-6">

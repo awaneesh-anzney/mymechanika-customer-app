@@ -22,7 +22,7 @@ const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
     { icon: Car, label: "My Vehicles", path: "/my-vehicles" },
     { icon: Calendar, label: "Book Service", path: "/my-booking" },
-    { icon: History, label: "Service History", path: "/my-history" },
+    { icon: History, label: "Service History", path: "/service-history" },
     { icon: MessageSquare, label: "Messages", path: "/my-messages" },
     { icon: User, label: "Profile", path: "/my-profile" },
     { icon: Settings, label: "Settings", path: "/my-settings" },
