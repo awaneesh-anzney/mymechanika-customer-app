@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
-import { Clock } from "lucide-react"
+import { CalendarCheck2 } from "lucide-react"
 import { timeSlots } from "../constants"
 
 type Props = {
@@ -27,8 +27,8 @@ export default function DateTimeStep({
     <Card className="bg-card border-border shadow-card">
       <CardHeader>
         <CardTitle className="font-display flex items-center gap-2">
-          <Clock className="w-5 h-5 text-primary" />
-          Select Date & Time
+          <CalendarCheck2 className="w-5 h-5 text-primary" />
+          Schedule
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">

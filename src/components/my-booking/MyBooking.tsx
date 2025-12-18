@@ -46,20 +46,20 @@ export default function MyBooking() {
       )}
 
       {step === 3 && (
-        <DateTimeStep
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-          selectedTime={selectedTime}
-          onSelectTime={setSelectedTime}
+        <WorkshopStep
+          selectedWorkshop={selectedWorkshop}
+          onSelectWorkshop={(id) => setSelectedWorkshop(id)}
           onBack={() => setStep(2)}
           onContinue={() => setStep(4)}
         />
       )}
 
       {step === 4 && (
-        <WorkshopStep
-          selectedWorkshop={selectedWorkshop}
-          onSelectWorkshop={(id) => setSelectedWorkshop(id)}
+        <DateTimeStep
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          selectedTime={selectedTime}
+          onSelectTime={setSelectedTime}
           onBack={() => setStep(3)}
           onContinue={() => setStep(5)}
         />

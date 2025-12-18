@@ -1,5 +1,5 @@
 "use client"
-import { Check } from "lucide-react"
+import { Check, Car, Wrench, MapPin, CalendarCheck2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type ProgressStepsProps = {
@@ -7,11 +7,11 @@ type ProgressStepsProps = {
 }
 
 const steps = [
-  { num: 1, label: "Vehicle" },
-  { num: 2, label: "Services" },
-  { num: 3, label: "Workshop" },
-  { num: 4, label: "Date & Time" },
-  { num: 5, label: "Confirm" },
+  { num: 1, label: "Vehicle", icon: Car },
+  { num: 2, label: "Services", icon: Wrench },
+  { num: 3, label: "Workshop", icon: MapPin },
+  { num: 4, label: "Schedule", icon: CalendarCheck2 },
+  { num: 5, label: "Confirm", icon: Check },
 ]
 
 export function ProgressSteps({ step }: ProgressStepsProps) {
@@ -26,7 +26,7 @@ export function ProgressSteps({ step }: ProgressStepsProps) {
                 step >= s.num ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
               )}
             >
-              {step > s.num ? <Check className="w-5 h-5" /> : s.num}
+              {step > s.num ? <Check className="w-5 h-5" /> : <s.icon className="w-5 h-5" />}
             </div>
             <span className="text-xs mt-2 text-muted-foreground hidden sm:block">{s.label}</span>
           </div>
