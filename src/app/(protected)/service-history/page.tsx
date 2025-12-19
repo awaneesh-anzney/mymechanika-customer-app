@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { InvoiceDialog } from "@/components/invoice-dialog/InvoiceDialog";
 
 const stats = [
   { label: "Total Services", value: "12" },
@@ -192,9 +193,11 @@ const ServiceHistoryPage = () => {
                   <div className="text-xs text-muted-foreground">{record.invoice}</div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="icon" className="h-9 w-9 border-border shadow-none hover:shadow-md hover:border-primary/30 hover:ring-1 hover:ring-primary/20 transition-all">
-                    <Eye className="w-4 h-4" />
-                  </Button>
+                  <InvoiceDialog>
+                    <Button variant="outline" size="icon" className="h-9 w-9 border-border shadow-none hover:shadow-md hover:border-primary/30 hover:ring-1 hover:ring-primary/20 transition-all">
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                  </InvoiceDialog>
                   <Button variant="outline" size="icon" className="h-9 w-9 border-border shadow-none hover:shadow-md hover:border-primary/30 hover:ring-1 hover:ring-primary/20 transition-all">
                     <Download className="w-4 h-4" />
                   </Button>
