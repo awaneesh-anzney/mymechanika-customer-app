@@ -137,9 +137,10 @@
 }
 
 /* =========================
-   ARABIC TEXT SUPPORT (NON-FLIPPING)
+   ARABIC TEXT SUPPORT (MINIMAL)
 ========================= */
-:lang(ar) body,
+/* Only apply RTL to text tokens to ensure punctuation/symbols flow correctly
+   WITHOUT changing the overall UI layout or container positions. */
 :lang(ar) p,
 :lang(ar) h1,
 :lang(ar) h2,
@@ -148,24 +149,13 @@
 :lang(ar) h5,
 :lang(ar) h6,
 :lang(ar) span,
-:lang(ar) a,
-:lang(ar) button,
+:lang(ar) label {
+  direction: rtl;
+}
+
+/* Maintain LTR alignment for typing areas */
 :lang(ar) input,
 :lang(ar) textarea {
-  direction: rtl;
-  text-align: right;
-}
-
-/* Ensure flex/grid items don't flip order but text inside does */
-:lang(ar) .flex,
-:lang(ar) .grid {
-  /* We keep direction as LTR for layout containers to prevent mirroring */
   direction: ltr;
-}
-
-/* Specifically align buttons/inputs if they are inside LTR containers */
-:lang(ar) button,
-:lang(ar) input {
-  text-align: inherit;
-  /* Allow better control */
+  text-align: left;
 }

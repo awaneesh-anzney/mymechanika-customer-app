@@ -8,9 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Car, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft } from "lucide-react";
 
 
+import { useTranslation } from "react-i18next";
+
 
 const AuthContent = () => {
-
+  const { t } = useTranslation('auth');
   const searchParams = useSearchParams();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -36,12 +38,18 @@ const AuthContent = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const stats = [
+    { value: "2M+", label: t("branding.stats.customers") },
+    { value: "1000+", label: t("branding.stats.centers") },
+    { value: "50+", label: t("branding.stats.cities") },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Panel - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-primary to-secondary relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-50" />
-        
+
         <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-center">
           <Link href="/" className="flex items-center gap-3 mb-12">
             <div className="w-16 h-16 rounded-2xl bg-primary-foreground/10 backdrop-blur flex items-center justify-center">
@@ -51,20 +59,16 @@ const AuthContent = () => {
               MyMechanika
             </span>
           </Link>
-          
+
           <h1 className="text-4xl font-bold text-primary-foreground mb-4">
-            Your Smart Car<br />Maintenance Companion
+            {t("branding.title")}
           </h1>
           <p className="text-primary-foreground/80 text-lg max-w-md">
-            Join millions of car owners who trust us for quality service, transparent pricing, and hassle-free experience.
+            {t("branding.description")}
           </p>
 
           <div className="grid grid-cols-3 gap-8 mt-12">
-            {[
-              { value: "2M+", label: "Happy Customers" },
-              { value: "1000+", label: "Service Centers" },
-              { value: "50+", label: "Cities" },
-            ].map((stat, index) => (
+            {stats.map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-3xl font-bold text-primary-foreground">{stat.value}</div>
                 <div className="text-sm text-primary-foreground/70">{stat.label}</div>
@@ -78,11 +82,11 @@ const AuthContent = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 bg-background flex-1">
         <div className="w-full max-w-md">
           <Link
-href="/"
+            href="/"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            {t("common.backHome")}
           </Link>
 
           <div className="lg:hidden flex items-center gap-2 mb-8">
@@ -95,24 +99,22 @@ href="/"
           </div>
 
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-            {isLogin ? "Welcome back" : "Create account"}
+            {isLogin ? t("login.title") : t("register.title")}
           </h2>
           <p className="text-muted-foreground mb-8">
-            {isLogin
-              ? "Enter your credentials to access your account"
-              : "Fill in your details to get started"}
+            {isLogin ? t("login.subtitle") : t("register.subtitle")}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
+                <Label htmlFor="fullName">{t("register.fullName")}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="fullName"
                     name="fullName"
-                    placeholder="John Doe"
+                    placeholder={t("register.fullNamePlaceholder")}
                     value={formData.fullName}
                     onChange={handleChange}
                     className="pl-10 h-12"
@@ -122,14 +124,14 @@ href="/"
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">{t("login.email")}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t("login.emailPlaceholder")}
                   value={formData.email}
                   onChange={handleChange}
                   className="pl-10 h-12"
@@ -139,14 +141,14 @@ href="/"
 
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">{t("register.phoneNumber")}</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="phone"
                     name="phone"
                     type="tel"
-                    placeholder="+91 98765 43210"
+                    placeholder={t("register.phoneNumberPlaceholder")}
                     value={formData.phone}
                     onChange={handleChange}
                     className="pl-10 h-12"
@@ -156,14 +158,14 @@ href="/"
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("login.password")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
+                  placeholder={t("login.passwordPlaceholder")}
                   value={formData.password}
                   onChange={handleChange}
                   className="pl-10 pr-10 h-12"
@@ -181,13 +183,13 @@ href="/"
             {isLogin && (
               <div className="flex justify-end">
                 <button type="button" className="text-sm text-primary hover:underline">
-                  Forgot password?
+                  {t("login.forgotPassword")}
                 </button>
               </div>
             )}
 
             <Button type="submit" variant="default" size="lg" className="w-full">
-              {isLogin ? "Sign In" : "Create Account"}
+              {isLogin ? t("login.submit") : t("register.submit")}
             </Button>
 
             <div className="relative my-6">
@@ -195,7 +197,7 @@ href="/"
                 <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-background px-2 text-muted-foreground">{t("common.orContinueWith")}</span>
               </div>
             </div>
 
@@ -223,18 +225,18 @@ href="/"
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Continue with Google
+              {t("common.continueGoogle")}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-8">
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            {isLogin ? t("login.noAccount") : t("register.hasAccount")}
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-primary font-medium hover:underline"
+              className="text-primary font-medium hover:underline mx-1"
             >
-              {isLogin ? "Sign up" : "Sign in"}
+              {isLogin ? t("login.signupLink") : t("register.signinLink")}
             </button>
           </p>
         </div>
