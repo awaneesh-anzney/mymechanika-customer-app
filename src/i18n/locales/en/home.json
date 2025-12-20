@@ -1,0 +1,132 @@
+{
+    "hero": {
+        "trustBadge": "Trusted by 2M+ Car Owners",
+        "title": "Get Your Car Serviced",
+        "titleAccent": "in Minutes",
+        "description": "Premium car maintenance at your doorstep. Quality service, transparent pricing, and hassle-free experience guaranteed.",
+        "bookButton": "Book Service",
+        "viewServices": "View All Services",
+        "locationPlaceholder": "Enter your zip code or city...",
+        "detectLocation": "Detect my location",
+        "findButton": "Find",
+        "locationMessages": {
+            "success": "Location detected successfully",
+            "error": "Could not detect location. Please enter manually.",
+            "unsupported": "Geolocation is not supported by your browser"
+        }
+    },
+    "stats": {
+        "cars": "Cars Serviced",
+        "centers": "Service Centers",
+        "rating": "Customer Rating",
+        "cities": "Cities"
+    },
+    "howItWorks": {
+        "badge": "How It Works",
+        "title": "Book Your Service in 5 Easy Steps",
+        "description": "Simple, hassle-free process to get your car serviced by experts",
+        "steps": {
+            "step1": {
+                "title": "Select Car & Service",
+                "description": "Choose your vehicle and the service you need"
+            },
+            "step2": {
+                "title": "Schedule Appointment",
+                "description": "Pick a convenient date and time slot"
+            },
+            "step3": {
+                "title": "Free Pickup",
+                "description": "We collect your car from your doorstep"
+            },
+            "step4": {
+                "title": "Expert Service",
+                "description": "Certified mechanics work on your car"
+            },
+            "step5": {
+                "title": "Delivery",
+                "description": "Your serviced car delivered back to you"
+            }
+        },
+        "stepLabel": "Step"
+    },
+    "whyChoose": {
+        "title": "Why Choose",
+        "companyName": "MyMechanika",
+        "description": "We're committed to providing the best car service experience with quality and transparency.",
+        "features": {
+            "quality": {
+                "title": "Quality Assured",
+                "description": "OEM & OES spare parts with warranty on every service"
+            },
+            "time": {
+                "title": "On-Time Service",
+                "description": "Pickup & drop at your doorstep at scheduled time"
+            },
+            "mechanics": {
+                "title": "Expert Mechanics",
+                "description": "Trained & certified professionals for all brands"
+            },
+            "pricing": {
+                "title": "Transparent Pricing",
+                "description": "No hidden charges, pay only for what you need"
+            }
+        }
+    },
+    "appDownload": {
+        "badge": "Download Our App",
+        "title": "Car Service at Your",
+        "titleAccent": "Fingertips",
+        "description": "Book services, track repairs, manage your cars, and get exclusive app-only discounts. Everything you need for hassle-free car maintenance.",
+        "appStore": {
+            "label": "Download on the",
+            "store": "App Store"
+        },
+        "googlePlay": {
+            "label": "Get it on",
+            "store": "Google Play"
+        },
+        "features": {
+            "free": "Free Download",
+            "rating": "4.8★ Rating",
+            "downloads": "1M+ Downloads"
+        },
+        "phoneMockup": {
+            "book": "Book Service",
+            "track": "Track Repair",
+            "cars": "My Cars",
+            "offers": "Offers"
+        }
+    },
+    "footer": {
+        "description": "Your smart car maintenance companion. Quality service, transparent pricing, and hassle-free experience at your doorstep.",
+        "sections": {
+            "company": {
+                "title": "Company",
+                "about": "About Us",
+                "careers": "Careers",
+                "blog": "Blog",
+                "press": "Press"
+            },
+            "services": {
+                "title": "Services",
+                "carService": "Car Service",
+                "acRepair": "AC Repair",
+                "tyreReplacement": "Tyre Replacement",
+                "batteryService": "Battery Service"
+            },
+            "support": {
+                "title": "Support",
+                "helpCenter": "Help Center",
+                "contactUs": "Contact Us",
+                "faqs": "FAQs",
+                "terms": "Terms of Service"
+            },
+            "contact": {
+                "title": "Contact"
+            }
+        },
+        "rights": "All rights reserved",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
+    }
+}

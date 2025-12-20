@@ -11,10 +11,10 @@ import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const navItems = [
-  { label: "navbar.home", href: "/" },
-  { label: "navbar.services", href: "/services" },
-  { label: "navbar.about", href: "/about" },
-  { label: "navbar.contact", href: "/contact" },
+  { label: "home", href: "/" },
+  { label: "services", href: "/services" },
+  { label: "about", href: "/about" },
+  { label: "contact", href: "/contact" },
 ];
 
 export function Navbar() {
@@ -22,7 +22,7 @@ export function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { setTheme, theme, resolvedTheme } = useTheme();
-  const { t } = useTranslation();
+  const { t } = useTranslation('navbar');
 
   const toggleTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
@@ -57,7 +57,7 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">{t('navbar.toggleTheme')}</span>
+              <span className="sr-only">{t('toggleTheme')}</span>
             </Button>
             <Button
               variant="ghost"
@@ -68,7 +68,7 @@ export function Navbar() {
             >
 
               <LogIn className="h-4 w-4 mr-2" />
-              {t('navbar.login')}
+              {t('login')}
             </Button>
             <Button
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -76,7 +76,7 @@ export function Navbar() {
                 router.push("/auth?mode=register")
               }}
             >
-              {t('navbar.getStarted')}
+              {t('getStarted')}
             </Button>
           </div>
 
@@ -86,7 +86,7 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">{t('navbar.toggleTheme')}</span>
+              <span className="sr-only">{t('toggleTheme')}</span>
             </Button>
             <Button
               variant="ghost"
@@ -129,7 +129,7 @@ export function Navbar() {
               }}
             >
               <LogIn className="h-4 w-4 mr-2" />
-              {t('navbar.login')}
+              {t('login')}
             </Button>
             <Button
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -137,7 +137,7 @@ export function Navbar() {
                 router.push("/auth?mode=register")
               }}
             >
-              {t('navbar.getStarted')}
+              {t('getStarted')}
             </Button>
           </div>
         </div>

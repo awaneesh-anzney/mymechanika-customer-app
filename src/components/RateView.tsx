@@ -1,13 +1,17 @@
+"use client"
 import React from 'react';
 import { Car, MapPin, Star, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const RateView = () => {
+  const { t } = useTranslation('home');
+
   const stats = [
-    { value: "2M+", label: "Cars Serviced", icon: Car },
-    { value: "1000+", label: "Service Centers", icon: Building2 },
-    { value: "4.8", label: "Customer Rating", icon: Star },
-    { value: "50+", label: "Cities", icon: MapPin },
+    { value: "2M+", label: t("stats.cars"), icon: Car },
+    { value: "1000+", label: t("stats.centers"), icon: Building2 },
+    { value: "4.8", label: t("stats.rating"), icon: Star },
+    { value: "50+", label: t("stats.cities"), icon: MapPin },
   ];
 
   return (

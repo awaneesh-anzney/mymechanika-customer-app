@@ -1,16 +1,30 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-// Import translation files
-import enTranslations from './locales/en/translation.json';
-import arTranslations from './locales/ar/translation.json';
+// English
+import enCommon from './locales/en/common.json';
+import enNavbar from './locales/en/navbar.json';
+import enHome from './locales/en/home.json';
+import enAuth from './locales/en/auth.json';
+
+// Arabic
+import arCommon from './locales/ar/common.json';
+import arNavbar from './locales/ar/navbar.json';
+import arHome from './locales/ar/home.json';
+import arAuth from './locales/ar/auth.json';
 
 const resources = {
   en: {
-    translation: enTranslations,
+    common: enCommon,
+    navbar: enNavbar,
+    home: enHome,
+    auth: enAuth,
   },
   ar: {
-    translation: arTranslations,
+    common: arCommon,
+    navbar: arNavbar,
+    home: arHome,
+    auth: arAuth,
   },
 };
 
@@ -20,6 +34,8 @@ i18n
     resources,
     lng: 'en', // default language
     fallbackLng: 'en',
+    ns: ['common', 'navbar', 'home', 'auth'],
+    defaultNS: 'common',
     interpolation: {
       escapeValue: false, // React already escapes values
     },

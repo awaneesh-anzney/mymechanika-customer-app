@@ -14,11 +14,18 @@ The application supports two languages:
 src/
 ├── i18n/
 │   ├── config.ts                    # i18n configuration
+│   ├── i18next.d.ts                 # Type definitions for namespaces
 │   └── locales/
 │       ├── en/
-│       │   └── translation.json     # English translations
+│       │   ├── common.json          # Generic UI strings
+│       │   ├── navbar.json          # Navigation translations
+│       │   ├── home.json            # Home page sections
+│       │   └── auth.json            # Auth related strings
 │       └── ar/
-│           └── translation.json     # Arabic translations
+│           ├── common.json
+│           ├── navbar.json
+│           ├── home.json
+│           └── auth.json
 ├── components/
 │   ├── language-provider.tsx        # Language context provider
 │   └── LanguageSwitcher.tsx         # Language switcher component
@@ -28,20 +35,20 @@ src/
 
 ### 1. Configuration (`i18n/config.ts`)
 - Initializes i18next with react-i18next
-- Imports translation files for both languages
+- Imports separate JSON files for each namespace (`common`, `navbar`, `home`, `auth`)
 - Sets English as the default language
-- Configures fallback language
+- Configures `common` as the default namespace
 
 ### 2. Language Provider (`components/language-provider.tsx`)
 - Provides language context throughout the app
 - Manages language state and direction (RTL/LTR)
 - Persists language preference in localStorage
-- Automatically updates `document.documentElement.dir` and `document.documentElement.lang`
+- Automatically updates `document.documentElement.lang` and applies RTL direction to text elements via CSS
 
-### 3. Translation Files (`i18n/locales/*/translation.json`)
-- Organized by feature/component
+### 3. Translation Files (`i18n/locales/*/*.json`)
+- Split into multiple files for better organization and performance
+- Each file acts as a separate namespace
 - Structured JSON format for easy maintenance
-- Contains all translatable strings
 
 ### 4. Language Switcher (`components/LanguageSwitcher.tsx`)
 - Displays a language icon button
@@ -52,17 +59,32 @@ src/
 
 ### Using Translations in Components
 
+When using translations, you can specify the namespace(s) your component needs:
+
 ```tsx
 import { useTranslation } from 'react-i18next';
 
-function MyComponent() {
-  const { t } = useTranslation();
+function MyHomeComponent() {
+  // Using multiple namespaces
+  const { t } = useTranslation(['navbar', 'home']);
   
   return (
     <div>
-      <h1>{t('navbar.home')}</h1>
-      <p>{t('hero.description')}</p>
+      {/* Accessing navbar namespace */}
+      <h1>{t('navbar:home')}</h1> 
+      
+      {/* Accessing home namespace */}
+      <p>{t('home:hero.description')}</p>
     </div>
+  );
+}
+
+function MySimpleComponent() {
+  // Using a single namespace (keys don't need prefixes)
+  const { t } = useTranslation('navbar');
+  
+  return (
+    <button>{t('login')}</button>
   );
 }
 ```
@@ -91,87 +113,55 @@ function MyComponent() {
 
 ## Adding New Translations
 
-1. Open both translation files:
-   - `src/i18n/locales/en/translation.json`
-   - `src/i18n/locales/ar/translation.json`
+1. Identify the relevant category for your translation (e.g., `common`, `home`, `auth`).
+2. Open the corresponding JSON file in both languages:
+   - `src/i18n/locales/en/[category].json`
+   - `src/i18n/locales/ar/[category].json`
 
-2. Add your new key-value pairs in the same structure:
+3. Add your new key-value pairs:
 
-**English:**
+**English (`home.json`):**
 ```json
 {
   "myFeature": {
-    "title": "My Feature Title",
-    "description": "My feature description"
+    "title": "My Feature Title"
   }
 }
 ```
 
-**Arabic:**
+**Arabic (`home.json`):**
 ```json
 {
   "myFeature": {
-    "title": "عنوان ميزتي",
-    "description": "وصف ميزتي"
+    "title": "عنوان ميزتي"
   }
 }
 ```
 
-3. Use in your component:
+3. Use in your component with the namespace:
 ```tsx
+const { t } = useTranslation('home');
+// ...
 {t('myFeature.title')}
-{t('myFeature.description')}
 ```
 
 ## RTL Support
 
-The application automatically handles RTL layout when Arabic is selected:
-
-- `document.documentElement.dir` is set to `"rtl"`
-- CSS automatically flips layout using `dir` attribute
-- No manual CSS changes needed for most components
-- Tailwind CSS respects the `dir` attribute automatically
-
-### Custom RTL Styles (if needed)
-
-If you need custom RTL styles, use the `dir` attribute selector:
-
-```css
-/* LTR specific */
-[dir="ltr"] .my-element {
-  margin-left: 1rem;
-}
-
-/* RTL specific */
-[dir="rtl"] .my-element {
-  margin-right: 1rem;
-}
-```
-
-Or use Tailwind's RTL modifiers:
-
-```tsx
-<div className="ml-4 rtl:mr-4 rtl:ml-0">
-  Content
-</div>
-```
+The application handles RTL layout by setting `lang="ar"` on the `html` tag. Global CSS applies `direction: rtl` and `text-align: right` to text-carrying elements (body, p, headings, etc.) while preserving the overall grid/flex layout order.
 
 ## Language Persistence
 
 The selected language is automatically saved to `localStorage` with the key `"language"`. When the user returns to the app, their language preference is restored.
 
-## Translation Keys Structure
+## Translation Categories (Namespaces)
 
-Current translation structure:
+Current namespaces:
 
 ```
-navbar.*          - Navigation bar items
-hero.*            - Hero section content
-services.*        - Services page content
-about.*           - About page content
-contact.*         - Contact page content
-footer.*          - Footer content
-common.*          - Common UI elements (buttons, messages, etc.)
+common.json   - Generic UI elements (loading, buttons, alerts)
+navbar.json   - Header and Navigation menu items
+home.json     - Landing page sections (hero, stats, features, footer)
+auth.json     - Login, Signup, and Password recovery strings
 ```
 
 ## Best Practices
