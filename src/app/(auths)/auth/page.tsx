@@ -12,7 +12,17 @@ import { useTranslation } from "react-i18next";
 
 
 const AuthContent = () => {
-  const { t } = useTranslation('auth');
+  const { t, i18n } = useTranslation('auth');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Use English translator for the initial pass to match Server Side Rendering
+  // This prevents hydration mismatches when the user's saved language is Arabic
+  const activeT = mounted ? t : i18n.getFixedT('en', 'auth');
+
   const searchParams = useSearchParams();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -39,9 +49,9 @@ const AuthContent = () => {
   };
 
   const stats = [
-    { value: "2M+", label: t("branding.stats.customers") },
-    { value: "1000+", label: t("branding.stats.centers") },
-    { value: "50+", label: t("branding.stats.cities") },
+    { value: "2M+", label: activeT("branding.stats.customers") },
+    { value: "1000+", label: activeT("branding.stats.centers") },
+    { value: "50+", label: activeT("branding.stats.cities") },
   ];
 
   return (
@@ -61,10 +71,10 @@ const AuthContent = () => {
           </Link>
 
           <h1 className="text-4xl font-bold text-primary-foreground mb-4">
-            {t("branding.title")}
+            {activeT("branding.title")}
           </h1>
-          <p className="text-primary-foreground/80 text-lg max-w-md">
-            {t("branding.description")}
+          <p className="text-secondary-foreground/80 text-lg max-w-md">
+            {activeT("branding.description")}
           </p>
 
           <div className="grid grid-cols-3 gap-8 mt-12">
@@ -86,7 +96,7 @@ const AuthContent = () => {
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            {t("common.backHome")}
+            {activeT("common.backHome")}
           </Link>
 
           <div className="lg:hidden flex items-center gap-2 mb-8">
@@ -99,22 +109,22 @@ const AuthContent = () => {
           </div>
 
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-            {isLogin ? t("login.title") : t("register.title")}
+            {isLogin ? activeT("login.title") : activeT("register.title")}
           </h2>
           <p className="text-muted-foreground mb-8">
-            {isLogin ? t("login.subtitle") : t("register.subtitle")}
+            {isLogin ? activeT("login.subtitle") : activeT("register.subtitle")}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="fullName">{t("register.fullName")}</Label>
+                <Label htmlFor="fullName">{activeT("register.fullName")}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="fullName"
                     name="fullName"
-                    placeholder={t("register.fullNamePlaceholder")}
+                    placeholder={activeT("register.fullNamePlaceholder")}
                     value={formData.fullName}
                     onChange={handleChange}
                     className="pl-10 h-12"
@@ -124,14 +134,14 @@ const AuthContent = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">{t("login.email")}</Label>
+              <Label htmlFor="email">{activeT("login.email")}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder={t("login.emailPlaceholder")}
+                  placeholder={activeT("login.emailPlaceholder")}
                   value={formData.email}
                   onChange={handleChange}
                   className="pl-10 h-12"
@@ -141,14 +151,14 @@ const AuthContent = () => {
 
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="phone">{t("register.phoneNumber")}</Label>
+                <Label htmlFor="phone">{activeT("register.phoneNumber")}</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="phone"
                     name="phone"
                     type="tel"
-                    placeholder={t("register.phoneNumberPlaceholder")}
+                    placeholder={activeT("register.phoneNumberPlaceholder")}
                     value={formData.phone}
                     onChange={handleChange}
                     className="pl-10 h-12"
@@ -158,14 +168,14 @@ const AuthContent = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="password">{t("login.password")}</Label>
+              <Label htmlFor="password">{activeT("login.password")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder={t("login.passwordPlaceholder")}
+                  placeholder={activeT("login.passwordPlaceholder")}
                   value={formData.password}
                   onChange={handleChange}
                   className="pl-10 pr-10 h-12"
@@ -183,13 +193,13 @@ const AuthContent = () => {
             {isLogin && (
               <div className="flex justify-end">
                 <button type="button" className="text-sm text-primary hover:underline">
-                  {t("login.forgotPassword")}
+                  {activeT("login.forgotPassword")}
                 </button>
               </div>
             )}
 
             <Button type="submit" variant="default" size="lg" className="w-full">
-              {isLogin ? t("login.submit") : t("register.submit")}
+              {isLogin ? activeT("login.submit") : activeT("register.submit")}
             </Button>
 
             <div className="relative my-6">
@@ -197,7 +207,7 @@ const AuthContent = () => {
                 <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">{t("common.orContinueWith")}</span>
+                <span className="bg-background px-2 text-muted-foreground">{activeT("common.orContinueWith")}</span>
               </div>
             </div>
 
@@ -225,18 +235,18 @@ const AuthContent = () => {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              {t("common.continueGoogle")}
+              {activeT("common.continueGoogle")}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-8">
-            {isLogin ? t("login.noAccount") : t("register.hasAccount")}
+            {isLogin ? activeT("login.noAccount") : activeT("register.hasAccount")}
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
               className="text-primary font-medium hover:underline mx-1"
             >
-              {isLogin ? t("login.signupLink") : t("register.signinLink")}
+              {isLogin ? activeT("login.signupLink") : activeT("register.signinLink")}
             </button>
           </p>
         </div>

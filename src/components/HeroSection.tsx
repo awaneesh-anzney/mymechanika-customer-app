@@ -1,5 +1,5 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import { TrustBadge } from "./TrustBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,14 @@ import { useTranslation } from "react-i18next";
 
 export function HeroSection() {
   const router = useRouter();
-  const { t } = useTranslation('home');
+  const { t, i18n } = useTranslation('home');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeT = mounted ? t : i18n.getFixedT('en', 'home');
 
   return (
     <div className="flex flex-col gap-8">
@@ -27,11 +34,11 @@ export function HeroSection() {
       {/* Headline */}
       <div className="space-y-4">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-          {t("hero.title")}{" "}
-          <span className="text-primary">{t("hero.titleAccent")}</span>
+          {activeT("hero.title")}{" "}
+          <span className="text-primary">{activeT("hero.titleAccent")}</span>
         </h1>
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl">
-          {t("hero.description")}
+          {activeT("hero.description")}
         </p>
       </div>
 
@@ -43,7 +50,7 @@ export function HeroSection() {
           size="lg"
           className="bg-linear-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground px-8 h-12 w-full sm:w-auto"
         >
-          {t("hero.bookButton")}
+          {activeT("hero.bookButton")}
           <ArrowRight className="h-5 w-5 ml-2" />
         </Button>
         <Button
@@ -52,7 +59,7 @@ export function HeroSection() {
           className="border-2 border-foreground text-foreground hover:bg-foreground hover:text-background px-8 h-12 w-full sm:w-auto"
           onClick={() => router.push("/services")}
         >
-          {t("hero.viewServices")}
+          {activeT("hero.viewServices")}
         </Button>
       </div>
     </div>
