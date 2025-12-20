@@ -7,12 +7,14 @@ import { Moon, Sun, LogIn, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "navbar.home", href: "/" },
+  { label: "navbar.services", href: "/services" },
+  { label: "navbar.about", href: "/about" },
+  { label: "navbar.contact", href: "/contact" },
 ];
 
 export function Navbar() {
@@ -20,6 +22,7 @@ export function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { setTheme, theme, resolvedTheme } = useTheme();
+  const { t } = useTranslation();
 
   const toggleTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
@@ -38,51 +41,52 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-bold transition-colors hover:text-primary ${
-                  pathname === item.href
-                    ? "text-primary font-bold underline underline-offset-4"
-                    : "text-foreground"
-                }`}
+                className={`text-sm font-bold transition-colors hover:text-primary ${pathname === item.href
+                  ? "text-primary font-bold underline underline-offset-4"
+                  : "text-foreground"
+                  }`}
               >
-                {item.label}
+                {t(item.label)}
               </Link>
             ))}
           </div>
 
           {/* Desktop Right Side Actions */}
           <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
+              <span className="sr-only">{t('navbar.toggleTheme')}</span>
             </Button>
             <Button
-             variant="ghost" 
-             className="text-foreground"
-             onClick={()=>{
-              router.push("/auth")
-             }}
-             >
+              variant="ghost"
+              className="text-foreground"
+              onClick={() => {
+                router.push("/auth")
+              }}
+            >
 
               <LogIn className="h-4 w-4 mr-2" />
-              Login
+              {t('navbar.login')}
             </Button>
-            <Button 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
-            onClick={()=>{
-              router.push("/auth?mode=register")
-            }}
+            <Button
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              onClick={() => {
+                router.push("/auth?mode=register")
+              }}
             >
-              Get Started
+              {t('navbar.getStarted')}
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
+            <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
-               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-               <span className="sr-only">Toggle theme</span>
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">{t('navbar.toggleTheme')}</span>
             </Button>
             <Button
               variant="ghost"
@@ -105,34 +109,35 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className={`text-base font-medium transition-colors hover:text-primary py-2 ${
-                  pathname === item.href
-                    ? "text-primary"
-                    : "text-foreground"
-                }`}
+                className={`text-base font-medium transition-colors hover:text-primary py-2 ${pathname === item.href
+                  ? "text-primary"
+                  : "text-foreground"
+                  }`}
               >
-                {item.label}
+                {t(item.label)}
               </Link>
             ))}
-            
+
             <div className="h-px bg-border my-4" />
-            
-            <Button variant="ghost" 
-            className="justify-start px-0 hover:bg-transparent text-foreground"
-            onClick={()=>{
-              router.push("/auth")
-            }}
+
+            <LanguageSwitcher />
+
+            <Button variant="ghost"
+              className="justify-start px-0 hover:bg-transparent text-foreground"
+              onClick={() => {
+                router.push("/auth")
+              }}
             >
               <LogIn className="h-4 w-4 mr-2" />
-              Login
+              {t('navbar.login')}
             </Button>
-            <Button 
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-            onClick={()=>{
-              router.push("/auth?mode=register")
-            }}
+            <Button
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+              onClick={() => {
+                router.push("/auth?mode=register")
+              }}
             >
-              Get Started
+              {t('navbar.getStarted')}
             </Button>
           </div>
         </div>

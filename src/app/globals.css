@@ -51,10 +51,12 @@
   --popover-foreground: #111827;
 
   /* Brand Colors */
-  --primary: #0f963e; /* Service green */
+  --primary: #0f963e;
+  /* Service green */
   --primary-foreground: #ffffff;
 
-  --secondary: #0f52ba; /* Automotive blue */
+  --secondary: #0f52ba;
+  /* Automotive blue */
   --secondary-foreground: #ffffff;
 
   /* UI States */
@@ -132,4 +134,38 @@
 
 *::-webkit-scrollbar {
   display: none;
+}
+
+/* =========================
+   ARABIC TEXT SUPPORT (NON-FLIPPING)
+========================= */
+:lang(ar) body,
+:lang(ar) p,
+:lang(ar) h1,
+:lang(ar) h2,
+:lang(ar) h3,
+:lang(ar) h4,
+:lang(ar) h5,
+:lang(ar) h6,
+:lang(ar) span,
+:lang(ar) a,
+:lang(ar) button,
+:lang(ar) input,
+:lang(ar) textarea {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Ensure flex/grid items don't flip order but text inside does */
+:lang(ar) .flex,
+:lang(ar) .grid {
+  /* We keep direction as LTR for layout containers to prevent mirroring */
+  direction: ltr;
+}
+
+/* Specifically align buttons/inputs if they are inside LTR containers */
+:lang(ar) button,
+:lang(ar) input {
+  text-align: inherit;
+  /* Allow better control */
 }
