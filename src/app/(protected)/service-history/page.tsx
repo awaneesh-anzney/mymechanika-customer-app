@@ -59,6 +59,13 @@ const records = [
   },
 ];
 
+const statusClasses: Record<string, string> = {
+  Completed: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  Scheduled: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  Pending: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  Cancelled: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+};
+
 export default function ServiceHistoryPage() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 -mt-2">
