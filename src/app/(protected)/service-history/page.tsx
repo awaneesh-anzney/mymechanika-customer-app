@@ -59,12 +59,7 @@ const records = [
   },
 ];
 
-const statusClasses: Record<string, string> = {
-  Completed: "bg-green-50 text-green-700 border-green-100",
-  Scheduled: "bg-amber-50 text-amber-700 border-amber-100",
-};
-
-const ServiceHistoryPage = () => {
+export default function ServiceHistoryPage() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 -mt-2">
       <div className="flex flex-col gap-4">
@@ -209,8 +204,6 @@ const ServiceHistoryPage = () => {
       </Card>
     </div>
   );
-};
-
-export default ServiceHistoryPage;
+}
 
 
