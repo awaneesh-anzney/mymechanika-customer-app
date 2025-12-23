@@ -8,6 +8,7 @@ import enHome from './locales/en/home.json';
 import enAuth from './locales/en/auth.json';
 import enServices from './locales/en/services.json';
 import enAbout from './locales/en/about.json';
+import enContact from './locales/en/contact.json';
 
 // Arabic
 import arCommon from './locales/ar/common.json';
@@ -16,6 +17,7 @@ import arHome from './locales/ar/home.json';
 import arAuth from './locales/ar/auth.json';
 import arServices from './locales/ar/services.json';
 import arAbout from './locales/ar/about.json';
+import arContact from './locales/ar/contact.json';
 
 const resources = {
   en: {
@@ -25,6 +27,7 @@ const resources = {
     auth: enAuth,
     services: enServices,
     about: enAbout,
+    contact: enContact,
   },
   ar: {
     common: arCommon,
@@ -33,6 +36,7 @@ const resources = {
     auth: arAuth,
     services: arServices,
     about: arAbout,
+    contact: arContact,
   },
 };
 
@@ -42,7 +46,7 @@ i18n
     resources,
     lng: 'en', // default language
     fallbackLng: 'en',
-    ns: ['common', 'navbar', 'home', 'auth', 'services', 'about'],
+    ns: ['common', 'navbar', 'home', 'auth', 'services', 'about', 'contact'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false, // React already escapes values

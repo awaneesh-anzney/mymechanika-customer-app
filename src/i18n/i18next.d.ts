@@ -6,6 +6,7 @@ import type home from './locales/en/home.json';
 import type auth from './locales/en/auth.json';
 import type services from './locales/en/services.json';
 import type about from './locales/en/about.json';
+import type contact from './locales/en/contact.json';
 
 declare module 'react-i18next' {
     interface CustomTypeOptions {
@@ -17,6 +18,7 @@ declare module 'react-i18next' {
             auth: typeof auth;
             services: typeof services;
             about: typeof about;
+            contact: typeof contact;
         };
     }
 }
