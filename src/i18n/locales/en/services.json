@@ -1,0 +1,41 @@
+{
+    "badge": "Our Services",
+    "popular": "Popular",
+    "bookNow": "Book Now",
+    "title": "Premium Car Care Services",
+    "subtitle": "From routine maintenance to complex repairs, we've got your car covered with expert service and genuine parts.",
+    "items": {
+        "general": {
+            "title": "General Maintenance",
+            "description": "Regular check-ups, oil changes, and fluid top-ups to keep your car running smoothly."
+        },
+        "brakes": {
+            "title": "Brake Services",
+            "description": "Complete brake inspection, pad replacement, and rotor resurfacing for your safety."
+        },
+        "engine": {
+            "title": "Engine Diagnostics",
+            "description": "Advanced computer diagnostics to identify and fix engine issues quickly."
+        },
+        "ac": {
+            "title": "AC Service & Repair",
+            "description": "Deep cleaning, gas top-up, and cooling system inspection for peak performance."
+        },
+        "wheel": {
+            "title": "Wheel Care",
+            "description": "Wheel alignment, balancing, and tyre rotation for a smoother, safer ride."
+        },
+        "spa": {
+            "title": "Car Spa & Detailing",
+            "description": "Interior deep cleaning, exterior polishing, and ceramic coating for a showroom shine."
+        },
+        "paint": {
+            "title": "Denting & Painting",
+            "description": "Professional scratch removal and premium paint services to restore your car's look."
+        },
+        "battery": {
+            "title": "Battery Replacement",
+            "description": "Testing and replacement of old batteries with high-quality new ones."
+        }
+    }
+}

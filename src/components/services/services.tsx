@@ -2,6 +2,8 @@ import { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Star, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 
 interface ServiceCardProps {
   title: string;
@@ -28,6 +30,15 @@ const ServiceCard = ({
   className,
   compact = false,
 }: ServiceCardProps) => {
+  const { t, i18n } = useTranslation('services');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeT = mounted ? t : i18n.getFixedT('en', 'services');
+
   return (
     <div
       className={cn(
@@ -41,7 +52,7 @@ const ServiceCard = ({
     >
       {featured && (
         <span className="absolute -top-3 left-6 px-3 py-1 text-xs font-semibold bg-linear-to-br from-primary to-secondary text-primary-foreground rounded-full shadow-md z-10">
-          Popular
+          {activeT("popular")}
         </span>
       )}
 
@@ -91,7 +102,7 @@ const ServiceCard = ({
           )}
         </div>
         <Button variant={featured ? "default" : "default"} size="sm">
-          Book Now
+          {activeT("bookNow")}
         </Button>
       </div>
     </div>
