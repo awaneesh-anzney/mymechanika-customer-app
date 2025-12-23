@@ -3,84 +3,68 @@
 import { Car, Wrench, Shield, Thermometer, Battery, CircleDashed, Clock, ArrowRight, PaintBucket, Sparkles, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 
-const heroServices = [
+const heroServicesData = [
   {
-    title: "Maintenance",
-    price: "SAR 199",
-    time: "45m",
+    id: "maintenance",
     icon: Car,
-    description: "Keep your car running smoothly with our comprehensive maintenance package.",
-    features: ["Fluid Top-up", "Filter Check", "Safety Inspection"]
   },
   {
-    title: "Brake Service",
-    price: "SAR 299",
-    time: "2h",
+    id: "brakes",
     icon: Shield,
     featured: true,
-    description: "Ensure your safety with expert brake inspection and servicing.",
-    features: ["Pad Replacement", "Rotor Check", "Fluid Flush"]
   },
   {
-    title: "Diagnostics",
-    price: "SAR 149",
-    time: "30m",
+    id: "diagnostics",
     icon: Wrench,
-    description: "Identify issues quickly with our advanced computer diagnostics.",
-    features: ["Engine Scan", "Sensor Check", "Detailed Report"]
   },
   {
-    title: "AC Service",
-    price: "SAR 399",
-    time: "3h",
+    id: "ac",
     icon: Thermometer,
-    description: "Stay cool with our complete air conditioning system service.",
-    features: ["Gas Refill", "Leak Test", "Filter Cleaning"]
   },
   {
-    title: "Battery",
-    price: "SAR 249",
-    time: "45m",
+    id: "battery",
     icon: Battery,
-    description: "Reliable battery replacement and health check services.",
-    features: ["Voltage Test", "Terminal Clean", "Replacement"]
   },
   {
-    title: "Tyres",
-    price: "SAR 199",
-    time: "1h",
+    id: "tyres",
     icon: CircleDashed,
-    description: "Professional tyre services for a smoother, safer ride.",
-    features: ["Alignment", "Balancing", "Rotation"]
   },
   {
-    title: "Oil Change",
-    price: "SAR 99",
-    time: "30m",
+    id: "oil",
     icon: PaintBucket,
-    description: "Premium oil change service to protect your engine.",
-    features: ["Synthetic Oil", "Filter Change", "Fluid Check"]
   },
   {
-    title: "Detailing",
-    price: "SAR 499",
-    time: "4h",
+    id: "detailing",
     icon: Sparkles,
-    description: "Restore your car's showroom shine inside and out.",
-    features: ["Wash & Wax", "Interior Deep Clean", "Polishing"]
   },
   {
-    title: "Emergency",
-    price: "SAR 150",
-    time: "20m",
+    id: "emergency",
     icon: AlertTriangle,
-    description: "24/7 roadside assistance when you need it most.",
-    features: ["Jump Start", "Flat Tyre", "Fuel Delivery"]
   },
 ];
 
 export function HeroIllustration() {
+  const { t, i18n } = useTranslation('services');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeT = mounted ? t : i18n.getFixedT('en', 'services');
+
+  const heroServices = heroServicesData.map(service => ({
+    ...service,
+    title: activeT(`heroIllustration.services.${service.id}.title`),
+    price: activeT(`heroIllustration.services.${service.id}.price`),
+    time: activeT(`heroIllustration.services.${service.id}.time`),
+    description: activeT(`heroIllustration.services.${service.id}.description`),
+    features: activeT(`heroIllustration.services.${service.id}.features`, { returnObjects: true }) as string[],
+  }));
+
   return (
     <div className="w-full flex justify-center lg:justify-end">
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-2xl">
@@ -89,8 +73,8 @@ export function HeroIllustration() {
             key={index}
             className={cn(
               "group relative h-[160px] flex flex-col p-3 rounded-xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-card overflow-hidden",
-              service.featured 
-                ? "border-primary/50 bg-linear-to-br from-primary/5 to-transparent shadow-sm" 
+              service.featured
+                ? "border-primary/50 bg-linear-to-br from-primary/5 to-transparent shadow-sm"
                 : "border-border hover:border-primary/30"
             )}
           >
@@ -108,7 +92,7 @@ export function HeroIllustration() {
                   <span>{service.time}</span>
                 </div>
               </div>
-              
+
               <div>
                 <h3 className="font-bold text-foreground text-sm mb-1 line-clamp-1">
                   {service.title}
@@ -130,13 +114,13 @@ export function HeroIllustration() {
                 <h3 className="font-bold text-foreground text-xs">{service.title}</h3>
                 <span className="font-bold text-primary text-xs">{service.price}</span>
               </div>
-              
+
               <p className="text-[10px] text-muted-foreground leading-tight mb-2 line-clamp-2">
                 {service.description}
               </p>
-              
+
               <ul className="space-y-1 mb-auto">
-                {service.features.map((feature, idx) => (
+                {Array.isArray(service.features) && service.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center text-[10px] text-foreground/80">
                     <div className="w-1 h-1 rounded-full bg-primary mr-1.5" />
                     {feature}
@@ -145,7 +129,7 @@ export function HeroIllustration() {
               </ul>
 
               <Button size="sm" className="w-full h-7 text-xs mt-2 rounded-lg">
-                Book Now
+                {activeT("heroIllustration.bookNow")}
               </Button>
             </div>
           </div>

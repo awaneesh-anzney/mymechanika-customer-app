@@ -37,5 +37,109 @@
             "title": "Battery Replacement",
             "description": "Testing and replacement of old batteries with high-quality new ones."
         }
+    },
+    "heroIllustration": {
+        "bookNow": "Book Now",
+        "services": {
+            "maintenance": {
+                "title": "Maintenance",
+                "price": "SAR 199",
+                "time": "45m",
+                "description": "Keep your car running smoothly with our comprehensive maintenance package.",
+                "features": [
+                    "Fluid Top-up",
+                    "Filter Check",
+                    "Safety Inspection"
+                ]
+            },
+            "brakes": {
+                "title": "Brake Service",
+                "price": "SAR 299",
+                "time": "2h",
+                "description": "Ensure your safety with expert brake inspection and servicing.",
+                "features": [
+                    "Pad Replacement",
+                    "Rotor Check",
+                    "Fluid Flush"
+                ]
+            },
+            "diagnostics": {
+                "title": "Diagnostics",
+                "price": "SAR 149",
+                "time": "30m",
+                "description": "Identify issues quickly with our advanced computer diagnostics.",
+                "features": [
+                    "Engine Scan",
+                    "Sensor Check",
+                    "Detailed Report"
+                ]
+            },
+            "ac": {
+                "title": "AC Service",
+                "price": "SAR 399",
+                "time": "3h",
+                "description": "Stay cool with our complete air conditioning system service.",
+                "features": [
+                    "Gas Refill",
+                    "Leak Test",
+                    "Filter Cleaning"
+                ]
+            },
+            "battery": {
+                "title": "Battery",
+                "price": "SAR 249",
+                "time": "45m",
+                "description": "Reliable battery replacement and health check services.",
+                "features": [
+                    "Voltage Test",
+                    "Terminal Clean",
+                    "Replacement"
+                ]
+            },
+            "tyres": {
+                "title": "Tyres",
+                "price": "SAR 199",
+                "time": "1h",
+                "description": "Professional tyre services for a smoother, safer ride.",
+                "features": [
+                    "Alignment",
+                    "Balancing",
+                    "Rotation"
+                ]
+            },
+            "oil": {
+                "title": "Oil Change",
+                "price": "SAR 99",
+                "time": "30m",
+                "description": "Premium oil change service to protect your engine.",
+                "features": [
+                    "Synthetic Oil",
+                    "Filter Change",
+                    "Fluid Check"
+                ]
+            },
+            "detailing": {
+                "title": "Detailing",
+                "price": "SAR 499",
+                "time": "4h",
+                "description": "Restore your car's showroom shine inside and out.",
+                "features": [
+                    "Wash & Wax",
+                    "Interior Deep Clean",
+                    "Polishing"
+                ]
+            },
+            "emergency": {
+                "title": "Emergency",
+                "price": "SAR 150",
+                "time": "20m",
+                "description": "24/7 roadside assistance when you need it most.",
+                "features": [
+                    "Jump Start",
+                    "Flat Tyre",
+                    "Fuel Delivery"
+                ]
+            }
+        }
     }
 }
