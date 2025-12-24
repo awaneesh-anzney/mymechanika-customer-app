@@ -1,0 +1,145 @@
+{
+    "badge": "Our Services",
+    "popular": "Popular",
+    "bookNow": "Book Now",
+    "title": "Premium Car Care Services",
+    "subtitle": "From routine maintenance to complex repairs, we've got your car covered with expert service and genuine parts.",
+    "items": {
+        "general": {
+            "title": "General Maintenance",
+            "description": "Regular check-ups, oil changes, and fluid top-ups to keep your car running smoothly."
+        },
+        "brakes": {
+            "title": "Brake Services",
+            "description": "Complete brake inspection, pad replacement, and rotor resurfacing for your safety."
+        },
+        "engine": {
+            "title": "Engine Diagnostics",
+            "description": "Advanced computer diagnostics to identify and fix engine issues quickly."
+        },
+        "ac": {
+            "title": "AC Service & Repair",
+            "description": "Deep cleaning, gas top-up, and cooling system inspection for peak performance."
+        },
+        "wheel": {
+            "title": "Wheel Care",
+            "description": "Wheel alignment, balancing, and tyre rotation for a smoother, safer ride."
+        },
+        "spa": {
+            "title": "Car Spa & Detailing",
+            "description": "Interior deep cleaning, exterior polishing, and ceramic coating for a showroom shine."
+        },
+        "paint": {
+            "title": "Denting & Painting",
+            "description": "Professional scratch removal and premium paint services to restore your car's look."
+        },
+        "battery": {
+            "title": "Battery Replacement",
+            "description": "Testing and replacement of old batteries with high-quality new ones."
+        }
+    },
+    "heroIllustration": {
+        "bookNow": "Book Now",
+        "services": {
+            "maintenance": {
+                "title": "Maintenance",
+                "price": "SAR 199",
+                "time": "45m",
+                "description": "Keep your car running smoothly with our comprehensive maintenance package.",
+                "features": [
+                    "Fluid Top-up",
+                    "Filter Check",
+                    "Safety Inspection"
+                ]
+            },
+            "brakes": {
+                "title": "Brake Service",
+                "price": "SAR 299",
+                "time": "2h",
+                "description": "Ensure your safety with expert brake inspection and servicing.",
+                "features": [
+                    "Pad Replacement",
+                    "Rotor Check",
+                    "Fluid Flush"
+                ]
+            },
+            "diagnostics": {
+                "title": "Diagnostics",
+                "price": "SAR 149",
+                "time": "30m",
+                "description": "Identify issues quickly with our advanced computer diagnostics.",
+                "features": [
+                    "Engine Scan",
+                    "Sensor Check",
+                    "Detailed Report"
+                ]
+            },
+            "ac": {
+                "title": "AC Service",
+                "price": "SAR 399",
+                "time": "3h",
+                "description": "Stay cool with our complete air conditioning system service.",
+                "features": [
+                    "Gas Refill",
+                    "Leak Test",
+                    "Filter Cleaning"
+                ]
+            },
+            "battery": {
+                "title": "Battery",
+                "price": "SAR 249",
+                "time": "45m",
+                "description": "Reliable battery replacement and health check services.",
+                "features": [
+                    "Voltage Test",
+                    "Terminal Clean",
+                    "Replacement"
+                ]
+            },
+            "tyres": {
+                "title": "Tyres",
+                "price": "SAR 199",
+                "time": "1h",
+                "description": "Professional tyre services for a smoother, safer ride.",
+                "features": [
+                    "Alignment",
+                    "Balancing",
+                    "Rotation"
+                ]
+            },
+            "oil": {
+                "title": "Oil Change",
+                "price": "SAR 99",
+                "time": "30m",
+                "description": "Premium oil change service to protect your engine.",
+                "features": [
+                    "Synthetic Oil",
+                    "Filter Change",
+                    "Fluid Check"
+                ]
+            },
+            "detailing": {
+                "title": "Detailing",
+                "price": "SAR 499",
+                "time": "4h",
+                "description": "Restore your car's showroom shine inside and out.",
+                "features": [
+                    "Wash & Wax",
+                    "Interior Deep Clean",
+                    "Polishing"
+                ]
+            },
+            "emergency": {
+                "title": "Emergency",
+                "price": "SAR 150",
+                "time": "20m",
+                "description": "24/7 roadside assistance when you need it most.",
+                "features": [
+                    "Jump Start",
+                    "Flat Tyre",
+                    "Fuel Delivery"
+                ]
+            }
+        }
+    }
+}

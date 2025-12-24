@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Search, Crosshair, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface LocationSearchProps {
   className?: string;
@@ -10,6 +11,7 @@ interface LocationSearchProps {
 }
 
 const LocationSearch = ({ className, onSearch }: LocationSearchProps) => {
+  const { t } = useTranslation('home');
   const [location, setLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,16 +23,16 @@ const LocationSearch = ({ className, onSearch }: LocationSearchProps) => {
           // In a real app, we'd reverse geocode here
           setLocation("Current Location");
           setIsLoading(false);
-          toast.success("Location detected successfully");
+          toast.success(t("hero.locationMessages.success"));
         },
         (error) => {
           setIsLoading(false);
-          toast.error("Could not detect location. Please enter manually.");
+          toast.error(t("hero.locationMessages.error"));
         }
       );
     } else {
       setIsLoading(false);
-      toast.error("Geolocation is not supported by your browser");
+      toast.error(t("hero.locationMessages.unsupported"));
     }
   };
 
@@ -45,28 +47,28 @@ const LocationSearch = ({ className, onSearch }: LocationSearchProps) => {
           <input
             type="text"
             className="flex-1 bg-transparent border-none h-11 px-3 text-sm focus:outline-none placeholder:text-muted-foreground text-foreground"
-            placeholder="Enter your zip code or city..."
+            placeholder={t("hero.locationPlaceholder")}
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
           <div className="flex items-center gap-1 pr-1.5">
-             <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
               onClick={handleDetectLocation}
               disabled={isLoading}
-              title="Detect my location"
+              title={t("hero.detectLocation")}
             >
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Crosshair className="h-4 w-4" />}
             </Button>
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               className="rounded-full px-5 h-9 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md"
               onClick={() => onSearch?.(location)}
             >
               <Search className="h-4 w-4 mr-2" />
-              Find
+              {t("hero.findButton")}
             </Button>
           </div>
         </div>

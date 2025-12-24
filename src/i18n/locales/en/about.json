@@ -1,0 +1,77 @@
+{
+    "hero": {
+        "badge": "About Us",
+        "title": "Your Trusted",
+        "titleAccent": "Car Care Partner",
+        "description": "MyMechanika is India's leading car service platform, dedicated to making car maintenance simple, affordable, and hassle-free for millions of car owners."
+    },
+    "story": {
+        "badge": "Our Story",
+        "title": "Revolutionizing Car Service in India",
+        "p1": "Founded in 2018, MyMechanika started with a simple mission: to bring transparency and convenience to car servicing. We noticed that car owners often faced hidden charges, poor quality parts, and unreliable service providers.",
+        "p2": "We set out to change this by building a network of certified mechanics, partnering with OEM suppliers, and creating a technology platform that gives car owners complete visibility into their service.",
+        "p3": "Today, we've serviced over 2 million cars across 50+ cities, and we're just getting started. Our vision is to be every car owner's trusted partner for all their vehicle needs.",
+        "stats": {
+            "cars": "Cars Serviced",
+            "cities": "Cities",
+            "centers": "Service Centers",
+            "rating": "Rating"
+        }
+    },
+    "values": {
+        "title": "Our Core Values",
+        "subtitle": "These principles guide everything we do at MYmechanika.",
+        "items": {
+            "trust": {
+                "title": "Trust & Transparency",
+                "description": "We believe in honest pricing and transparent service processes."
+            },
+            "customer": {
+                "title": "Customer First",
+                "description": "Every decision we make is centered around customer satisfaction."
+            },
+            "excellence": {
+                "title": "Excellence",
+                "description": "We strive for excellence in every service we provide."
+            },
+            "quality": {
+                "title": "Quality Assurance",
+                "description": "Only genuine parts and certified mechanics work on your car."
+            }
+        }
+    },
+    "timeline": {
+        "title": "Our Journey",
+        "subtitle": "From a startup in Bangalore to India's most trusted car service platform.",
+        "milestones": {
+            "2018": "MYmechanika founded in Bangalore",
+            "2019": "Expanded to 10 cities across India",
+            "2020": "Reached 500,000 cars serviced milestone",
+            "2021": "Launched mobile app for easier bookings",
+            "2022": "Expanded to 50+ cities",
+            "2023": "Crossed 2 million happy customers"
+        }
+    },
+    "team": {
+        "title": "Meet Our Leadership",
+        "subtitle": "The passionate team driving MYmechanika's mission forward.",
+        "members": {
+            "rajesh": {
+                "name": "Rajesh Kumar",
+                "role": "Founder & CEO"
+            },
+            "priya": {
+                "name": "Priya Sharma",
+                "role": "Head of Operations"
+            },
+            "amit": {
+                "name": "Amit Patel",
+                "role": "Technical Director"
+            },
+            "sneha": {
+                "name": "Sneha Reddy",
+                "role": "Customer Success Lead"
+            }
+        }
+    }
+}

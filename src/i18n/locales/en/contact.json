@@ -1,0 +1,68 @@
+{
+    "hero": {
+        "badge": "Contact Us",
+        "title": "We're Here to",
+        "titleAccent": "Help",
+        "description": "Have questions or need assistance? Our support team is available 24/7 to help you with anything you need."
+    },
+    "info": {
+        "phone": {
+            "title": "Phone",
+            "details": "+91 1800-123-4567",
+            "subtext": "Toll-free, 24/7 available"
+        },
+        "email": {
+            "title": "Email",
+            "details": "support@mymechanika.com",
+            "subtext": "We reply within 24 hours"
+        },
+        "office": {
+            "title": "Head Office",
+            "details": "Bangalore, Karnataka",
+            "subtext": "HSR Layout, Sector 7"
+        },
+        "hours": {
+            "title": "Working Hours",
+            "details": "Mon - Sun: 7AM - 10PM",
+            "subtext": "Including public holidays"
+        }
+    },
+    "form": {
+        "title": "Send us a Message",
+        "subtitle": "Fill out the form and we'll respond promptly",
+        "namePlaceholder": "Your Name",
+        "emailPlaceholder": "Email Address",
+        "phonePlaceholder": "Phone Number",
+        "subjectPlaceholder": "Subject",
+        "messagePlaceholder": "Your Message",
+        "submitButton": "Send Message",
+        "successTitle": "Message Sent!",
+        "successDescription": "We'll get back to you within 24 hours."
+    },
+    "faq": {
+        "title": "Frequently Asked",
+        "subtitle": "Quick answers to common questions",
+        "questions": [
+            {
+                "question": "How do I book a service?",
+                "answer": "You can book a service through our app or website by selecting your car, choosing a service, and picking a convenient time slot."
+            },
+            {
+                "question": "Do you provide pickup and drop?",
+                "answer": "Yes! We offer free pickup and drop service for all major services within city limits."
+            },
+            {
+                "question": "What warranty do you provide?",
+                "answer": "We provide 1000km or 1 month warranty on all services and spare parts."
+            },
+            {
+                "question": "How can I track my service?",
+                "answer": "Once your car is picked up, you can track the service status in real-time through your dashboard."
+            }
+        ]
+    },
+    "map": {
+        "title": "Find Us",
+        "subtitle": "Visit our head office or any of our 1000+ service centers"
+    }
+}

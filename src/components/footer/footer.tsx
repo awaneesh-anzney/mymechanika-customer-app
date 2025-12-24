@@ -1,25 +1,29 @@
+"use client"
 import { Car, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation('home');
+
   const footerLinks = {
     company: [
-      { name: "About Us", path: "/about" },
-      { name: "Careers", path: "/careers" },
-      { name: "Blog", path: "/blog" },
-      { name: "Press", path: "/press" },
+      { name: t("footer.sections.company.about"), path: "/about" },
+      { name: t("footer.sections.company.careers"), path: "/careers" },
+      { name: t("footer.sections.company.blog"), path: "/blog" },
+      { name: t("footer.sections.company.press"), path: "/press" },
     ],
     services: [
-      { name: "Car Service", path: "/services" },
-      { name: "AC Repair", path: "/services" },
-      { name: "Tyre Replacement", path: "/services" },
-      { name: "Battery Service", path: "/services" },
+      { name: t("footer.sections.services.carService"), path: "/services" },
+      { name: t("footer.sections.services.acRepair"), path: "/services" },
+      { name: t("footer.sections.services.tyreReplacement"), path: "/services" },
+      { name: t("footer.sections.services.batteryService"), path: "/services" },
     ],
     support: [
-      { name: "Help Center", path: "/help" },
-      { name: "Contact Us", path: "/contact" },
-      { name: "FAQs", path: "/faq" },
-      { name: "Terms of Service", path: "/terms" },
+      { name: t("footer.sections.support.helpCenter"), path: "/help" },
+      { name: t("footer.sections.support.contactUs"), path: "/contact" },
+      { name: t("footer.sections.support.faqs"), path: "/faq" },
+      { name: t("footer.sections.support.terms"), path: "/terms" },
     ],
   };
 
@@ -45,7 +49,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm">
-              Your smart car maintenance companion. Quality service, transparent pricing, and hassle-free experience at your doorstep.
+              {t("footer.description")}
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social, index) => (
@@ -62,7 +66,7 @@ const Footer = () => {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Company</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t("footer.sections.company.title")}</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -79,7 +83,7 @@ const Footer = () => {
 
           {/* Services Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Services</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t("footer.sections.services.title")}</h4>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
@@ -96,7 +100,7 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Contact</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t("footer.sections.contact.title")}</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-4 h-4 text-primary" />
@@ -117,14 +121,14 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-border mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 MyMechanika. All rights reserved.
+            © 2024 MyMechanika. {t("footer.rights")}
           </p>
           <div className="flex gap-6">
             <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Privacy Policy
+              {t("footer.privacy")}
             </Link>
             <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Terms of Service
+              {t("footer.terms")}
             </Link>
           </div>
         </div>

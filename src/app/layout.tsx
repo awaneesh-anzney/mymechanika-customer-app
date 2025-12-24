@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { LanguageProvider } from "@/components/language-provider";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -14,7 +15,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "MyMechanika",
   description: "Your trusted partner for all your mechanical needs.",
-   icons: {
+  icons: {
     icon: "/icon.png"
   },
 };
@@ -35,9 +36,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <Navbar /> */}
-          {children}
-          <Toaster />
+          <LanguageProvider>
+            {/* <Navbar /> */}
+            {children}
+            <Toaster />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

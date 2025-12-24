@@ -51,10 +51,12 @@
   --popover-foreground: #111827;
 
   /* Brand Colors */
-  --primary: #0f963e; /* Service green */
+  --primary: #0f963e;
+  /* Service green */
   --primary-foreground: #ffffff;
 
-  --secondary: #0f52ba; /* Automotive blue */
+  --secondary: #0f52ba;
+  /* Automotive blue */
   --secondary-foreground: #ffffff;
 
   /* UI States */
@@ -132,4 +134,28 @@
 
 *::-webkit-scrollbar {
   display: none;
+}
+
+/* =========================
+   ARABIC TEXT SUPPORT (MINIMAL)
+========================= */
+/* Only apply RTL to text tokens to ensure punctuation/symbols flow correctly
+   WITHOUT changing the overall UI layout or container positions. */
+:lang(ar) p,
+:lang(ar) h1,
+:lang(ar) h2,
+:lang(ar) h3,
+:lang(ar) h4,
+:lang(ar) h5,
+:lang(ar) h6,
+:lang(ar) span,
+:lang(ar) label {
+  direction: rtl;
+}
+
+/* Maintain LTR alignment for typing areas */
+:lang(ar) input,
+:lang(ar) textarea {
+  direction: ltr;
+  text-align: left;
 }
