@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export const ProfileSecurity = () => {
     return (
-        <Card className="border-border shadow-md bg-card">
+        <Card className="border-border shadow-md bg-card -mt-2 md:-mt-3">
             <CardContent className="p-6 space-y-6">
 
                 {/* Change Password Section */}

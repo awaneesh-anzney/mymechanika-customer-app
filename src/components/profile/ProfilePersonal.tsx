@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export const ProfilePersonal = () => {
     return (
-        <Card className="border-border shadow-md bg-card">
+        <Card className="border-border shadow-md bg-card -mt-2 md:-mt-3">
             <CardContent className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* First Name */}

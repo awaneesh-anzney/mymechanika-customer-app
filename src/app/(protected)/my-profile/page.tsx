@@ -18,15 +18,15 @@ export default function MyProfilePage() {
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="grid grid-cols-12 gap-8">
 
                 {/* Left Sidebar - 4 Columns */}
-                <div className="lg:col-span-4 space-y-6">
+                <div className="col-span-4 space-y-6">
                     <ProfileSidebar />
                 </div>
 
                 {/* Right Content Area - 8 Columns */}
-                <div className="lg:col-span-8 space-y-6">
+                <div className="col-span-8 space-y-6">
                     {/* Custom Tabs */}
                     <div className="flex items-center p-1 bg-muted/50 rounded-lg w-full sm:w-fit border border-border/50">
                         {tabs.map((tab) => (
