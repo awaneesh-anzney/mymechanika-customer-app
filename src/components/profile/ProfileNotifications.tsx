@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export const ProfileNotifications = () => {
     return (
-        <Card className="border-border shadow-md bg-card -mt-2 md:-mt-3">
+        <Card className="border-border shadow-md bg-card -mt-2 md:-mt-3 min-h-[520px]">
             <CardContent className="p-6 space-y-6">
                 <div className="space-y-6">
                     {/* Marketing Emails */}
@@ -62,7 +62,7 @@ export const ProfileNotifications = () => {
                 </div>
 
                 <div className="flex justify-end pt-2">
-                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                    <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                         Save Preferences
                     </Button>
                 </div>

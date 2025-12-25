@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export const ProfilePersonal = () => {
     return (
-        <Card className="border-border shadow-md bg-card -mt-2 md:-mt-3">
+        <Card className="border-border shadow-md bg-card -mt-2 md:-mt-3 min-h-[520px]">
             <CardContent className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* First Name */}
@@ -78,7 +78,7 @@ export const ProfilePersonal = () => {
                     <Button variant="outline" className="h-10 px-6 gap-2">
                         <X className="w-4 h-4" /> Cancel
                     </Button>
-                    <Button className="h-10 px-6 gap-2 bg-emerald-600 hover:bg-emerald-700 text-white">
+                    <Button className="h-10 px-6 gap-2 bg-primary hover:bg-primary/90 text-primary-foreground">
                         <Check className="w-4 h-4" /> Save Changes
                     </Button>
                 </div>
