@@ -1,10 +1,12 @@
 "use client";
 
-import { Car, Wrench, Shield, Thermometer, Battery, CircleDashed, Clock, ArrowRight, PaintBucket, Sparkles, AlertTriangle } from "lucide-react";
+import { Car, Wrench, Shield, Thermometer, Battery, CircleDashed, Clock, ArrowRight, PaintBucket, Sparkles, AlertTriangle, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
+import { useCart } from "@/components/cart-provider";
+import { toast } from "sonner";
 
 const heroServicesData = [
   {
@@ -49,6 +51,7 @@ const heroServicesData = [
 export function HeroIllustration() {
   const { t, i18n } = useTranslation('services');
   const [mounted, setMounted] = useState(false);
+  const { addItem } = useCart();
 
   useEffect(() => {
     setMounted(true);
@@ -64,6 +67,15 @@ export function HeroIllustration() {
     description: activeT(`heroIllustration.services.${service.id}.description`),
     features: activeT(`heroIllustration.services.${service.id}.features`, { returnObjects: true }) as string[],
   }));
+
+  const handleAddToCart = (service: any) => {
+    addItem({
+      id: service.id,
+      title: service.title,
+      price: service.price,
+    });
+    toast.success(`${service.title} added to cart`);
+  };
 
   return (
     <div className="w-full flex justify-center lg:justify-end">
@@ -110,27 +122,37 @@ export function HeroIllustration() {
 
             {/* Hover View (Details) */}
             <div className="absolute inset-0 p-3 bg-card/95 backdrop-blur-md flex flex-col opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-bold text-foreground text-xs">{service.title}</h3>
-                <span className="font-bold text-primary text-xs">{service.price}</span>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="font-bold text-foreground text-[11px] line-clamp-1">{service.title}</h3>
+                <span className="font-bold text-primary text-[11px] whitespace-nowrap">{service.price}</span>
               </div>
 
-              <p className="text-[10px] text-muted-foreground leading-tight mb-2 line-clamp-2">
+              <p className="text-[9px] text-muted-foreground leading-tight mb-2 line-clamp-2">
                 {service.description}
               </p>
 
-              <ul className="space-y-1 mb-auto">
-                {Array.isArray(service.features) && service.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center text-[10px] text-foreground/80">
-                    <div className="w-1 h-1 rounded-full bg-primary mr-1.5" />
-                    {feature}
+              <ul className="space-y-0.5 mb-auto">
+                {Array.isArray(service.features) && service.features.slice(0, 2).map((feature, idx) => (
+                  <li key={idx} className="flex items-center text-[9px] text-foreground/80">
+                    <div className="w-1 h-1 rounded-full bg-primary mr-1.5 shrink-0" />
+                    <span className="line-clamp-1">{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              <Button size="sm" className="w-full h-7 text-xs mt-2 rounded-lg">
-                {activeT("heroIllustration.bookNow")}
-              </Button>
+              <div className="flex gap-1.5 mt-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-7 w-7 p-0 shrink-0"
+                  onClick={() => handleAddToCart(service)}
+                >
+                  <ShoppingCart className="h-3.5 w-3.5" />
+                </Button>
+                <Button size="sm" className="flex-1 h-7 text-[10px] rounded-lg">
+                  {activeT("heroIllustration.bookNow")}
+                </Button>
+              </div>
             </div>
           </div>
         ))}
