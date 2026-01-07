@@ -31,7 +31,7 @@ export const ProfileSidebar = () => {
                 <h2 className="text-xl font-bold text-foreground">Rahul Sharma</h2>
                 <p className="text-sm text-muted-foreground mb-4">rahul.sharma@email.com</p>
 
-                <Badge className="bg-emerald-600 hover:bg-emerald-700 mb-6 px-4 py-1.5 text-sm">
+                <Badge className="bg-primary hover:bg-primary/90 mb-6 px-4 py-1.5 text-sm">
                     Premium Member
                 </Badge>
 
