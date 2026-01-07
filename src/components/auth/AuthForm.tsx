@@ -13,6 +13,7 @@ interface AuthFormProps {
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSubmit: (e: React.FormEvent) => void;
     activeT: any;
+    isSubmitting?: boolean;
 }
 
 export const AuthForm = ({
@@ -24,6 +25,7 @@ export const AuthForm = ({
     handleChange,
     handleSubmit,
     activeT,
+    isSubmitting = false,
 }: AuthFormProps) => {
     return (
         <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 bg-background flex-1">
@@ -65,6 +67,8 @@ export const AuthForm = ({
                                     value={formData.fullName}
                                     onChange={handleChange}
                                     className="pl-10 h-12"
+                                    disabled={isSubmitting}
+                                    required
                                 />
                             </div>
                         </div>
@@ -82,6 +86,8 @@ export const AuthForm = ({
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="pl-10 h-12"
+                                disabled={isSubmitting}
+                                required
                             />
                         </div>
                     </div>
@@ -99,6 +105,8 @@ export const AuthForm = ({
                                     value={formData.phone}
                                     onChange={handleChange}
                                     className="pl-10 h-12"
+                                    disabled={isSubmitting}
+                                    required
                                 />
                             </div>
                         </div>
@@ -116,11 +124,14 @@ export const AuthForm = ({
                                 value={formData.password}
                                 onChange={handleChange}
                                 className="pl-10 pr-10 h-12"
+                                disabled={isSubmitting}
+                                required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                disabled={isSubmitting}
                             >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                             </button>
@@ -129,14 +140,14 @@ export const AuthForm = ({
 
                     {isLogin && (
                         <div className="flex justify-end">
-                            <button type="button" className="text-sm text-primary hover:underline">
+                            <button type="button" className="text-sm text-primary hover:underline" disabled={isSubmitting}>
                                 {activeT("login.forgotPassword")}
                             </button>
                         </div>
                     )}
 
-                    <Button type="submit" variant="default" size="lg" className="w-full">
-                        {isLogin ? activeT("login.submit") : activeT("register.submit")}
+                    <Button type="submit" variant="default" size="lg" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? "Loading..." : (isLogin ? activeT("login.submit") : activeT("register.submit"))}
                     </Button>
 
                     <div className="relative my-6">
@@ -153,6 +164,7 @@ export const AuthForm = ({
                         variant="outline"
                         size="lg"
                         className="w-full"
+                        disabled={isSubmitting}
                     >
                         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                             <path
@@ -182,6 +194,7 @@ export const AuthForm = ({
                         type="button"
                         onClick={() => setIsLogin(!isLogin)}
                         className="text-primary font-medium hover:underline mx-1"
+                        disabled={isSubmitting}
                     >
                         {isLogin ? activeT("login.signupLink") : activeT("register.signinLink")}
                     </button>
