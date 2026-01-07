@@ -4,6 +4,7 @@ import { Bell, Search, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Cart } from "@/components/Cart";
 
 interface DashNavProps {
   setMobileOpen: (open: boolean) => void;
@@ -77,6 +78,8 @@ const DashNav = ({ setMobileOpen }: DashNavProps) => {
         <Button variant="ghost" size="icon" className="md:hidden">
           <Search className="w-5 h-5" />
         </Button>
+
+        <Cart />
 
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="w-5 h-5" />

@@ -50,7 +50,7 @@ export function Cart() {
                 </div>
 
                 <SimpleScrollArea className="p-2">
-                    {items.length === 0 ? (
+                    {!Array.isArray(items) || items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 text-center">
                             <ShoppingCart className="h-12 w-12 text-muted-foreground/30 mb-2" />
                             <p className="text-sm text-muted-foreground">Your cart is empty</p>
@@ -61,11 +61,7 @@ export function Cart() {
                                 <div key={item.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent transition-colors">
                                     <div className="flex items-center gap-3">
                                         <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center">
-                                            {item.icon ? (
-                                                <item.icon className="h-5 w-5 text-primary" />
-                                            ) : (
-                                                <ShoppingCart className="h-5 w-5 text-primary" />
-                                            )}
+                                            <ShoppingCart className="h-5 w-5 text-primary" />
                                         </div>
                                         <div className="flex flex-col">
                                             <span className="text-sm font-medium line-clamp-1">{item.title}</span>
