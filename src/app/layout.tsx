@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/components/language-provider";
+import { CartProvider } from "@/components/cart-provider";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -37,9 +38,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
-            {/* <Navbar /> */}
-            {children}
-            <Toaster />
+            <CartProvider>
+              {/* <Navbar /> */}
+              {children}
+              <Toaster />
+            </CartProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>
