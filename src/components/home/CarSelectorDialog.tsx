@@ -12,18 +12,19 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
-import { carService, CarBrand, CarModel } from "@/services/car.service";
+import { carService, CarBrand, CarModel, CarFuelType } from "@/services/car.service";
 
 // Generic Logo for fallback
 const GENERIC_LOGO = "https://cdn-icons-png.flaticon.com/512/1598/1598196.png";
 
-const FUEL_TYPES = [
-    { id: 'petrol', name: 'Petrol', icon: Droplet },
-    { id: 'diesel', name: 'Diesel', icon: Fuel },
-    { id: 'cng', name: 'CNG', icon: Flame },
-    { id: 'electric', name: 'Electric', icon: Zap },
-    { id: 'hybrid', name: 'Hybrid', icon: Leaf },
-];
+// Map fuel type strings to Icons
+const FUEL_TYPE_ICONS: Record<string, any> = {
+    'petrol': Droplet,
+    'diesel': Fuel,
+    'cng': Flame,
+    'electric': Zap,
+    'hybrid': Leaf,
+};
 
 export function CarSelectorDialog() {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -32,11 +33,12 @@ export function CarSelectorDialog() {
     // Data State
     const [brands, setBrands] = React.useState<CarBrand[]>([]);
     const [models, setModels] = React.useState<CarModel[]>([]);
+    const [fuelTypes, setFuelTypes] = React.useState<CarFuelType[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
     // Selection State
     const [selectedBrand, setSelectedBrand] = React.useState<CarBrand | null>(null)
-    const [selectedModel, setSelectedModel] = React.useState<string | null>(null)
+    const [selectedModel, setSelectedModel] = React.useState<CarModel | null>(null)
 
     React.useEffect(() => {
         // Open on mount
@@ -68,16 +70,25 @@ export function CarSelectorDialog() {
         }
     }
 
-    const handleModelSelect = (model: string) => {
-        setSelectedModel(model)
-        setStep('fuel')
+    const handleModelSelect = async (model: CarModel) => {
+        setSelectedModel(model);
+        setStep('fuel');
+        setIsLoading(true);
+        try {
+            const fetchedFuelTypes = await carService.getCarFuelTypes(model.id);
+            setFuelTypes(fetchedFuelTypes);
+        } catch (error) {
+            console.error("Failed to load fuel types", error);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
-    const handleFuelSelect = (fuel: typeof FUEL_TYPES[0]) => {
+    const handleFuelSelect = (fuel: CarFuelType) => {
         console.log("Final Selection:", {
             brand: selectedBrand?.name,
-            model: selectedModel,
-            fuel: fuel.name
+            model: selectedModel?.name,
+            fuel: fuel.fuelType
         })
         setIsOpen(false)
     }
@@ -90,6 +101,7 @@ export function CarSelectorDialog() {
         } else if (step === 'fuel') {
             setStep('model');
             setSelectedModel(null);
+            setFuelTypes([]); // Clear fuel types
         }
     }
 
@@ -111,6 +123,11 @@ export function CarSelectorDialog() {
             case 'model': return `Which ${selectedBrand?.name} model do you own?`;
             case 'fuel': return 'Select the fuel variant.';
         }
+    }
+
+    const getFuelIcon = (type: string) => {
+        const normalizedType = type.toLowerCase();
+        return FUEL_TYPE_ICONS[normalizedType] || Fuel; // Default to Fuel icon if unknown
     }
 
     return (
@@ -174,7 +191,7 @@ export function CarSelectorDialog() {
 
                         <div className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
                             {/* LOADING STATE */}
-                            {isLoading && step === 'brand' && (
+                            {isLoading && (
                                 <div className="flex items-center justify-center h-48">
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                                 </div>
@@ -203,17 +220,13 @@ export function CarSelectorDialog() {
                             )}
 
                             {/* MODEL SELECTION */}
-                            {step === 'model' && selectedBrand && (
+                            {step === 'model' && selectedBrand && !isLoading && (
                                 <div className="grid grid-cols-2 gap-3">
-                                    {isLoading ? (
-                                        <div className="col-span-2 flex items-center justify-center py-10">
-                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                                        </div>
-                                    ) : models.length > 0 ? (
+                                    {models.length > 0 ? (
                                         models.map((model) => (
                                             <button
                                                 key={model.id}
-                                                onClick={() => handleModelSelect(model.name)}
+                                                onClick={() => handleModelSelect(model)}
                                                 className="group flex flex-col items-center justify-center p-4 rounded-xl border border-border/50 bg-background hover:border-primary/50 hover:bg-muted/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-center"
                                             >
                                                 <span className="text-base font-medium block">{model.name}</span>
@@ -227,20 +240,27 @@ export function CarSelectorDialog() {
                             )}
 
                             {/* FUEL SELECTION */}
-                            {step === 'fuel' && (
+                            {step === 'fuel' && !isLoading && (
                                 <div className="grid grid-cols-2 gap-3">
-                                    {FUEL_TYPES.map((fuel) => (
-                                        <button
-                                            key={fuel.id}
-                                            onClick={() => handleFuelSelect(fuel)}
-                                            className="group flex flex-col items-center justify-center p-6 rounded-xl border border-border/50 bg-background hover:border-primary/50 hover:bg-muted/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-                                        >
-                                            <div className="p-3 rounded-full bg-muted group-hover:bg-background transition-colors mb-4 shadow-sm">
-                                                <fuel.icon className="w-8 h-8 text-primary" />
-                                            </div>
-                                            <span className="text-base font-medium">{fuel.name}</span>
-                                        </button>
-                                    ))}
+                                    {fuelTypes.length > 0 ? (
+                                        fuelTypes.map((fuel) => {
+                                            const Icon = getFuelIcon(fuel.fuelType);
+                                            return (
+                                                <button
+                                                    key={fuel.id}
+                                                    onClick={() => handleFuelSelect(fuel)}
+                                                    className="group flex flex-col items-center justify-center p-6 rounded-xl border border-border/50 bg-background hover:border-primary/50 hover:bg-muted/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                                                >
+                                                    <div className="p-3 rounded-full bg-muted group-hover:bg-background transition-colors mb-4 shadow-sm">
+                                                        <Icon className="w-8 h-8 text-primary" />
+                                                    </div>
+                                                    <span className="text-base font-medium capitalize">{fuel.fuelType}</span>
+                                                </button>
+                                            );
+                                        })
+                                    ) : (
+                                        <p className="col-span-2 text-center text-muted-foreground py-10">No fuel types found for this model.</p>
+                                    )}
                                 </div>
                             )}
                         </div>

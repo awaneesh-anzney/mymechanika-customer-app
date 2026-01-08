@@ -13,6 +13,11 @@ export interface CarModel {
     segment: string;
 }
 
+export interface CarFuelType {
+    id: string;
+    fuelType: string;
+}
+
 export const carService = {
     getCarBrands: async (): Promise<CarBrand[]> => {
         try {
@@ -30,6 +35,16 @@ export const carService = {
             return response.data;
         } catch (error) {
             console.error(`Error fetching car models for brand ${brandId}:`, error);
+            return [];
+        }
+    },
+
+    getCarFuelTypes: async (modelId: string): Promise<CarFuelType[]> => {
+        try {
+            const response = await axios.get(`/cars/models/${modelId}/fuel-types`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching fuel types for model ${modelId}:`, error);
             return [];
         }
     }
