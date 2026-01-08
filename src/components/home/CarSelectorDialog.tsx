@@ -12,33 +12,29 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
+import { carService, CarBrand } from "@/services/car.service";
+
 // Generic Logo for fallback
 const GENERIC_LOGO = "https://cdn-icons-png.flaticon.com/512/1598/1598196.png";
 
-const BRANDS = [
-    { id: 'toyota', name: 'Toyota', logoUrl: GENERIC_LOGO },
-    { id: 'honda', name: 'Honda', logoUrl: GENERIC_LOGO },
-    { id: 'hyundai', name: 'Hyundai', logoUrl: GENERIC_LOGO },
-    { id: 'suzuki', name: 'Maruti Suzuki', logoUrl: GENERIC_LOGO },
-    { id: 'tata', name: 'Tata Motors', logoUrl: GENERIC_LOGO },
-    { id: 'mahindra', name: 'Mahindra', logoUrl: GENERIC_LOGO },
-    { id: 'kia', name: 'Kia', logoUrl: GENERIC_LOGO },
-    { id: 'bmw', name: 'BMW', logoUrl: GENERIC_LOGO },
-    { id: 'mercedes', name: 'Benz', logoUrl: GENERIC_LOGO },
-    { id: 'audi', name: 'Audi', logoUrl: GENERIC_LOGO },
-];
-
+// ... MODELS and FUEL_TYPES constants can remain for now as user only requested Brands API ...
 const MODELS: Record<string, string[]> = {
-    toyota: ['Fortuner', 'Innova Crysta', 'Glanza', 'Urban Cruiser', 'Camry'],
-    honda: ['City', 'Amaze', 'Elevate', 'WR-V', 'Jazz'],
-    hyundai: ['Creta', 'Venue', 'Verna', 'i20', 'Grand i10 Nios'],
-    suzuki: ['Swift', 'Baleno', 'Brezza', 'Ertiga', 'Dzire'],
-    tata: ['Nexon', 'Harrier', 'Safari', 'Punch', 'Tiago'],
-    mahindra: ['XUV700', 'Thar', 'Scorpio-N', 'XUV300', 'Bolero'],
-    kia: ['Seltos', 'Sonet', 'Carens', 'Carnival'],
-    bmw: ['3 Series', '5 Series', 'X1', 'X3', 'X5'],
-    mercedes: ['C-Class', 'E-Class', 'GLA', 'GLC', 'S-Class'],
-    audi: ['A4', 'A6', 'Q3', 'Q5', 'Q7'],
+    // We need to map the new brand names (which might not match exactly with checks) or just use names.
+    // However, the previous logic used brand IDs (lowercase names). The API returns UUIDs.
+    // For this step, I will map the API `name` to the static `MODELS` keys loosely if possible, or just keep static MODELS for now.
+    // The user instruction specifically asked to map the BRAND API.
+    // Note: The `MODELS` dictionary keys (toyota, honda) might not match the UUIDs.
+    // I will try to use the brand name (lowercase) to lookup models for now to preserve functionality.
+    'Toyota': ['Fortuner', 'Innova Crysta', 'Glanza', 'Urban Cruiser', 'Camry'],
+    'Honda': ['City', 'Amaze', 'Elevate', 'WR-V', 'Jazz'],
+    'Hyundai': ['Creta', 'Venue', 'Verna', 'i20', 'Grand i10 Nios'],
+    'Maruti Suzuki': ['Swift', 'Baleno', 'Brezza', 'Ertiga', 'Dzire'],
+    'Tata': ['Nexon', 'Harrier', 'Safari', 'Punch', 'Tiago'],
+    'Mahindra': ['XUV700', 'Thar', 'Scorpio-N', 'XUV300', 'Bolero'],
+    'Kia': ['Seltos', 'Sonet', 'Carens', 'Carnival'],
+    'BMW': ['3 Series', '5 Series', 'X1', 'X3', 'X5'],
+    'Mercedes-Benz': ['C-Class', 'E-Class', 'GLA', 'GLC', 'S-Class'],
+    'Audi': ['A4', 'A6', 'Q3', 'Q5', 'Q7'],
 };
 
 const FUEL_TYPES = [
@@ -53,16 +49,31 @@ export function CarSelectorDialog() {
     const [isOpen, setIsOpen] = React.useState(false)
     const [step, setStep] = React.useState<'brand' | 'model' | 'fuel'>('brand')
 
+    // Data State
+    const [brands, setBrands] = React.useState<CarBrand[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+
     // Selection State
-    const [selectedBrand, setSelectedBrand] = React.useState<typeof BRANDS[0] | null>(null)
+    const [selectedBrand, setSelectedBrand] = React.useState<CarBrand | null>(null)
     const [selectedModel, setSelectedModel] = React.useState<string | null>(null)
 
     React.useEffect(() => {
         // Open on mount
-        setIsOpen(true)
+        setIsOpen(true);
+
+        // Fetch Brands
+        const fetchBrands = async () => {
+            setIsLoading(true);
+            const data = await carService.getCarBrands();
+            // Sort by displayOrder
+            const sorted = data.sort((a, b) => a.displayOrder - b.displayOrder);
+            setBrands(sorted);
+            setIsLoading(false);
+        };
+        fetchBrands();
     }, [])
 
-    const handleBrandSelect = (brand: typeof BRANDS[0]) => {
+    const handleBrandSelect = (brand: CarBrand) => {
         setSelectedBrand(brand)
         setStep('model')
     }
@@ -124,7 +135,7 @@ export function CarSelectorDialog() {
                     </button>
                 </div>
 
-                <div className="grid md:grid-cols-5 h-full min-h-[500px]">
+                <div className="grid md:grid-cols-5 h-[80vh] md:h-[600px]">
                     {/* Left Sidebar / Illustration Area */}
                     <div className="hidden md:flex md:col-span-2 bg-muted/30 flex-col justify-between p-8 border-r border-border/50 relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent pointer-events-none" />
@@ -160,7 +171,7 @@ export function CarSelectorDialog() {
                     </div>
 
                     {/* Right Content Area */}
-                    <div className="md:col-span-3 p-6 md:p-8 flex flex-col h-full bg-card/50">
+                    <div className="md:col-span-3 p-6 md:p-8 flex flex-col h-full overflow-hidden bg-card/50">
                         <DialogHeader className="mb-6 md:hidden">
                             {step !== 'brand' && (
                                 <button
@@ -178,11 +189,18 @@ export function CarSelectorDialog() {
                             </DialogDescription>
                         </DialogHeader>
 
-                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                        <div className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
+                            {/* LOADING STATE */}
+                            {isLoading && step === 'brand' && (
+                                <div className="flex items-center justify-center h-48">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                                </div>
+                            )}
+
                             {/* BRAND SELECTION */}
-                            {step === 'brand' && (
+                            {step === 'brand' && !isLoading && (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    {BRANDS.map((brand) => (
+                                    {brands.map((brand) => (
                                         <button
                                             key={brand.id}
                                             onClick={() => handleBrandSelect(brand)}
@@ -190,7 +208,7 @@ export function CarSelectorDialog() {
                                         >
                                             <div className="w-12 h-12 mb-3 relative flex items-center justify-center bg-gray-50 rounded-full p-2 group-hover:bg-white transition-colors">
                                                 <img
-                                                    src={brand.logoUrl}
+                                                    src={brand.logoUrl || GENERIC_LOGO}
                                                     alt={brand.name}
                                                     className="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity"
                                                 />
@@ -204,7 +222,8 @@ export function CarSelectorDialog() {
                             {/* MODEL SELECTION */}
                             {step === 'model' && selectedBrand && (
                                 <div className="grid grid-cols-2 gap-3">
-                                    {MODELS[selectedBrand.id]?.map((model) => (
+                                    {/* Lookup by Name since we updated keys to be capitalized names */}
+                                    {MODELS[selectedBrand.name]?.map((model) => (
                                         <button
                                             key={model}
                                             onClick={() => handleModelSelect(model)}
@@ -213,8 +232,8 @@ export function CarSelectorDialog() {
                                             <span className="text-base font-medium">{model}</span>
                                         </button>
                                     ))}
-                                    {(!MODELS[selectedBrand.id] || MODELS[selectedBrand.id].length === 0) && (
-                                        <p className="col-span-2 text-center text-muted-foreground py-10">No models found for this brand.</p>
+                                    {(!MODELS[selectedBrand.name] || MODELS[selectedBrand.name].length === 0) && (
+                                        <p className="col-span-2 text-center text-muted-foreground py-10">No models found for {selectedBrand.name}.</p>
                                     )}
                                 </div>
                             )}

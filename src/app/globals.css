@@ -139,6 +139,26 @@
   display: none;
 }
 
+/* Allow scrolling for specific containers */
+.custom-scrollbar {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--muted-foreground) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: block !important;
+  width: 6px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--muted-foreground) !important;
+  border-radius: 20px !important;
+}
+
 /* =========================
    ARABIC TEXT SUPPORT (MINIMAL)
 ========================= */
