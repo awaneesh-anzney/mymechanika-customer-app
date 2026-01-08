@@ -7,6 +7,12 @@ export interface CarBrand {
     displayOrder: number;
 }
 
+export interface CarModel {
+    id: string;
+    name: string;
+    segment: string;
+}
+
 export const carService = {
     getCarBrands: async (): Promise<CarBrand[]> => {
         try {
@@ -15,6 +21,16 @@ export const carService = {
         } catch (error) {
             console.error('Error fetching car brands:', error);
             return []; // Return empty array on error to prevent UI crash
+        }
+    },
+
+    getCarModels: async (brandId: string): Promise<CarModel[]> => {
+        try {
+            const response = await axios.get(`/cars/brands/${brandId}/models`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching car models for brand ${brandId}:`, error);
+            return [];
         }
     }
 };

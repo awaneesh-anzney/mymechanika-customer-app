@@ -12,30 +12,10 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
-import { carService, CarBrand } from "@/services/car.service";
+import { carService, CarBrand, CarModel } from "@/services/car.service";
 
 // Generic Logo for fallback
 const GENERIC_LOGO = "https://cdn-icons-png.flaticon.com/512/1598/1598196.png";
-
-// ... MODELS and FUEL_TYPES constants can remain for now as user only requested Brands API ...
-const MODELS: Record<string, string[]> = {
-    // We need to map the new brand names (which might not match exactly with checks) or just use names.
-    // However, the previous logic used brand IDs (lowercase names). The API returns UUIDs.
-    // For this step, I will map the API `name` to the static `MODELS` keys loosely if possible, or just keep static MODELS for now.
-    // The user instruction specifically asked to map the BRAND API.
-    // Note: The `MODELS` dictionary keys (toyota, honda) might not match the UUIDs.
-    // I will try to use the brand name (lowercase) to lookup models for now to preserve functionality.
-    'Toyota': ['Fortuner', 'Innova Crysta', 'Glanza', 'Urban Cruiser', 'Camry'],
-    'Honda': ['City', 'Amaze', 'Elevate', 'WR-V', 'Jazz'],
-    'Hyundai': ['Creta', 'Venue', 'Verna', 'i20', 'Grand i10 Nios'],
-    'Maruti Suzuki': ['Swift', 'Baleno', 'Brezza', 'Ertiga', 'Dzire'],
-    'Tata': ['Nexon', 'Harrier', 'Safari', 'Punch', 'Tiago'],
-    'Mahindra': ['XUV700', 'Thar', 'Scorpio-N', 'XUV300', 'Bolero'],
-    'Kia': ['Seltos', 'Sonet', 'Carens', 'Carnival'],
-    'BMW': ['3 Series', '5 Series', 'X1', 'X3', 'X5'],
-    'Mercedes-Benz': ['C-Class', 'E-Class', 'GLA', 'GLC', 'S-Class'],
-    'Audi': ['A4', 'A6', 'Q3', 'Q5', 'Q7'],
-};
 
 const FUEL_TYPES = [
     { id: 'petrol', name: 'Petrol', icon: Droplet },
@@ -51,6 +31,7 @@ export function CarSelectorDialog() {
 
     // Data State
     const [brands, setBrands] = React.useState<CarBrand[]>([]);
+    const [models, setModels] = React.useState<CarModel[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
     // Selection State
@@ -73,9 +54,18 @@ export function CarSelectorDialog() {
         fetchBrands();
     }, [])
 
-    const handleBrandSelect = (brand: CarBrand) => {
+    const handleBrandSelect = async (brand: CarBrand) => {
         setSelectedBrand(brand)
         setStep('model')
+        setIsLoading(true);
+        try {
+            const fetchedModels = await carService.getCarModels(brand.id);
+            setModels(fetchedModels);
+        } catch (error) {
+            console.error("Failed to load models", error);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     const handleModelSelect = (model: string) => {
@@ -96,6 +86,7 @@ export function CarSelectorDialog() {
         if (step === 'model') {
             setStep('brand');
             setSelectedBrand(null);
+            setModels([]); // Clear models when going back
         } else if (step === 'fuel') {
             setStep('model');
             setSelectedModel(null);
@@ -214,17 +205,22 @@ export function CarSelectorDialog() {
                             {/* MODEL SELECTION */}
                             {step === 'model' && selectedBrand && (
                                 <div className="grid grid-cols-2 gap-3">
-                                    {/* Lookup by Name since we updated keys to be capitalized names */}
-                                    {MODELS[selectedBrand.name]?.map((model) => (
-                                        <button
-                                            key={model}
-                                            onClick={() => handleModelSelect(model)}
-                                            className="group flex flex-col items-center justify-center p-4 rounded-xl border border-border/50 bg-background hover:border-primary/50 hover:bg-muted/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-center"
-                                        >
-                                            <span className="text-base font-medium">{model}</span>
-                                        </button>
-                                    ))}
-                                    {(!MODELS[selectedBrand.name] || MODELS[selectedBrand.name].length === 0) && (
+                                    {isLoading ? (
+                                        <div className="col-span-2 flex items-center justify-center py-10">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                                        </div>
+                                    ) : models.length > 0 ? (
+                                        models.map((model) => (
+                                            <button
+                                                key={model.id}
+                                                onClick={() => handleModelSelect(model.name)}
+                                                className="group flex flex-col items-center justify-center p-4 rounded-xl border border-border/50 bg-background hover:border-primary/50 hover:bg-muted/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-center"
+                                            >
+                                                <span className="text-base font-medium block">{model.name}</span>
+                                                {model.segment && <span className="text-xs text-muted-foreground capitalize mt-1 block">{model.segment}</span>}
+                                            </button>
+                                        ))
+                                    ) : (
                                         <p className="col-span-2 text-center text-muted-foreground py-10">No models found for {selectedBrand.name}.</p>
                                     )}
                                 </div>
