@@ -7,6 +7,8 @@ import { ShoppingCart, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/components/auth-provider";
+import { useRouter } from "next/navigation";
 
 // Simple ScrollArea implementation if it's not in UI
 const SimpleScrollArea = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -19,10 +21,21 @@ export function Cart() {
     const { items, removeItem, totalItems, totalPrice, clearCart } = useCart();
     const { t } = useTranslation('cart');
     const [mounted, setMounted] = useState(false);
+    const { isAuthenticated } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    const handleCheckout = () => {
+        if (!isAuthenticated) {
+            router.push('/auth');
+            return;
+        }
+        // TODO: Proceed to checkout
+        console.log("Proceeding to checkout...");
+    };
 
     if (!mounted) return null;
 
@@ -88,7 +101,7 @@ export function Cart() {
                             <span className="font-semibold">Subtotal</span>
                             <span className="font-bold text-lg text-primary">${totalPrice}</span>
                         </div>
-                        <Button className="w-full shadow-lg shadow-primary/20">
+                        <Button className="w-full shadow-lg shadow-primary/20" onClick={handleCheckout}>
                             Checkout
                         </Button>
                     </div>
