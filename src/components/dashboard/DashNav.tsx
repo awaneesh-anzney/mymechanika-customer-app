@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Cart } from "@/components/Cart";
 import { ProfileMenu } from "@/components/dashboard/ProfileMenu";
+import { NotificationsMenu } from "@/components/dashboard/NotificationsMenu";
 
 interface DashNavProps {
   setMobileOpen: (open: boolean) => void;
@@ -82,10 +83,7 @@ const DashNav = ({ setMobileOpen }: DashNavProps) => {
 
         <Cart />
 
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
-        </Button>
+        <NotificationsMenu />
 
         <ProfileMenu />
       </div>
