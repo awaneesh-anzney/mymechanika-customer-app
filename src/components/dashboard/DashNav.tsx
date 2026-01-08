@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Cart } from "@/components/Cart";
+import { ProfileMenu } from "@/components/dashboard/ProfileMenu";
 
 interface DashNavProps {
   setMobileOpen: (open: boolean) => void;
@@ -86,9 +87,7 @@ const DashNav = ({ setMobileOpen }: DashNavProps) => {
           <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
         </Button>
 
-        <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-          <span className="text-sm font-medium text-primary">JD</span>
-        </div>
+        <ProfileMenu />
       </div>
     </header>
   );
