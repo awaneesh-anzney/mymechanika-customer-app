@@ -47,5 +47,21 @@ export const carService = {
             console.error(`Error fetching fuel types for model ${modelId}:`, error);
             return [];
         }
+    },
+
+    addMyCar: async (data: AddMyCarPayload): Promise<any> => {
+        const response = await axios.post('/cars/my-cars', data);
+        return response.data;
     }
 };
+
+export interface AddMyCarPayload {
+    brandId: string;
+    modelId: string;
+    fuelTypeId: string;
+    transmission: string;
+    year: number;
+    registrationNumber?: string;
+    color?: string;
+    isDefault?: boolean;
+}
