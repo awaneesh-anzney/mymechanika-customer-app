@@ -27,6 +27,9 @@ const FUEL_TYPE_ICONS: Record<string, any> = {
 };
 
 export function CarSelectorDialog() {
+    const STORAGE_KEY_SEEN = 'mymechanika_car_selector_seen';
+    const STORAGE_KEY_CAR = 'mymechanika_selected_car';
+
     const [isOpen, setIsOpen] = React.useState(false)
     const [step, setStep] = React.useState<'brand' | 'model' | 'fuel'>('brand')
 
@@ -41,8 +44,11 @@ export function CarSelectorDialog() {
     const [selectedModel, setSelectedModel] = React.useState<CarModel | null>(null)
 
     React.useEffect(() => {
-        // Open on mount
-        setIsOpen(true);
+        // Check if user has already visited/skipped
+        const hasSeen = localStorage.getItem(STORAGE_KEY_SEEN);
+        if (!hasSeen) {
+            setIsOpen(true);
+        }
 
         // Fetch Brands
         const fetchBrands = async () => {
@@ -55,6 +61,16 @@ export function CarSelectorDialog() {
         };
         fetchBrands();
     }, [])
+
+    const handleOpenChange = (open: boolean) => {
+        if (!open) {
+            // If the user closes the dialog (click outside, escape), mark as seen
+            localStorage.setItem(STORAGE_KEY_SEEN, 'true');
+        }
+        setIsOpen(open);
+    }
+
+
 
     const handleBrandSelect = async (brand: CarBrand) => {
         setSelectedBrand(brand)
@@ -85,11 +101,19 @@ export function CarSelectorDialog() {
     }
 
     const handleFuelSelect = (fuel: CarFuelType) => {
-        console.log("Final Selection:", {
-            brand: selectedBrand?.name,
-            model: selectedModel?.name,
-            fuel: fuel.fuelType
-        })
+        const selection = {
+            brand: selectedBrand,
+            model: selectedModel,
+            fuel: fuel
+        };
+
+        console.log("Final Selection:", selection);
+
+        // Store selected car details
+        localStorage.setItem(STORAGE_KEY_CAR, JSON.stringify(selection));
+        // Mark as seen so it doesn't open again
+        localStorage.setItem(STORAGE_KEY_SEEN, 'true');
+
         setIsOpen(false)
     }
 
@@ -103,10 +127,6 @@ export function CarSelectorDialog() {
             setSelectedModel(null);
             setFuelTypes([]); // Clear fuel types
         }
-    }
-
-    const handleClose = () => {
-        setIsOpen(false)
     }
 
     const getStepTitle = () => {
@@ -131,7 +151,7 @@ export function CarSelectorDialog() {
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogContent className="sm:max-w-3xl overflow-hidden p-0 gap-0 bg-background/95 backdrop-blur-md border-border/40 shadow-2xl">
 
 
@@ -171,8 +191,10 @@ export function CarSelectorDialog() {
                     </div>
 
                     {/* Right Content Area */}
-                    <div className="md:col-span-3 p-6 md:p-8 flex flex-col h-full overflow-hidden bg-card/50">
-                        <DialogHeader className="mb-6 md:hidden">
+                    <div className="md:col-span-3 p-6 md:p-8 flex flex-col h-full overflow-hidden bg-card/50 relative">
+
+
+                        <DialogHeader className="mb-6 md:hidden text-left">
                             {step !== 'brand' && (
                                 <button
                                     onClick={handleBack}
