@@ -8,6 +8,8 @@ import { LanguageProvider } from "@/components/language-provider";
 import { CartProvider } from "@/components/cart-provider";
 import { AuthProvider } from "@/components/auth-provider";
 
+import { QueryProvider } from "@/lib/query-provider";
+
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -40,11 +42,13 @@ export default function RootLayout({
         >
           <AuthProvider>
             <LanguageProvider>
-              <CartProvider>
-                {/* <Navbar /> */}
-                {children}
-                <Toaster />
-              </CartProvider>
+              <QueryProvider>
+                <CartProvider>
+                  {/* <Navbar /> */}
+                  {children}
+                  <Toaster />
+                </CartProvider>
+              </QueryProvider>
             </LanguageProvider>
           </AuthProvider>
         </ThemeProvider>

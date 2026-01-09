@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { VehicleList } from '@/components/vehicles/VehicleList';
 import { AddVehicleWizard } from '@/components/vehicles/AddVehicleWizard';
-import { carService, UserCar } from '@/services/car.service';
+import { useMyVehicles } from '@/hooks/useVehicles';
 import { Droplet, Fuel, Flame, Zap, Leaf } from 'lucide-react';
+import { UserCar } from '@/services/car.service';
 
 // Helper to get a proximate side-view image based on model type
 const getModelImage = (model: string) => {
@@ -28,63 +29,59 @@ const GENERIC_LOGO = "https://cdn-icons-png.flaticon.com/512/1598/1598196.png";
 
 export default function MyVehiclesPage() {
     const [view, setView] = useState<'list' | 'add'>('list');
-    const [vehicles, setVehicles] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
 
-    const fetchVehicles = async () => {
-        setIsLoading(true);
-        try {
-            const data = await carService.getMyCars();
+    // Use React Query hook
+    const { data: rawVehicles, isLoading, isError } = useMyVehicles();
 
-            // Map API response to UI Component format
-            const mappedVehicles = data.map((car: UserCar) => {
-                // Map fuel icons
-                let FuelIcon = Droplet; // Default
-                const ft = car.fuelType.toLowerCase();
-                if (ft === 'diesel') FuelIcon = Fuel;
-                if (ft === 'cng') FuelIcon = Flame;
-                if (ft === 'electric') FuelIcon = Zap;
-                if (ft === 'hybrid') FuelIcon = Leaf;
+    // Transform data
+    const vehicles = React.useMemo(() => {
+        if (!rawVehicles) return [];
 
-                return {
-                    id: car.id,
-                    brand: {
-                        id: car.brand.id,
-                        name: car.brand.name,
-                        logoUrl: car.brand.logoUrl || GENERIC_LOGO
-                    },
-                    model: car.model.name,
-                    fuel: {
-                        id: car.fuelType,
-                        name: car.fuelType,
-                        icon: FuelIcon
-                    },
-                    year: car.year.toString(),
-                    number: car.registrationNumber,
-                    km: car.odometerReading ? car.odometerReading.toLocaleString() : 'N/A',
-                    color: car.color,
-                    image: car.carImage || getModelImage(car.model.name),
-                    status: 'All Good', // Mock status
-                    nextServiceDate: 'Unknown' // Mock date
-                };
-            });
-            setVehicles(mappedVehicles);
-        } catch (error) {
-            console.error("Failed to fetch vehicles", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        return rawVehicles.map((car: UserCar) => {
+            // Map fuel icons
+            let FuelIcon = Droplet; // Default
+            const ft = car.fuelType.toLowerCase();
+            if (ft === 'diesel') FuelIcon = Fuel;
+            if (ft === 'cng') FuelIcon = Flame;
+            if (ft === 'electric') FuelIcon = Zap;
+            if (ft === 'hybrid') FuelIcon = Leaf;
 
-    useEffect(() => {
-        fetchVehicles();
-    }, []);
+            return {
+                id: car.id,
+                brand: {
+                    id: car.brand.id,
+                    name: car.brand.name,
+                    logoUrl: car.brand.logoUrl || GENERIC_LOGO
+                },
+                model: car.model.name,
+                fuel: {
+                    id: car.fuelType,
+                    name: car.fuelType,
+                    icon: FuelIcon
+                },
+                year: car.year.toString(),
+                number: car.registrationNumber,
+                km: car.odometerReading ? car.odometerReading.toLocaleString() : 'N/A',
+                color: car.color,
+                image: car.carImage || getModelImage(car.model.name),
+                status: 'All Good', // Mock status
+                nextServiceDate: 'Unknown' // Mock date
+            };
+        });
+    }, [rawVehicles]);
 
     const handleAddVehicleSuccess = (newVehicle: any) => {
-        // Refresh list to get full details (like brand logo if not in response) or just re-fetch
-        fetchVehicles();
+        // Query invalidation in the mutation will trigger a refetch automatically
         setView('list');
     };
+
+    if (isError) {
+        return (
+            <div className="flex justify-center items-center h-64 text-red-500">
+                Failed to load vehicles. Please try again later.
+            </div>
+        );
+    }
 
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">

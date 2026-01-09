@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     ArrowLeft,
     Droplet,
@@ -14,7 +14,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { carService, CarBrand, CarModel, CarFuelType, AddMyCarPayload } from '@/services/car.service';
+import { CarBrand, CarModel, CarFuelType, AddMyCarPayload } from '@/services/car.service';
+import { useCarBrands, useCarModels, useCarFuelTypes, useAddVehicle } from '@/hooks/useVehicles';
 
 // Generic Logo
 const GENERIC_LOGO = "https://cdn-icons-png.flaticon.com/512/1598/1598196.png";
@@ -37,13 +38,6 @@ interface AddVehicleWizardProps {
 export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicleWizardProps) => {
     const [step, setStep] = useState<'brand' | 'model' | 'fuel' | 'details'>('brand');
 
-    // Data State
-    const [brands, setBrands] = useState<CarBrand[]>([]);
-    const [models, setModels] = useState<CarModel[]>([]);
-    const [fuelTypes, setFuelTypes] = useState<CarFuelType[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
     const [formData, setFormData] = useState<{
         brand: CarBrand | null;
         model: CarModel | null;
@@ -64,33 +58,23 @@ export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicle
         transmission: 'MANUAL'
     });
 
-    useEffect(() => {
-        const fetchBrands = async () => {
-            setIsLoading(true);
-            try {
-                const data = await carService.getCarBrands();
-                const sorted = data.sort((a, b) => a.displayOrder - b.displayOrder);
-                setBrands(sorted);
-            } catch (error) {
-                console.error("Failed to load brands", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchBrands();
-    }, []);
+    // Queries
+    const { data: brands = [], isLoading: isBrandsLoading } = useCarBrands();
+    const { data: models = [], isLoading: isModelsLoading } = useCarModels(formData.brand?.id || null);
+    const { data: fuelTypes = [], isLoading: isFuelTypesLoading } = useCarFuelTypes(formData.model?.id || null);
+
+    // Mutations
+    const { mutate: addCar, isPending: isSubmitting } = useAddVehicle();
 
     const handleStepBack = () => {
         if (step === 'brand') onBack();
         else if (step === 'model') {
             setStep('brand');
-            setModels([]);
-            setFormData((prev) => ({ ...prev, brand: null }));
+            setFormData((prev) => ({ ...prev, brand: null, model: null }));
         }
         else if (step === 'fuel') {
             setStep('model');
-            setFuelTypes([]);
-            setFormData((prev) => ({ ...prev, model: null }));
+            setFormData((prev) => ({ ...prev, model: null, fuel: null }));
         }
         else if (step === 'details') {
             setStep('fuel');
@@ -98,32 +82,14 @@ export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicle
         }
     };
 
-    const handleBrandSelect = async (brand: CarBrand) => {
+    const handleBrandSelect = (brand: CarBrand) => {
         setFormData((prev) => ({ ...prev, brand, model: null }));
         setStep('model');
-        setIsLoading(true);
-        try {
-            const fetchedModels = await carService.getCarModels(brand.id);
-            setModels(fetchedModels);
-        } catch (error) {
-            console.error("Failed to load models", error);
-        } finally {
-            setIsLoading(false);
-        }
     };
 
-    const handleModelSelect = async (model: CarModel) => {
+    const handleModelSelect = (model: CarModel) => {
         setFormData((prev) => ({ ...prev, model }));
         setStep('fuel');
-        setIsLoading(true);
-        try {
-            const fetchedFuelTypes = await carService.getCarFuelTypes(model.id);
-            setFuelTypes(fetchedFuelTypes);
-        } catch (error) {
-            console.error("Failed to load fuel types", error);
-        } finally {
-            setIsLoading(false);
-        }
     };
 
     const handleFuelSelect = (fuel: CarFuelType) => {
@@ -131,15 +97,13 @@ export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicle
         setStep('details');
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!formData.brand || !formData.model || !formData.fuel) {
             console.error("Missing required vehicle data");
             return;
         }
-
-        setIsSubmitting(true);
 
         const payload: AddMyCarPayload = {
             brandId: formData.brand.id,
@@ -153,22 +117,33 @@ export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicle
             isDefault: true
         };
 
-        try {
-            const newCar = await carService.addMyCar(payload);
-            console.log("Vehicle added successfully:", newCar);
-            onSubmit(newCar); // Pass the new car back to parent
-        } catch (error) {
-            console.error("Failed to add vehicle:", error);
-            // Ideally show a toast here
-        } finally {
-            setIsSubmitting(false);
-        }
+        addCar(payload, {
+            onSuccess: (newCar) => {
+                console.log("Vehicle added successfully:", newCar);
+                onSubmit(newCar);
+            },
+            onError: (error) => {
+                console.error("Failed to add vehicle:", error);
+                // Ideally show a toast here
+            }
+        });
     };
 
     const getFuelIcon = (type: string) => {
         const normalizedType = type.toLowerCase();
         return FUEL_TYPE_ICONS[normalizedType] || Fuel;
     }
+
+    // Determine current loading state based on step
+    const isLoading =
+        (step === 'brand' && isBrandsLoading) ||
+        (step === 'model' && isModelsLoading) ||
+        (step === 'fuel' && isFuelTypesLoading);
+
+    // Sort brands by displayOrder
+    const sortedBrands = React.useMemo(() => {
+        return [...brands].sort((a, b) => a.displayOrder - b.displayOrder);
+    }, [brands]);
 
     return (
         <div className="max-w-4xl mx-auto mt-4">
@@ -207,7 +182,7 @@ export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicle
                         <>
                             {step === 'brand' && (
                                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                                    {brands.map((brand) => (
+                                    {sortedBrands.map((brand) => (
                                         <button
                                             key={brand.id}
                                             onClick={() => handleBrandSelect(brand)}
@@ -365,3 +340,4 @@ export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicle
         </div>
     );
 };
+
