@@ -49,11 +49,47 @@ export const carService = {
         }
     },
 
-    addMyCar: async (data: AddMyCarPayload): Promise<any> => {
+    addMyCar: async (data: AddMyCarPayload): Promise<UserCar> => {
         const response = await axios.post('/cars/my-cars', data);
         return response.data;
+    },
+
+    getMyCars: async (): Promise<UserCar[]> => {
+        try {
+            const response = await axios.get('/cars/my-cars');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching my cars:', error);
+            return [];
+        }
     }
 };
+
+export interface UserCar {
+    id: string;
+    userId: string;
+    brandId: string;
+    brand: CarBrand;
+    modelId: string;
+    model: CarModel;
+    fuelType: string;
+    transmission: string;
+    year: number;
+    registrationNumber: string;
+    color: string;
+    engineCC: number | null;
+    odometerReading: number | null;
+    purchaseDate: string | null;
+    nickname: string | null;
+    carImage: string | null;
+    carImagePublicId: string | null;
+    isDefault: boolean;
+    lastServiceDate: string | null;
+    nextServiceDue: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+}
 
 export interface AddMyCarPayload {
     brandId: string;
@@ -63,5 +99,6 @@ export interface AddMyCarPayload {
     year: number;
     registrationNumber?: string;
     color?: string;
+    odometerReading?: number;
     isDefault?: boolean;
 }

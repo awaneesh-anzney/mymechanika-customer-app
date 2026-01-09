@@ -149,6 +149,7 @@ export const AddVehicleWizard = ({ onBack, onSubmit, getModelImage }: AddVehicle
             year: parseInt(formData.year),
             registrationNumber: formData.number.toUpperCase(),
             color: formData.color,
+            odometerReading: parseInt(formData.km),
             isDefault: true
         };
 
