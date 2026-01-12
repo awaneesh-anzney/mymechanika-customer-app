@@ -6,26 +6,45 @@ import { useTranslation } from "react-i18next";
 import { useServiceCategories, useServices } from "@/hooks/useServices";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Page = () => {
   const { t, i18n } = useTranslation('services');
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
+  // Get Category from URL
+  const categoryParam = searchParams.get('category');
+
   const { data: categories, isLoading: isCategoriesLoading } = useServiceCategories();
+
+  // Create a derived state for the effective category ID.
+  // Use URL param if available.
+  // If not, and categories are loaded, use the first category.
+  const selectedCategoryId = categoryParam || (categories && categories.length > 0 ? categories[0].id : undefined);
+
   const { data: services, isLoading: queryLoading } = useServices(selectedCategoryId);
-  const isServicesLoading = queryLoading || !selectedCategoryId;
+  // We consider services loading if the query is loading OR if we are waiting for a category to be selected (which depends on categories loading)
+  const isServicesLoading = queryLoading || (!selectedCategoryId && isCategoriesLoading);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Sync URL with default category if loaded and no param
+  // Optional: If you want the URL to always reflect the state, uncomment below.
+  // But for now, we just let derived state handle the "default" view without changing URL necessarily, 
+  // or we can push the default to URL to make it explicit.
   useEffect(() => {
-    if (categories && categories.length > 0 && !selectedCategoryId) {
-      setSelectedCategoryId(categories[0].id);
+    if (!categoryParam && categories && categories.length > 0) {
+      // We generally don't encourage auto-redirecting on mount as it adds history entries, 
+      // but it makes the "current state" shareable.
+      // For a better UX, we just render Category 1 but don't force the URL unless user interacts.
+      // So we leave this empty or remove it.
     }
-  }, [categories, selectedCategoryId]);
+  }, [categoryParam, categories]);
 
   const activeT = mounted ? t : i18n.getFixedT('en', 'services');
 
@@ -60,7 +79,7 @@ const Page = () => {
               {visibleCategories?.map((category) => (
                 <button
                   key={category.id}
-                  onClick={() => setSelectedCategoryId(category.id)}
+                  onClick={() => router.push(`/services?category=${category.id}`, { scroll: false })}
                   className={cn(
                     "flex-none w-28 p-4 rounded-2xl flex flex-col items-center gap-3 transition-all duration-300 border-2 snap-center",
                     selectedCategoryId === category.id
