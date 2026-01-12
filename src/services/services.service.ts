@@ -45,11 +45,11 @@ export interface ServicesResponse {
     data: Service[];
 }
 
-export const getServices = async (categoryId?: string): Promise<ServicesResponse> => {
+export const getServices = async (categoryId?: string, signal?: AbortSignal): Promise<ServicesResponse> => {
     if (categoryId && categoryId !== 'all') {
-        const response = await api.get(`/services/categories/${categoryId}`);
+        const response = await api.get(`/services/categories/${categoryId}`, { signal });
         return response.data;
     }
-    const response = await api.get("/services");
+    const response = await api.get("/services", { signal });
     return response.data;
 };

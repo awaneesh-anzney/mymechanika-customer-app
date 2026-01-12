@@ -12,7 +12,7 @@ export const useServiceCategories = () => {
 export const useServices = (categoryId?: string) => {
     return useQuery({
         queryKey: ["services", categoryId],
-        queryFn: () => getServices(categoryId),
+        queryFn: ({ signal }) => getServices(categoryId, signal),
         select: (data) => data.data,
         enabled: !!categoryId,
     });
