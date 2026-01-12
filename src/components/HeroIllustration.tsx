@@ -20,7 +20,7 @@ export function HeroIllustration() {
     return (
       <div className="w-full flex justify-center lg:justify-end">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-2xl">
-          {[...Array(6)].map((_, i) => (
+          {[...Array(9)].map((_, i) => (
             <div key={i} className="h-[140px] rounded-xl bg-muted/20 animate-pulse" />
           ))}
         </div>
@@ -30,7 +30,10 @@ export function HeroIllustration() {
 
   // Only take first 6 or 9 to fit the grid nicely if needed, or all of them.
   // The original design had a fixed grid.
-  const displayCategories = categories || [];
+  const allCategories = categories || [];
+  const MAX_ITEMS = 9;
+  const shouldShowMore = allCategories.length > MAX_ITEMS;
+  const displayCategories = shouldShowMore ? allCategories.slice(0, MAX_ITEMS - 1) : allCategories;
 
   return (
     <div className="w-full flex justify-center lg:justify-end">
@@ -67,6 +70,19 @@ export function HeroIllustration() {
             </div>
           </div>
         ))}
+        {shouldShowMore && (
+          <div
+            onClick={() => router.push('/services')}
+            className="group relative h-[140px] flex flex-col items-center justify-center p-4 rounded-xl border border-dashed border-primary/30 bg-primary/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:bg-primary/10 cursor-pointer"
+          >
+            <div className="p-3 mb-2 rounded-full bg-primary/10 text-primary group-hover:scale-110 transition-transform duration-300">
+              <ArrowRight className="w-6 h-6" />
+            </div>
+            <span className="font-bold text-primary text-sm">
+              {t('heroIllustration.showMore', 'Show More')}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
