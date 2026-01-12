@@ -11,11 +11,12 @@ interface ServiceCardProps {
   id: string;
   title: string;
   description: string;
-  price: string;
-  originalPrice?: string;
-  rating: number;
-  duration: string;
-  icon: LucideIcon;
+  price: string | number;
+  originalPrice?: string | number;
+  rating?: number;
+  duration?: string;
+  icon?: LucideIcon;
+  image?: string;
   featured?: boolean;
   className?: string;
   compact?: boolean;
@@ -30,6 +31,7 @@ const ServiceCard = ({
   rating,
   duration,
   icon: Icon,
+  image,
   featured = false,
   className,
   compact = false,
@@ -45,7 +47,7 @@ const ServiceCard = ({
   const activeT = mounted ? t : i18n.getFixedT('en', 'services');
 
   const handleAddToCart = () => {
-    addItem({ id, title, price, icon: Icon });
+    addItem({ id, title, price: String(price), icon: Icon }); // Cast price to string if needed
     toast.success(`${title} added to cart`);
   };
 
@@ -69,22 +71,30 @@ const ServiceCard = ({
       <div className="flex items-start justify-between mb-4">
         <div
           className={cn(
-            "rounded-xl flex items-center justify-center transition-all duration-300",
+            "rounded-xl flex items-center justify-center transition-all duration-300 overflow-hidden",
             compact ? "w-10 h-10" : "w-14 h-14",
-            featured
+            featured && !image
               ? "bg-linear-to-br from-primary to-secondary"
-              : "bg-primary/10 group-hover:bg-linear-to-br group-hover:from-primary group-hover:to-secondary"
+              : !image ? "bg-primary/10 group-hover:bg-linear-to-br group-hover:from-primary group-hover:to-secondary" : ""
           )}
         >
-          <Icon
-            className={cn(
-              "transition-colors",
-              compact ? "w-5 h-5" : "w-7 h-7",
-              featured
-                ? "text-primary-foreground"
-                : "text-primary group-hover:text-primary-foreground"
-            )}
-          />
+          {image ? (
+            <img
+              src={image}
+              alt={title}
+              className={cn("w-full h-full object-cover")}
+            />
+          ) : Icon ? (
+            <Icon
+              className={cn(
+                "transition-colors",
+                compact ? "w-5 h-5" : "w-7 h-7",
+                featured
+                  ? "text-primary-foreground"
+                  : "text-primary group-hover:text-primary-foreground"
+              )}
+            />
+          ) : null}
         </div>
         <div className="flex items-center gap-1 text-sm">
           <Star className="w-4 h-4 text-accent fill-accent" />
