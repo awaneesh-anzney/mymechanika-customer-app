@@ -5,6 +5,7 @@ export interface RegisterDto {
     email: string;
     phone: string;
     password?: string;
+    role?: string;
 }
 
 export interface LoginDto {
@@ -12,15 +13,21 @@ export interface LoginDto {
     password?: string;
 }
 
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    status: string;
+}
+
 export interface AuthResponse {
-    user: {
-        id: string;
-        name: string;
-        email: string;
-        phone: string;
-    };
+    user: User;
     accessToken: string;
-    refreshToken: string;
+    // refreshToken is handled via HttpOnly cookie
 }
 
 export const authService = {
@@ -34,9 +41,20 @@ export const authService = {
         return response.data;
     },
 
-    logout: () => {
-        if (typeof window !== "undefined") {
-            localStorage.removeItem("mymechanika-auth-context");
+    refreshToken: async (): Promise<{ accessToken: string }> => {
+        const response = await api.post("/auth/refresh-token");
+        return response.data;
+    },
+
+    logout: async () => {
+        try {
+            await api.post("/auth/logout");
+        } catch (error) {
+            console.error("Logout API call failed", error);
+        } finally {
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("mymechanika-auth-context");
+            }
         }
     },
 };
