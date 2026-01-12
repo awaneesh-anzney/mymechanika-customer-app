@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react'
 import ServiceCard from '@/components/services/services'
 import { Car, Wrench, Battery, Shield, Thermometer, CircleDashed, Sparkles, PaintBucket } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { useServiceCategories } from "@/hooks/useServices";
+import { Skeleton } from "@/components/ui/skeleton";
 
+// Temporary mockup data updated to match API category names
 const servicesData = [
   {
     id: "general",
@@ -11,6 +15,7 @@ const servicesData = [
     rating: 4.8,
     duration: "1h",
     icon: Car,
+    category: "Periodic Maintenance",
   },
   {
     id: "brakes",
@@ -20,6 +25,7 @@ const servicesData = [
     duration: "2h",
     icon: Shield,
     featured: true,
+    category: "Mechanical Repair",
   },
   {
     id: "engine",
@@ -27,6 +33,7 @@ const servicesData = [
     rating: 4.7,
     duration: "45m",
     icon: Wrench,
+    category: "Mechanical Repair",
   },
   {
     id: "ac",
@@ -36,6 +43,7 @@ const servicesData = [
     duration: "3h",
     icon: Thermometer,
     featured: true,
+    category: "AC Service & Repair",
   },
   {
     id: "wheel",
@@ -43,6 +51,7 @@ const servicesData = [
     rating: 4.7,
     duration: "1h",
     icon: CircleDashed,
+    category: "Tyres & Wheel Care",
   },
   {
     id: "spa",
@@ -52,6 +61,7 @@ const servicesData = [
     duration: "4h",
     icon: Sparkles,
     featured: true,
+    category: "Car Wash & Detailing",
   },
   {
     id: "paint",
@@ -59,6 +69,7 @@ const servicesData = [
     rating: 4.8,
     duration: "24h",
     icon: PaintBucket,
+    category: "Denting, Painting & Bodywork",
   },
   {
     id: "battery",
@@ -66,12 +77,16 @@ const servicesData = [
     rating: 4.8,
     duration: "30m",
     icon: Battery,
+    category: "Battery & Electrical",
   },
 ];
 
 const Page = () => {
   const { t, i18n } = useTranslation('services');
   const [mounted, setMounted] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All Services");
+
+  const { data: categories, isLoading } = useServiceCategories();
 
   useEffect(() => {
     setMounted(true);
@@ -84,6 +99,10 @@ const Page = () => {
     title: activeT(`items.${service.id}.title`),
     description: activeT(`items.${service.id}.description`),
   }));
+
+  const filteredServices = services.filter(service =>
+    selectedCategory === "All Services" || service.category === selectedCategory
+  );
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -99,8 +118,37 @@ const Page = () => {
           {activeT("subtitle")}
         </p>
       </div>
+
+      <div className="flex flex-wrap justify-center gap-2 mb-12">
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-10 w-32 rounded-full" />
+          ))
+        ) : (
+          <>
+            <Button
+              variant={selectedCategory === "All Services" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("All Services")}
+              className="rounded-full"
+            >
+              All Services
+            </Button>
+            {categories?.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.name ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.name)}
+                className="rounded-full"
+              >
+                {category.name}
+              </Button>
+            ))}
+          </>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {services.map((service, index) => (
+        {filteredServices.map((service, index) => (
           <ServiceCard key={index} {...service} />
         ))}
       </div>
