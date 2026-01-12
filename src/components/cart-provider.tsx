@@ -1,17 +1,19 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useGetCart, useAddToCart, useSyncCart } from "@/hooks/useCartQueries";
+import { useGetCart, useAddToCart, useSyncCart, useRemoveFromCart } from "@/hooks/useCartQueries";
 import { useAuth } from "@/components/auth-provider";
 import { toast } from "sonner";
 
 export interface CartItem {
-    id: string; // Cart Item ID or Service ID depending on backend
+    id: string; // This MUST be the serviceId/product UUID for deletion to work
+    cartItemId?: string; // The ID of the item in the cart table (e.g. "2")
     title: string;
     price: string | number;
     icon?: any;
     quantity: number;
     serviceId?: string;
+    currency?: string;
 }
 
 interface CartContextType {
@@ -45,17 +47,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const { data: cartData, isLoading } = useGetCart(guestId, isAuthenticated);
     const addToCartMutation = useAddToCart();
     const syncCartMutation = useSyncCart();
+    const removeFromCartMutation = useRemoveFromCart();
 
     // Sync guest cart when user logs in
     useEffect(() => {
         if (isAuthenticated && guestId) {
             syncCartMutation.mutate({ guestId }, {
                 onSuccess: () => {
-                    // Optional: Clear guestId or handle sync success
                     console.log("Cart synced successfully");
-                    // We might want to remove guestId from storage to avoid re-syncing, 
-                    // but we need to generate a new one if they logout.
-                    // For now, we keep it but the backend should handle idempotent capabilities.
                 },
                 onError: (error) => {
                     console.error("Failed to sync cart", error);
@@ -65,25 +64,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }, [isAuthenticated, guestId, syncCartMutation]);
 
     // Map backend items to frontend CartItem structure
-    // Assuming backend returns { items: [{ id, serviceId, quantity, service: { name, price, ... } }] }
-    // We try to gracefully handle missing fields
     const items: CartItem[] = (cartData?.items || []).map((item: any) => ({
-        id: item.id || item.serviceId,
+        id: item.serviceId || item.id, // Use serviceId for ID to ensure delete works
+        cartItemId: item.id,
         title: item.service?.name || item.title || "Service",
-        price: item.service?.price || item.price || 0,
+        price: item.price || item.service?.basePrice || 0,
         quantity: item.quantity || 1,
-        // We might not get icon from backend, preserve if possible or use default in UI
         serviceId: item.serviceId,
+        currency: item.currency || "SAR"
     }));
 
     const addItem = (item: Partial<CartItem> & { id: string }) => {
         const serviceId = item.id;
         const quantity = item.quantity || 1;
-
-        // If not authenticated, we must have a guestId
-        // If authenticated, we pass guestId only if logic requires (e.g. merge), 
-        // but typically backend reads token.
-        // We pass guestId if we have it, as the API allows it.
         const effectiveGuestId = isAuthenticated ? undefined : (guestId || undefined);
 
         addToCartMutation.mutate({
@@ -102,20 +95,31 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     };
 
     const removeItem = (id: string) => {
-        // TODO: Implement remove item API
-        console.warn("Remove item not implemented yet via API");
-        toast.info("Remove item coming soon");
+        const effectiveGuestId = isAuthenticated ? undefined : (guestId || undefined);
+
+        removeFromCartMutation.mutate({
+            serviceId: id,
+            guestId: effectiveGuestId
+        }, {
+            onSuccess: () => {
+                toast.success("Removed from cart");
+            },
+            onError: (err) => {
+                console.error(err);
+                toast.error("Failed to remove from cart");
+            }
+        });
     };
 
     const clearCart = () => {
         // TODO: Implement clear cart API
         console.warn("Clear cart not implemented yet via API");
+        toast.info("Clear cart coming soon");
     };
 
     const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
-    const totalPrice = items.reduce((acc, item) => {
-        // Handle price being string "$100" or number 100
+    const totalPriceVal = items.reduce((acc, item) => {
         const priceVal = item.price;
         let numericPrice = 0;
         if (typeof priceVal === 'number') {
@@ -125,7 +129,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             numericPrice = parseFloat(strPrice.replace(/[^0-9.]/g, ""));
         }
         return acc + (isNaN(numericPrice) ? 0 : numericPrice) * item.quantity;
-    }, 0).toFixed(2);
+    }, 0);
+
+    const totalPrice = totalPriceVal.toFixed(2);
 
     return (
         <CartContext.Provider value={{ items, addItem, removeItem, clearCart, totalItems, totalPrice, isLoading }}>

@@ -78,7 +78,10 @@ export function Cart() {
                                         </div>
                                         <div className="flex flex-col">
                                             <span className="text-sm font-medium line-clamp-1">{item.title}</span>
-                                            <span className="text-xs text-muted-foreground">{item.price}</span>
+                                            <div className="flex items-center gap-1">
+                                                <span className="text-xs font-semibold text-primary">{item.currency || 'SAR'}</span>
+                                                <span className="text-xs text-muted-foreground">{Number(item.price).toFixed(2)}</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <Button
@@ -99,7 +102,9 @@ export function Cart() {
                     <div className="p-4 border-t bg-muted/30">
                         <div className="flex items-center justify-between mb-4">
                             <span className="font-semibold">Subtotal</span>
-                            <span className="font-bold text-lg text-primary">${totalPrice}</span>
+                            <span className="font-bold text-lg text-primary">
+                                {items[0]?.currency || 'SAR'} {totalPrice}
+                            </span>
                         </div>
                         <Button className="w-full shadow-lg shadow-primary/20" onClick={handleCheckout}>
                             Checkout

@@ -50,5 +50,11 @@ export const cartService = {
     syncCart: async (data: SyncCartDto) => {
         const response = await api.post("/cart/sync", data);
         return response.data;
+    },
+
+    removeFromCart: async (serviceId: string, guestId?: string) => {
+        const params = guestId ? { guestId } : {};
+        const response = await api.delete(`/cart/${serviceId}`, { params });
+        return response.data;
     }
 };

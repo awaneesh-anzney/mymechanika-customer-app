@@ -30,3 +30,14 @@ export const useSyncCart = () => {
         },
     });
 };
+
+export const useRemoveFromCart = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ serviceId, guestId }: { serviceId: string; guestId?: string }) =>
+            cartService.removeFromCart(serviceId, guestId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+        },
+    });
+};
