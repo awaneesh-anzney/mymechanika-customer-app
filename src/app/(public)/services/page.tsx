@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react'
 import ServiceCard from '@/components/services/services'
-import { Wrench, LayoutGrid } from "lucide-react";
+import { Wrench, LayoutGrid, ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useServiceCategories, useServices } from "@/hooks/useServices";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,15 +11,25 @@ const Page = () => {
   const { t, i18n } = useTranslation('services');
   const [mounted, setMounted] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   const { data: categories, isLoading: isCategoriesLoading } = useServiceCategories();
-  const { data: services, isLoading: isServicesLoading } = useServices(selectedCategoryId);
+  const { data: services, isLoading: queryLoading } = useServices(selectedCategoryId);
+  const isServicesLoading = queryLoading || !selectedCategoryId;
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (categories && categories.length > 0 && !selectedCategoryId) {
+      setSelectedCategoryId(categories[0].id);
+    }
+  }, [categories, selectedCategoryId]);
+
   const activeT = mounted ? t : i18n.getFixedT('en', 'services');
+
+  const visibleCategories = showAllCategories ? categories : categories?.slice(0, 10);
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -37,7 +47,7 @@ const Page = () => {
       </div>
 
       <div className="mb-12">
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x md:flex-wrap md:justify-center md:gap-6 md:overflow-visible">
           {isCategoriesLoading ? (
             Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="flex-none w-24 flex flex-col items-center gap-2">
@@ -47,32 +57,7 @@ const Page = () => {
             ))
           ) : (
             <>
-              <button
-                onClick={() => setSelectedCategoryId(undefined)}
-                className={cn(
-                  "flex-none w-28 p-4 rounded-2xl flex flex-col items-center gap-3 transition-all duration-300 border-2 snap-center",
-                  selectedCategoryId === undefined
-                    ? "border-primary bg-primary/5 shadow-md scale-105"
-                    : "border-transparent bg-card hover:bg-muted/50 hover:border-muted-foreground/20"
-                )}
-              >
-                <div className={cn(
-                  "w-12 h-12 rounded-full flex items-center justify-center transition-colors",
-                  selectedCategoryId === undefined
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                )}>
-                  <LayoutGrid className="w-6 h-6" />
-                </div>
-                <span className={cn(
-                  "text-sm font-medium text-center leading-tight",
-                  selectedCategoryId === undefined ? "text-primary" : "text-muted-foreground"
-                )}>
-                  All Services
-                </span>
-              </button>
-
-              {categories?.map((category) => (
+              {visibleCategories?.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategoryId(category.id)}
@@ -102,6 +87,20 @@ const Page = () => {
                   </span>
                 </button>
               ))}
+
+              {categories && categories.length > 10 && (
+                <button
+                  onClick={() => setShowAllCategories(!showAllCategories)}
+                  className="flex-none w-28 p-4 rounded-2xl flex flex-col items-center gap-3 transition-all duration-300 border-2 border-transparent bg-card hover:bg-muted/50 hover:border-muted-foreground/20 snap-center"
+                >
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center bg-muted text-foreground/70">
+                    {showAllCategories ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+                  </div>
+                  <span className="text-sm font-medium text-center leading-tight text-muted-foreground">
+                    {showAllCategories ? activeT("viewLess") || "View Less" : activeT("viewMore") || "View More"}
+                  </span>
+                </button>
+              )}
             </>
           )}
         </div>

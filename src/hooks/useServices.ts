@@ -14,5 +14,6 @@ export const useServices = (categoryId?: string) => {
         queryKey: ["services", categoryId],
         queryFn: () => getServices(categoryId),
         select: (data) => data.data,
+        enabled: !!categoryId,
     });
 };
