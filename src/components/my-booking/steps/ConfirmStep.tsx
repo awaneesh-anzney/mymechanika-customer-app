@@ -2,7 +2,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Check, Car, Wrench, MapPin, CalendarCheck2 } from "lucide-react"
-import { services, workshops, vehicles } from "../constants"
+import { services, workshops } from "../constants"
+import { useMyVehicles } from "@/hooks/useVehicles"
 
 type Props = {
   selectedVehicle: string | null
@@ -27,8 +28,9 @@ export default function ConfirmStep({
   onBack,
   onConfirm,
 }: Props) {
-  const selectedVeh = vehicles.find((v) => v.id === selectedVehicle)
-  const vehicleLabel = selectedVeh ? `${selectedVeh.make} ${selectedVeh.model} ${selectedVeh.year} (${selectedVeh.plate})` : ""
+  const { data: vehicles } = useMyVehicles()
+  const selectedVeh = vehicles?.find((v) => v.id === selectedVehicle)
+  const vehicleLabel = selectedVeh ? `${selectedVeh.brand.name} ${selectedVeh.model.name} ${selectedVeh.year} (${selectedVeh.registrationNumber})` : ""
   const serviceNames = selectedServices
     .map((id) => services.find((s) => s.id === id)?.name)
     .filter(Boolean)
