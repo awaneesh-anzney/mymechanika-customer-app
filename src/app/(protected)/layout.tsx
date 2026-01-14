@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
 import { ProtectedRoute } from "@/components/protected-route";
+import { useAuth } from "@/components/auth-provider";
 
 export default function Layout({
   children,
@@ -14,8 +15,10 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
 
   const header = useMemo(() => {
     if (pathname?.startsWith("/service-history")) {
@@ -26,9 +29,9 @@ export default function Layout({
     }
     return {
       title: "Dashboard",
-      subtitle: "Welcome back, John!",
+      subtitle: `Welcome back, ${user?.name || "User"}!`,
     };
-  }, [pathname]);
+  }, [pathname, user]);
 
   return (
     <ProtectedRoute>

@@ -5,6 +5,7 @@ import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/auth-provider";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -13,6 +14,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
@@ -39,7 +41,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
             <div>
               <h1 className="font-display font-bold text-xl text-foreground">Dashboard</h1>
-              <p className="text-sm text-muted-foreground hidden md:block">Welcome back, John!</p>
+              <p className="text-sm text-muted-foreground hidden md:block">Welcome back, {user?.name || "User"}!</p>
             </div>
           </div>
 

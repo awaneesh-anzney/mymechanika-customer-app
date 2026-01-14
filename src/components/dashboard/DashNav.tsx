@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Cart } from "@/components/Cart";
 import { ProfileMenu } from "@/components/dashboard/ProfileMenu";
 import { NotificationsMenu } from "@/components/dashboard/NotificationsMenu";
+import { useAuth } from "@/components/auth-provider";
 
 interface DashNavProps {
   setMobileOpen: (open: boolean) => void;
@@ -38,9 +39,18 @@ const getPageConfig = (pathname: string) => {
   return { title: 'Dashboard', subtitle: 'Welcome back, John!' };
 };
 
-const DashNav = ({ setMobileOpen }: DashNavProps) => {
+const DashNav = ({ setMobileOpen, title: propTitle, subtitle: propSubtitle }: DashNavProps) => {
   const pathname = usePathname();
-  const { title, subtitle } = getPageConfig(pathname);
+  const config = getPageConfig(pathname);
+  const { user } = useAuth();
+
+  const title = propTitle || config.title;
+  // If config returns the default static message, replace it with dynamic one
+  const dynamicSubtitle = config.subtitle === 'Welcome back, John!'
+    ? `Welcome back, ${user?.name || 'User'}!`
+    : config.subtitle;
+
+  const subtitle = propSubtitle || dynamicSubtitle;
 
 
   return (
