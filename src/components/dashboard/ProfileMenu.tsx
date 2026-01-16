@@ -11,21 +11,26 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ProfileAvatar } from "./ProfileAvatar";
-import { useUploadProfilePhoto } from "@/hooks/useProfile";
+import { useUploadProfilePhoto, useProfile } from "@/hooks/useProfile";
 
 export function ProfileMenu() {
-    const { user, logout } = useAuth();
+    const { user: authUser, logout } = useAuth();
+    // Do not fetch profile on mount (enabled: false), but if cache is updated by other components, this will update.
+    const { data: profileUser } = useProfile({ enabled: false });
     const router = useRouter();
     const uploadPhotoMutation = useUploadProfilePhoto();
 
+    // Prioritize fresh profile data from server state, fallback to auth state
+    const displayUser = profileUser || authUser;
+
     // Get initials from user name or default to 'U'
     const getInitials = () => {
-        if (!user || !user.name) return "U";
-        const names = user.name.split(' ');
+        if (!displayUser || !displayUser.name) return "U";
+        const names = displayUser.name.split(' ');
         if (names.length >= 2) {
             return `${names[0][0]}${names[1][0]}`.toUpperCase();
         }
-        return user.name.substring(0, 2).toUpperCase();
+        return displayUser.name.substring(0, 2).toUpperCase();
     };
 
     const handleLogout = () => {
@@ -38,14 +43,17 @@ export function ProfileMenu() {
         uploadPhotoMutation.mutate(file);
     };
 
+    const userInitials = getInitials();
+
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <div className="cursor-pointer">
                     {/* Small Trigger Avatar */}
                     <ProfileAvatar
-                        src={user?.profilePhoto}
-                        alt={user?.name}
+                        src={displayUser?.profilePhoto}
+                        alt={displayUser?.name}
+                        initials={userInitials}
                         size={36}
                         editable={false} // Trigger is usually just a button
                         className="hover:ring-2 hover:ring-primary/20 rounded-full transition-all"
@@ -56,16 +64,17 @@ export function ProfileMenu() {
                 <div className="flex flex-col items-center p-4 space-y-2">
                     {/* Large Editable Avatar */}
                     <ProfileAvatar
-                        src={user?.profilePhoto}
-                        alt={user?.name}
+                        src={displayUser?.profilePhoto}
+                        alt={displayUser?.name}
+                        initials={userInitials}
                         size={80}
                         editable={true}
                         onImageUpdate={handleImageUpdate}
                     />
 
                     <div className="text-center">
-                        <p className="text-base font-medium leading-none mb-1">{user?.name}</p>
-                        <p className="text-xs text-muted-foreground">{user?.email}</p>
+                        <p className="text-base font-medium leading-none mb-1">{displayUser?.name}</p>
+                        <p className="text-xs text-muted-foreground">{displayUser?.email}</p>
                     </div>
                 </div>
 

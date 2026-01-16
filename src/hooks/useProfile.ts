@@ -6,7 +6,8 @@ import {
     DeactivatePayload,
     RequestPhoneChangePayload,
     VerifyPhoneChangePayload,
-    VerifyEmailPayload
+    VerifyEmailPayload,
+    UserProfile
 } from '@/services/profile.service';
 
 // Query Keys
@@ -17,11 +18,12 @@ export const PROFILE_KEYS = {
 
 // Hooks
 
-export const useProfile = () => {
+export const useProfile = (options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: PROFILE_KEYS.details(),
         queryFn: profileService.getProfile,
         staleTime: 5 * 60 * 1000, // 5 minutes
+        ...options
     });
 };
 
@@ -30,8 +32,9 @@ export const useUpdateProfile = () => {
 
     return useMutation({
         mutationFn: (payload: UpdateProfilePayload) => profileService.updateProfile(payload),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: PROFILE_KEYS.details() });
+        onSuccess: (data) => {
+            // Update the cache immediately with the new user profile data
+            queryClient.setQueryData(PROFILE_KEYS.details(), data);
         },
     });
 };
@@ -47,7 +50,16 @@ export const useUploadProfilePhoto = () => {
 
     return useMutation({
         mutationFn: (file: File) => profileService.uploadProfilePhoto(file),
-        onSuccess: () => {
+        onSuccess: (data) => {
+            // Patch the existing profile data with the new photo URL
+            queryClient.setQueryData(PROFILE_KEYS.details(), (oldData: UserProfile | undefined) => {
+                if (!oldData) return undefined;
+                return {
+                    ...oldData,
+                    profilePhoto: data.profilePhoto
+                };
+            });
+            // Also invalidate to be sure but setQueryData gives immediate feedback
             queryClient.invalidateQueries({ queryKey: PROFILE_KEYS.details() });
         },
     });
