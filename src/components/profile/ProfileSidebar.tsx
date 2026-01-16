@@ -1,16 +1,51 @@
 "use client";
 
-import React from 'react';
-import { Camera, Shield, Calendar, CreditCard } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Camera, Shield, Calendar, CreditCard, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useProfile } from '@/hooks/useProfile';
+import { useProfile, useUploadProfilePhoto } from '@/hooks/useProfile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
+import { ImageCropperDialog } from './ImageCropperDialog';
 
 export const ProfileSidebar = () => {
     const { data: user, isLoading } = useProfile();
+    const uploadPhotoMutation = useUploadProfilePhoto();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Cropper State
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [isCropperOpen, setIsCropperOpen] = useState(false);
+
+    const handlePhotoClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setSelectedImage(reader.result as string);
+                setIsCropperOpen(true);
+            };
+            reader.readAsDataURL(file);
+        }
+        // Reset input so same file can be selected again if needed
+        event.target.value = '';
+    };
+
+    const handleCropComplete = (croppedFile: File) => {
+        setIsCropperOpen(false);
+        uploadPhotoMutation.mutate(croppedFile);
+    };
+
+    const handleCropperClose = () => {
+        setIsCropperOpen(false);
+        setSelectedImage(null);
+    };
 
     if (isLoading) {
         return (
@@ -36,17 +71,39 @@ export const ProfileSidebar = () => {
                         <img
                             src={user.profilePhoto || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                             alt="Profile"
-                            className="w-full h-full object-cover"
+                            className={`w-full h-full object-cover transition-opacity duration-300 ${uploadPhotoMutation.isPending ? 'opacity-50' : 'opacity-100'}`}
                         />
+                        {uploadPhotoMutation.isPending && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                            </div>
+                        )}
                     </div>
-                    {/* Access to photo upload would go here, maybe handled by parent or a separate modal */}
+
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+
                     <Button
                         size="icon"
-                        className="absolute bottom-1 right-1 h-8 w-8 rounded-full bg-primary hover:bg-primary/90 border-2 border-background shadow-sm"
+                        onClick={handlePhotoClick}
+                        disabled={uploadPhotoMutation.isPending}
+                        className="absolute bottom-1 right-1 h-8 w-8 rounded-full bg-primary hover:bg-primary/90 border-2 border-background shadow-sm disabled:opacity-70"
                     >
-                        <Camera className="w-4 h-4 text-primary-foreground" />
+                        {uploadPhotoMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" /> : <Camera className="w-4 h-4 text-primary-foreground" />}
                     </Button>
                 </div>
+
+                <ImageCropperDialog
+                    open={isCropperOpen}
+                    imageSrc={selectedImage}
+                    onClose={handleCropperClose}
+                    onCropComplete={handleCropComplete}
+                />
 
                 {/* Name & Email */}
                 <h2 className="text-xl font-bold text-foreground">{user.name}</h2>
