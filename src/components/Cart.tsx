@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 // Simple ScrollArea implementation if it's not in UI
 const SimpleScrollArea = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={`overflow-y-auto max-h-[300px] ${className}`}>
+    <div className={`overflow-y-auto ${className || 'max-h-[300px]'}`}>
         {children}
     </div>
 );
@@ -53,65 +53,90 @@ export function Cart() {
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-80 p-0 bg-card border-border shadow-xl">
-                <div className="flex items-center justify-between p-4 border-b">
-                    <h4 className="font-semibold text-lg">My Cart ({totalItems})</h4>
-                    {totalItems > 0 && (
-                        <Button variant="ghost" size="sm" onClick={clearCart} className="text-xs text-muted-foreground hover:text-destructive">
-                            Clear All
-                        </Button>
-                    )}
-                </div>
-
-                <SimpleScrollArea className="p-2">
-                    {!Array.isArray(items) || items.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-8 text-center">
-                            <ShoppingCart className="h-12 w-12 text-muted-foreground/30 mb-2" />
-                            <p className="text-sm text-muted-foreground">Your cart is empty</p>
-                        </div>
-                    ) : (
-                        <div className="space-y-2">
-                            {items.map((item) => (
-                                <div key={item.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center">
-                                            <ShoppingCart className="h-5 w-5 text-primary" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-medium line-clamp-1">{item.title}</span>
-                                            <div className="flex items-center gap-1">
-                                                <span className="text-xs font-semibold text-primary">{item.currency || 'SAR'}</span>
-                                                <span className="text-xs text-muted-foreground">{Number(item.price).toFixed(2)}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                        onClick={() => removeItem(item.id)}
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </SimpleScrollArea>
-
-                {items.length > 0 && (
-                    <div className="p-4 border-t bg-muted/30">
-                        <div className="flex items-center justify-between mb-4">
-                            <span className="font-semibold">Subtotal</span>
-                            <span className="font-bold text-lg text-primary">
-                                {items[0]?.currency || 'SAR'} {totalPrice}
-                            </span>
-                        </div>
-                        <Button className="w-full shadow-lg shadow-primary/20" onClick={handleCheckout}>
-                            Checkout
-                        </Button>
-                    </div>
-                )}
+                <CartContents />
             </PopoverContent>
         </Popover>
+    );
+}
+
+export function CartContents({ className, scrollAreaClassName }: { className?: string, scrollAreaClassName?: string }) {
+    const { items, removeItem, totalItems, totalPrice, clearCart } = useCart();
+    const router = useRouter();
+    const { isAuthenticated } = useAuth();
+    const { t } = useTranslation('cart');
+
+    const handleCheckout = () => {
+        if (!isAuthenticated) {
+            router.push('/auth');
+            return;
+        }
+        // TODO: Proceed to checkout
+        console.log("Proceeding to checkout...");
+    };
+
+    return (
+        <div className={className}>
+            <div className="flex items-center justify-between p-4 border-b">
+                <h4 className="font-semibold text-lg">My Cart ({totalItems})</h4>
+                {totalItems > 0 && (
+                    <Button variant="ghost" size="sm" onClick={clearCart} className="text-xs text-muted-foreground hover:text-destructive">
+                        Clear All
+                    </Button>
+                )}
+            </div>
+
+            <SimpleScrollArea className={`p-2 bg-background ${scrollAreaClassName}`}>
+                {!Array.isArray(items) || items.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-8 text-center">
+                        <ShoppingCart className="h-12 w-12 text-muted-foreground/30 mb-2" />
+                        <p className="text-sm text-muted-foreground">Your cart is empty</p>
+                    </div>
+                ) : (
+                    <div className="space-y-2">
+                        {items.map((item) => (
+                            <div key={item.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-accent transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center">
+                                        <ShoppingCart className="h-5 w-5 text-primary" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium line-clamp-1">{item.title}</span>
+                                        <div className="flex items-center gap-1">
+                                            <span className="text-xs font-semibold text-primary">{item.currency || 'SAR'}</span>
+                                            <span className="text-xs text-muted-foreground">{Number(item.price).toFixed(2)}</span>
+                                            {item.quantity > 1 && (
+                                                <span className="text-xs font-bold text-primary ml-1">x{item.quantity}</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                    onClick={() => removeItem(item.id)}
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </SimpleScrollArea>
+
+            {items.length > 0 && (
+                <div className="p-4 border-t bg-muted/30 mt-auto">
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="font-semibold">Subtotal</span>
+                        <span className="font-bold text-lg text-primary">
+                            {items[0]?.currency || 'SAR'} {totalPrice}
+                        </span>
+                    </div>
+                    <Button className="w-full shadow-lg shadow-primary/20" onClick={handleCheckout}>
+                        Checkout
+                    </Button>
+                </div>
+            )}
+        </div>
     );
 }

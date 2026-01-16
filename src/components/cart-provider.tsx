@@ -14,6 +14,7 @@ export interface CartItem {
     quantity: number;
     serviceId?: string;
     currency?: string;
+    cityId?: string;
 }
 
 interface CartContextType {
@@ -91,16 +92,35 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
     }, [isAuthenticated]);
 
+    // Flexible data extraction to handle various backend response structures
+    let rawItems: any[] = [];
+    if (cartData) {
+        if (Array.isArray(cartData)) {
+            rawItems = cartData;
+        } else if (Array.isArray(cartData.items)) {
+            rawItems = cartData.items;
+        } else if (cartData.data && Array.isArray(cartData.data.items)) {
+            rawItems = cartData.data.items;
+        } else if (cartData.data && Array.isArray(cartData.data)) {
+            rawItems = cartData.data;
+        }
+    }
+
     // Map backend items to frontend CartItem structure
-    const items: CartItem[] = (cartData?.items || []).map((item: any) => ({
-        id: item.serviceId || item.id, // Use serviceId for ID to ensure delete works
-        cartItemId: item.id,
-        title: item.service?.name || item.title || "Service",
-        price: item.price || item.service?.basePrice || 0,
-        quantity: item.quantity || 1,
-        serviceId: item.serviceId,
-        currency: item.currency || "SAR"
-    }));
+    const items: CartItem[] = rawItems.map((item: any) => {
+        // Robustly find the Service ID
+        const sId = item.serviceId || item.service_id || item.service?.id;
+
+        return {
+            id: sId || item.id, // Use serviceId for ID to ensure delete/check works
+            cartItemId: item.id,
+            title: item.service?.name || item.title || "Service",
+            price: item.price || item.service?.basePrice || item.service?.price || 0,
+            quantity: item.quantity || 1,
+            serviceId: sId,
+            currency: item.currency || item.service?.currency || "SAR"
+        };
+    });
 
     const addItem = (item: Partial<CartItem> & { id: string }) => {
         const serviceId = item.id;
@@ -110,7 +130,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         addToCartMutation.mutate({
             serviceId,
             quantity,
-            guestId: effectiveGuestId
+            guestId: effectiveGuestId,
+            cityId: item.cityId
         }, {
             onSuccess: () => {
                 toast.success("Added to cart");

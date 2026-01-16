@@ -24,6 +24,7 @@ export interface AddToCartDto {
     serviceId: string;
     quantity: number;
     guestId?: string;
+    cityId?: string;
 }
 
 export interface SyncCartDto {
