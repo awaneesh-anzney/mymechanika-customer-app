@@ -31,6 +31,9 @@ const getPageConfig = (pathname: string) => {
   if (pathname.startsWith('/my-settings')) {
     return { title: 'Settings', subtitle: 'App preferences and configurations' };
   }
+  if (pathname.startsWith('/messages')) {
+    return { title: 'Messages', subtitle: 'Communicate with workshops' };
+  }
   // Default to Dashboard
   return { title: 'Dashboard', subtitle: 'Welcome back, John!' };
 };
