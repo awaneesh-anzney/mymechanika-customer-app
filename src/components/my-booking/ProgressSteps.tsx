@@ -1,5 +1,5 @@
 "use client"
-import { Check, Car, Wrench, MapPin, CalendarCheck2 } from "lucide-react"
+import { Check, Car, Wrench, MapPin, CalendarCheck2, Home } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type ProgressStepsProps = {
@@ -9,9 +9,10 @@ type ProgressStepsProps = {
 const steps = [
   { num: 1, label: "Vehicle", icon: Car },
   { num: 2, label: "Services", icon: Wrench },
-  { num: 3, label: "Workshop", icon: MapPin },
-  { num: 4, label: "Schedule", icon: CalendarCheck2 },
-  { num: 5, label: "Confirm", icon: Check },
+  { num: 3, label: "Address", icon: Home },
+  { num: 4, label: "Workshop", icon: MapPin },
+  { num: 5, label: "Schedule", icon: CalendarCheck2 },
+  { num: 6, label: "Confirm", icon: Check },
 ]
 
 export function ProgressSteps({ step }: ProgressStepsProps) {
