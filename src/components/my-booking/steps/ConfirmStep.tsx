@@ -6,6 +6,7 @@ import { workshops } from "../constants"
 import { useMyVehicles } from "@/hooks/useVehicles"
 import { useState, useEffect } from "react"
 import { getServiceCategories, getServices, ServiceCategory } from "@/services/services.service"
+import { useAddresses } from "@/hooks/useAddress"
 
 type Props = {
   selectedVehicle: string | null
@@ -33,6 +34,7 @@ export default function ConfirmStep({
   onConfirm,
 }: Props) {
   const { data: vehicles } = useMyVehicles()
+  const { data: addresses = [] } = useAddresses()
   const [servicesData, setServicesData] = useState<any[]>([])
   const [isLoadingServices, setIsLoadingServices] = useState(true)
   
@@ -67,16 +69,14 @@ export default function ConfirmStep({
   const selectedVeh = vehicles?.find((v) => v.id === selectedVehicle)
   const vehicleLabel = selectedVeh ? `${selectedVeh.brand.name} ${selectedVeh.model.name} ${selectedVeh.year} (${selectedVeh.registrationNumber})` : ""
   
-  // Mock address data - replace with actual API call when address service is ready
-  const mockAddresses = [
-    { id: "addr-1", label: "Home", street: "123 Main Street, Apt 4B", city: "Riyadh", state: "Riyadh Province", postalCode: "12345" },
-    { id: "addr-2", label: "Work", street: "456 Business Ave, Floor 10", city: "Jeddah", state: "Makkah Province", postalCode: "23456" },
-    { id: "addr-3", label: "Parents House", street: "789 Family Road", city: "Dammam", state: "Eastern Province", postalCode: "34567" },
-  ]
-  
-  const selectedAddr = mockAddresses.find((a) => a.id === selectedAddress)
+  // Find selected address from API data
+  const selectedAddr = addresses.find((a) => a.id === selectedAddress)
   const addressLabel = selectedAddr 
-    ? `${selectedAddr.street}, ${selectedAddr.city}, ${selectedAddr.state}` 
+    ? (
+        selectedAddr.city 
+          ? `${selectedAddr.houseNo}, ${selectedAddr.street}, ${selectedAddr.city.name}, ${selectedAddr.city.state}` 
+          : `${selectedAddr.houseNo}, ${selectedAddr.street}`
+      )
     : ""
   
   // Find selected services from API data

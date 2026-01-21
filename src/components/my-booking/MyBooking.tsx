@@ -8,6 +8,7 @@ import WorkshopStep from "./steps/WorkshopStep"
 import DateTimeStep from "./steps/DateTimeStep"
 import ConfirmStep from "./steps/ConfirmStep"
 import { toast } from "sonner"
+import { useAddresses } from "@/hooks/useAddress"
 
 export default function MyBooking() {
   const [step, setStep] = useState(1)
@@ -18,20 +19,18 @@ export default function MyBooking() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>()
   const [selectedTime, setSelectedTime] = useState<string>("")
 
-  // Set default address on mount
+  // Fetch addresses from API
+  const { data: addresses = [] } = useAddresses();
+
+  // Set default address on mount when addresses are loaded
   useEffect(() => {
-    // Mock addresses - replace with API call when ready
-    const mockAddresses = [
-      { id: "addr-1", isDefault: true },
-      { id: "addr-2", isDefault: false },
-      { id: "addr-3", isDefault: false },
-    ]
-    
-    const defaultAddress = mockAddresses.find(addr => addr.isDefault)
-    if (defaultAddress) {
-      setSelectedAddress(defaultAddress.id)
+    if (addresses.length > 0 && !selectedAddress) {
+      const defaultAddress = addresses.find(addr => addr.isDefault)
+      if (defaultAddress) {
+        setSelectedAddress(defaultAddress.id)
+      }
     }
-  }, [])
+  }, [addresses, selectedAddress])
 
   const toggleService = (id: string) => {
     setSelectedServices((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]))

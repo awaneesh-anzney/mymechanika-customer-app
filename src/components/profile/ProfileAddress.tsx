@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Plus, Edit2, Trash2, Home, Briefcase, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,79 +10,52 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
-
-// Mock address interface - replace with actual API interface later
-interface Address {
-  id: string;
-  label: string;
-  type: "home" | "work" | "other";
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  isDefault: boolean;
-}
-
-// Mock data - replace with API call later
-const mockAddresses: Address[] = [
-  {
-    id: "addr-1",
-    label: "Home",
-    type: "home",
-    street: "123 Main Street, Apt 4B",
-    city: "Riyadh",
-    state: "Riyadh Province",
-    postalCode: "12345",
-    country: "Saudi Arabia",
-    isDefault: true,
-  },
-  {
-    id: "addr-2",
-    label: "Work",
-    type: "work",
-    street: "456 Business Ave, Floor 10",
-    city: "Jeddah",
-    state: "Makkah Province",
-    postalCode: "23456",
-    country: "Saudi Arabia",
-    isDefault: false,
-  },
-  {
-    id: "addr-3",
-    label: "Parents House",
-    type: "other",
-    street: "789 Family Road",
-    city: "Dammam",
-    state: "Eastern Province",
-    postalCode: "34567",
-    country: "Saudi Arabia",
-    isDefault: false,
-  },
-];
+import { 
+  useAddresses, 
+  useCities, 
+  useCreateAddress, 
+  useUpdateAddress, 
+  useDeleteAddress, 
+  useSetDefaultAddress 
+} from '@/hooks/useAddress';
+import { Address } from '@/services/address.service';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const ProfileAddress = () => {
-  const [addresses, setAddresses] = useState<Address[]>(mockAddresses);
+  // Fetch data from API
+  const { data: addresses = [], isLoading: isLoadingAddresses } = useAddresses();
+  const { data: cities = [], isLoading: isLoadingCities } = useCities();
+  
+  // Mutations
+  const createAddressMutation = useCreateAddress();
+  const updateAddressMutation = useUpdateAddress();
+  const deleteAddressMutation = useDeleteAddress();
+  const setDefaultMutation = useSetDefaultAddress();
+  
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
 
   // Form state
   const [formData, setFormData] = useState({
-    label: "",
-    type: "home" as "home" | "work" | "other",
+    cityId: "",
+    label: "home" as "home" | "office" | "other",
+    houseNo: "",
     street: "",
-    city: "",
-    state: "",
-    postalCode: "",
+    landmark: "",
+    pincode: "",
+    latitude: undefined as number | undefined,
+    longitude: undefined as number | undefined,
+    contactName: "",
+    contactPhone: "",
     country: "Saudi Arabia",
     isDefault: false,
   });
 
-  const getAddressIcon = (type: string) => {
-    switch (type) {
+  const getAddressIcon = (label: string) => {
+    switch (label.toLowerCase()) {
       case "home":
         return Home;
+      case "office":
       case "work":
         return Briefcase;
       default:
@@ -91,76 +64,92 @@ export const ProfileAddress = () => {
   };
 
   const handleSetDefault = (id: string) => {
-    setAddresses(addresses.map(addr => ({
-      ...addr,
-      isDefault: addr.id === id
-    })));
-    toast.success("Default address updated");
+    setDefaultMutation.mutate(id);
   };
 
   const handleDelete = (id: string) => {
     const addressToDelete = addresses.find(addr => addr.id === id);
     if (addressToDelete?.isDefault && addresses.length > 1) {
-      toast.error("Cannot delete default address. Set another address as default first.");
-      return;
+      return; // API will handle this validation
     }
-    setAddresses(addresses.filter(addr => addr.id !== id));
-    toast.success("Address deleted");
+    deleteAddressMutation.mutate(id);
   };
 
   const handleEdit = (address: Address) => {
     setEditingAddress(address);
     setFormData({
+      cityId: address.cityId,
       label: address.label,
-      type: address.type,
+      houseNo: address.houseNo,
       street: address.street,
-      city: address.city,
-      state: address.state,
-      postalCode: address.postalCode,
-      country: address.country,
+      landmark: address.landmark || "",
+      pincode: address.pincode,
+      latitude: address.latitude,
+      longitude: address.longitude,
+      contactName: address.contactName || "",
+      contactPhone: address.contactPhone || "",
+      country: address.country || "Saudi Arabia",
       isDefault: address.isDefault,
     });
     setIsAddDialogOpen(true);
   };
 
   const handleSaveAddress = () => {
-    if (editingAddress) {
-      // Update existing address
-      setAddresses(addresses.map(addr =>
-        addr.id === editingAddress.id
-          ? { ...addr, ...formData }
-          : formData.isDefault ? { ...addr, isDefault: false } : addr
-      ));
-      toast.success("Address updated");
-    } else {
-      // Add new address
-      const newAddress: Address = {
-        id: `addr-${Date.now()}`,
-        ...formData,
-      };
-      setAddresses(formData.isDefault
-        ? [...addresses.map(addr => ({ ...addr, isDefault: false })), newAddress]
-        : [...addresses, newAddress]
-      );
-      toast.success("Address added");
+    // Basic validation
+    if (!formData.cityId || !formData.houseNo || !formData.street || !formData.pincode) {
+      return;
     }
-    resetForm();
+
+    const payload = {
+      cityId: formData.cityId,
+      label: formData.label,
+      houseNo: formData.houseNo,
+      street: formData.street,
+      landmark: formData.landmark || undefined,
+      pincode: formData.pincode,
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+      contactName: formData.contactName || undefined,
+      contactPhone: formData.contactPhone || undefined,
+      country: formData.country || undefined,
+      isDefault: formData.isDefault,
+    };
+
+    if (editingAddress) {
+      updateAddressMutation.mutate(
+        { id: editingAddress.id, payload },
+        {
+          onSuccess: () => resetForm(),
+        }
+      );
+    } else {
+      createAddressMutation.mutate(payload, {
+        onSuccess: () => resetForm(),
+      });
+    }
   };
 
   const resetForm = () => {
     setFormData({
-      label: "",
-      type: "home",
+      cityId: "",
+      label: "home",
+      houseNo: "",
       street: "",
-      city: "",
-      state: "",
-      postalCode: "",
+      landmark: "",
+      pincode: "",
+      latitude: undefined,
+      longitude: undefined,
+      contactName: "",
+      contactPhone: "",
       country: "Saudi Arabia",
       isDefault: false,
     });
     setEditingAddress(null);
     setIsAddDialogOpen(false);
   };
+
+  const isLoading = isLoadingAddresses || isLoadingCities;
+  const isSaving = createAddressMutation.isPending || updateAddressMutation.isPending;
 
   return (
     <Card className="border-border shadow-md bg-card -mt-2 md:-mt-3 min-h-[520px]">
@@ -175,76 +164,87 @@ export const ProfileAddress = () => {
             if (!open) resetForm();
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2">
+              <Button className="gap-2" disabled={addresses.length >= 10}>
                 <Plus className="w-4 h-4" />
                 Add Address
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{editingAddress ? 'Edit Address' : 'Add New Address'}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="label">Address Label</Label>
-                    <Input
-                      id="label"
-                      value={formData.label}
-                      onChange={(e) => setFormData({ ...formData, label: e.target.value })}
-                      placeholder="e.g., Home, Office"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="type">Address Type</Label>
-                    <Select value={formData.type} onValueChange={(value: any) => setFormData({ ...formData, type: value })}>
+                    <Label htmlFor="label">Label</Label>
+                    <Select value={formData.label} onValueChange={(value: any) => setFormData({ ...formData, label: value })}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="home">Home</SelectItem>
-                        <SelectItem value="work">Work</SelectItem>
+                        <SelectItem value="office">Office</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City *</Label>
+                    <Select 
+                      value={formData.cityId} 
+                      onValueChange={(value) => setFormData({ ...formData, cityId: value })}
+                      disabled={isLoadingCities}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select city" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities.map((city) => (
+                          <SelectItem key={city.id} value={city.id}>
+                            {city.name}, {city.state}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="street">Street Address</Label>
+                  <Label htmlFor="houseNo">House/Flat Number *</Label>
+                  <Input
+                    id="houseNo"
+                    value={formData.houseNo}
+                    onChange={(e) => setFormData({ ...formData, houseNo: e.target.value })}
+                    placeholder="e.g., A-123, Flat 4B"
+                    maxLength={100}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="street">Street/Area *</Label>
                   <Input
                     id="street"
                     value={formData.street}
                     onChange={(e) => setFormData({ ...formData, street: e.target.value })}
-                    placeholder="Street address, building, apartment"
+                    placeholder="Street address, area name"
+                    maxLength={255}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="landmark">Landmark</Label>
+                  <Input
+                    id="landmark"
+                    value={formData.landmark}
+                    onChange={(e) => setFormData({ ...formData, landmark: e.target.value })}
+                    placeholder="Nearby landmark"
+                    maxLength={255}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="city">City</Label>
+                    <Label htmlFor="pincode">Pincode *</Label>
                     <Input
-                      id="city"
-                      value={formData.city}
-                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      placeholder="City"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="state">State/Province</Label>
-                    <Input
-                      id="state"
-                      value={formData.state}
-                      onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                      placeholder="State or Province"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="postalCode">Postal Code</Label>
-                    <Input
-                      id="postalCode"
-                      value={formData.postalCode}
-                      onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                      id="pincode"
+                      value={formData.pincode}
+                      onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
                       placeholder="Postal code"
                     />
                   </div>
@@ -255,6 +255,27 @@ export const ProfileAddress = () => {
                       value={formData.country}
                       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                       placeholder="Country"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="contactName">Contact Name</Label>
+                    <Input
+                      id="contactName"
+                      value={formData.contactName}
+                      onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+                      placeholder="Alternate contact"
+                      maxLength={100}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="contactPhone">Contact Phone</Label>
+                    <Input
+                      id="contactPhone"
+                      value={formData.contactPhone}
+                      onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
+                      placeholder="Phone number"
                     />
                   </div>
                 </div>
@@ -270,11 +291,11 @@ export const ProfileAddress = () => {
                 </div>
               </div>
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={resetForm}>
+                <Button variant="outline" onClick={resetForm} disabled={isSaving}>
                   Cancel
                 </Button>
-                <Button onClick={handleSaveAddress}>
-                  {editingAddress ? 'Update' : 'Add'} Address
+                <Button onClick={handleSaveAddress} disabled={isSaving}>
+                  {isSaving ? 'Saving...' : editingAddress ? 'Update' : 'Add'} 
                 </Button>
               </div>
             </DialogContent>
@@ -282,7 +303,12 @@ export const ProfileAddress = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4">
-          {addresses.length === 0 ? (
+          {isLoading ? (
+            // Loading skeleton
+            Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-32 w-full" />
+            ))
+          ) : addresses.length === 0 ? (
             <div className="py-12 text-center">
               <MapPin className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-foreground mb-2">No addresses found</h3>
@@ -292,7 +318,8 @@ export const ProfileAddress = () => {
             </div>
           ) : (
             addresses.map((address) => {
-              const Icon = getAddressIcon(address.type);
+              const Icon = getAddressIcon(address.label);
+              const cityName = address.city ? `${address.city.name}, ${address.city.state}` : "";
               return (
                 <Card
                   key={address.id}
@@ -312,7 +339,7 @@ export const ProfileAddress = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-semibold text-foreground">{address.label}</h4>
+                            <h4 className="font-semibold text-foreground capitalize">{address.label}</h4>
                             {address.isDefault && (
                               <Badge variant="default" className="text-xs">
                                 Default
@@ -320,9 +347,11 @@ export const ProfileAddress = () => {
                             )}
                           </div>
                           <div className="space-y-1 text-sm text-muted-foreground">
-                            <p>{address.street}</p>
-                            <p>{address.city}, {address.state}</p>
-                            <p>{address.postalCode}, {address.country}</p>
+                            <p>{address.houseNo}, {address.street}</p>
+                            {address.landmark && <p>{address.landmark}</p>}
+                            <p>{cityName}</p>
+                            <p>{address.pincode}, {address.country || 'Saudi Arabia'}</p>
+                            {address.contactName && <p>Contact: {address.contactName} {address.contactPhone && `(${address.contactPhone})`}</p>}
                           </div>
                         </div>
                       </div>
@@ -333,6 +362,7 @@ export const ProfileAddress = () => {
                             size="icon"
                             onClick={() => handleSetDefault(address.id)}
                             title="Set as default"
+                            disabled={setDefaultMutation.isPending}
                           >
                             <Check className="w-4 h-4" />
                           </Button>
@@ -341,6 +371,7 @@ export const ProfileAddress = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleEdit(address)}
+                          disabled={updateAddressMutation.isPending}
                         >
                           <Edit2 className="w-4 h-4" />
                         </Button>
@@ -349,6 +380,7 @@ export const ProfileAddress = () => {
                           size="icon"
                           onClick={() => handleDelete(address.id)}
                           className="text-destructive hover:text-destructive"
+                          disabled={deleteAddressMutation.isPending}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
