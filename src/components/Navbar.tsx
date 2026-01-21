@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Cart } from "./Cart";
+
 
 const navItems = [
   { label: "home", href: "/" },
@@ -54,7 +54,6 @@ export function Navbar() {
 
           {/* Desktop Right Side Actions */}
           <div className="hidden md:flex items-center gap-4">
-            <Cart />
             <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -84,7 +83,6 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
-            <Cart />
             <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

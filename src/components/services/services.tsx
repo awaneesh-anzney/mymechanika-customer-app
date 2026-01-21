@@ -1,11 +1,10 @@
-import { LucideIcon, ShoppingCart } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Star, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import { useCart } from "@/components/cart-provider";
-import { toast } from "sonner";
+
 
 interface ServiceCardProps {
   id: string;
@@ -38,7 +37,7 @@ const ServiceCard = ({
 }: ServiceCardProps) => {
   const { t, i18n } = useTranslation('services');
   const [mounted, setMounted] = useState(false);
-  const { addItem } = useCart();
+
 
   useEffect(() => {
     setMounted(true);
@@ -46,10 +45,7 @@ const ServiceCard = ({
 
   const activeT = mounted ? t : i18n.getFixedT('en', 'services');
 
-  const handleAddToCart = () => {
-    addItem({ id, title, price: String(price), icon: Icon }); // Cast price to string if needed
-    toast.success(`${title} added to cart`);
-  };
+
 
   return (
     <div
@@ -124,15 +120,7 @@ const ServiceCard = ({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex-1 gap-2"
-            onClick={handleAddToCart}
-          >
-            <ShoppingCart className="w-4 h-4" />
-            {activeT("addToCart")}
-          </Button>
+
           <Button variant={featured ? "default" : "default"} size="sm" className="flex-1">
             {activeT("bookNow")}
           </Button>
