@@ -3,15 +3,17 @@
 import React, { useState } from 'react';
 import { ProfileSidebar } from '@/components/profile/ProfileSidebar';
 import { ProfilePersonal } from '@/components/profile/ProfilePersonal';
+import { ProfileAddress } from '@/components/profile/ProfileAddress';
 import { ProfileNotifications } from '@/components/profile/ProfileNotifications';
 import { ProfileSecurity } from '@/components/profile/ProfileSecurity';
 import { cn } from '@/lib/utils';
 
 export default function MyProfilePage() {
-    const [activeTab, setActiveTab] = useState<'personal' | 'notifications' | 'security'>('personal');
+    const [activeTab, setActiveTab] = useState<'personal' | 'address' | 'notifications' | 'security'>('personal');
 
     const tabs = [
         { id: 'personal', label: 'Personal' },
+        { id: 'address', label: 'Address' },
         { id: 'notifications', label: 'Notifications' },
         { id: 'security', label: 'Security' },
     ] as const;
@@ -48,6 +50,7 @@ export default function MyProfilePage() {
                     {/* Dynamic Content */}
                     <div className="animate-in fade-in zoom-in-95 duration-300">
                         {activeTab === 'personal' && <ProfilePersonal />}
+                        {activeTab === 'address' && <ProfileAddress />}
                         {activeTab === 'notifications' && <ProfileNotifications />}
                         {activeTab === 'security' && <ProfileSecurity />}
                     </div>

@@ -24,8 +24,7 @@ const menuItems = [
     { icon: Calendar, label: "Book Service", path: "/my-booking" },
     { icon: History, label: "Service History", path: "/service-history" },
     { icon: MessageSquare, label: "Messages", path: "/my-messages" },
-    { icon: User, label: "Profile", path: "/my-profile" },
-    { icon: Settings, label: "Settings", path: "/my-settings" },
+    { icon: User, label: "Profile", path: "/my-profile" }
 ];
 
 interface SidebarProps {
