@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import ServiceCard from '@/components/services/services'
 import { Wrench, LayoutGrid, ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -8,7 +8,45 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const Page = () => {
+const ServicesLoading = () => {
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <div className="text-center mb-12 mt-5">
+        <Skeleton className="w-32 h-8 rounded-full mx-auto mb-4" />
+        <Skeleton className="w-64 h-10 mx-auto mb-4" />
+        <Skeleton className="w-96 h-6 mx-auto" />
+      </div>
+
+      <div className="mb-12">
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x md:flex-wrap md:justify-center md:gap-6 md:overflow-visible">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="flex-none w-24 flex flex-col items-center gap-2">
+              <Skeleton className="w-16 h-16 rounded-full" />
+              <Skeleton className="w-20 h-4" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="rounded-2xl border p-6 space-y-4">
+            <Skeleton className="w-14 h-14 rounded-xl" />
+            <Skeleton className="w-3/4 h-6" />
+            <Skeleton className="w-full h-4" />
+            <Skeleton className="w-full h-4" />
+            <div className="flex gap-2 pt-4">
+              <Skeleton className="flex-1 h-10" />
+              <Skeleton className="flex-1 h-10" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const ServicesContent = () => {
   const { t, i18n } = useTranslation('services');
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -155,6 +193,14 @@ const Page = () => {
         )}
       </div>
     </div>
+  )
+}
+
+const Page = () => {
+  return (
+    <Suspense fallback={<ServicesLoading />}>
+      <ServicesContent />
+    </Suspense>
   )
 }
 

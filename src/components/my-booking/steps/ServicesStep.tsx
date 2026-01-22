@@ -9,18 +9,18 @@ import { Clock, Plus, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 // Import hooks and types
 import { useServiceCategories, useServices } from "@/hooks/useServices"
-import { useCart } from "@/components/cart-provider"
-import { CartContents } from "@/components/Cart"
 import { ServiceCategory } from "@/services/services.service"
 
 type Props = {
-  selectedServices: string[] // Kept for interface compatibility but functionality moved to Cart
+  selectedServices: string[]
   onToggleService: (id: string) => void
   onBack: () => void
   onContinue: () => void
 }
 
 export default function ServicesStep({
+  selectedServices,
+  onToggleService,
   onBack,
   onContinue,
 }: Props) {
@@ -41,28 +41,9 @@ export default function ServicesStep({
   const { data: servicesData, isLoading: isLoadingServices } = useServices(activeCategoryId || undefined);
   const services = servicesData || [];
 
-  // 4. Cart hook
-  const { addItem, items } = useCart();
-
-  const handleAddService = (service: any) => {
-    addItem({
-      id: service.id,
-      title: service.name,
-      price: service.price,
-      currency: service.currency,
-      quantity: 1, // Default quantity
-      serviceId: service.id
-    });
-  };
-
-  const getServiceQuantity = (serviceId: string) => {
-    const item = items.find(item => item.serviceId === serviceId);
-    return item ? item.quantity : 0;
-  };
-
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start h-[calc(100vh-220px)]">
-      {/* LEFT COLUMN: Categories & Services */}
+    <div className="flex flex-col gap-6 items-start h-[calc(100vh-220px)]">
+      {/* Categories & Services */}
       <div className="flex-1 w-full h-full flex flex-col gap-4 overflow-hidden">
 
         {/* Categories Header */}
@@ -96,28 +77,23 @@ export default function ServicesStep({
                 ))
               ) : services.length > 0 ? (
                 services.map((service) => {
-                  const quantity = getServiceQuantity(service.id);
+                  const isSelected = selectedServices.includes(service.id);
                   return (
                     <Card
                       key={service.id}
                       className={cn(
                         "group cursor-pointer transition-all hover:border-primary/50 relative overflow-hidden flex flex-col",
-                        quantity > 0 ? "border-primary bg-primary/5" : "border-border"
+                        isSelected ? "border-primary bg-primary/5" : "border-border"
                       )}
-                      onClick={() => handleAddService(service)}
+                      onClick={() => onToggleService(service.id)}
                     >
                       <CardContent className="p-4 flex flex-col justify-between flex-1">
                         <div className="space-y-2">
                           <div className="flex justify-between items-start">
                             <h3 className="font-medium line-clamp-2 pr-6">{service.name}</h3>
-                            {quantity > 0 && (
+                            {isSelected && (
                               <div className="absolute right-2 top-2 h-6 w-6 rounded-full bg-primary flex items-center justify-center shadow-sm z-10">
                                 <Check className="w-4 h-4 text-primary-foreground" />
-                                {quantity > 1 && (
-                                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground ring-2 ring-background">
-                                    {quantity}
-                                  </span>
-                                )}
                               </div>
                             )}
                           </div>
@@ -150,22 +126,10 @@ export default function ServicesStep({
           <Button variant="outline" onClick={onBack}>
             Back
           </Button>
-          <Button onClick={onContinue} disabled={items.length === 0}>
+          <Button onClick={onContinue} disabled={selectedServices.length === 0}>
             Continue
           </Button>
         </div>
-      </div>
-
-      {/* RIGHT COLUMN: Cart Sidebar */}
-      <div className="w-full lg:w-80 shrink-0 h-full hidden lg:block">
-        <Card className="h-full border-muted flex flex-col shadow-md overflow-hidden bg-card/50 backdrop-blur-sm">
-          <CardContent className="p-0 flex-1 flex flex-col h-full">
-            <CartContents
-              className="h-full flex flex-col"
-              scrollAreaClassName="flex-1 max-h-full"
-            />
-          </CardContent>
-        </Card>
       </div>
     </div>
   )
