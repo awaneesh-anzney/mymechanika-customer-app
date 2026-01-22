@@ -5,6 +5,10 @@ import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/components/language-provider";
+import { CartProvider } from "@/components/cart-provider";
+import { AuthProvider } from "@/components/auth-provider";
+
+import { QueryProvider } from "@/lib/query-provider";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -36,11 +40,17 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LanguageProvider>
-            {/* <Navbar /> */}
-            {children}
-            <Toaster />
-          </LanguageProvider>
+          <AuthProvider>
+            <LanguageProvider>
+              <QueryProvider>
+                <CartProvider>
+                  {/* <Navbar /> */}
+                  {children}
+                  <Toaster />
+                </CartProvider>
+              </QueryProvider>
+            </LanguageProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

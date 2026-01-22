@@ -1,24 +1,29 @@
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Star, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
+import { useCart } from "@/components/cart-provider";
+import { toast } from "sonner";
 
 interface ServiceCardProps {
+  id: string;
   title: string;
   description: string;
-  price: string;
-  originalPrice?: string;
-  rating: number;
-  duration: string;
-  icon: LucideIcon;
+  price: string | number;
+  originalPrice?: string | number;
+  rating?: number;
+  duration?: string;
+  icon?: LucideIcon;
+  image?: string;
   featured?: boolean;
   className?: string;
   compact?: boolean;
 }
 
 const ServiceCard = ({
+  id,
   title,
   description,
   price,
@@ -26,18 +31,25 @@ const ServiceCard = ({
   rating,
   duration,
   icon: Icon,
+  image,
   featured = false,
   className,
   compact = false,
 }: ServiceCardProps) => {
   const { t, i18n } = useTranslation('services');
   const [mounted, setMounted] = useState(false);
+  const { addItem } = useCart();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const activeT = mounted ? t : i18n.getFixedT('en', 'services');
+
+  const handleAddToCart = () => {
+    addItem({ id, title, price: String(price), icon: Icon }); // Cast price to string if needed
+    toast.success(`${title} added to cart`);
+  };
 
   return (
     <div
@@ -59,22 +71,30 @@ const ServiceCard = ({
       <div className="flex items-start justify-between mb-4">
         <div
           className={cn(
-            "rounded-xl flex items-center justify-center transition-all duration-300",
+            "rounded-xl flex items-center justify-center transition-all duration-300 overflow-hidden",
             compact ? "w-10 h-10" : "w-14 h-14",
-            featured
+            featured && !image
               ? "bg-linear-to-br from-primary to-secondary"
-              : "bg-primary/10 group-hover:bg-linear-to-br group-hover:from-primary group-hover:to-secondary"
+              : !image ? "bg-primary/10 group-hover:bg-linear-to-br group-hover:from-primary group-hover:to-secondary" : ""
           )}
         >
-          <Icon
-            className={cn(
-              "transition-colors",
-              compact ? "w-5 h-5" : "w-7 h-7",
-              featured
-                ? "text-primary-foreground"
-                : "text-primary group-hover:text-primary-foreground"
-            )}
-          />
+          {image ? (
+            <img
+              src={image}
+              alt={title}
+              className={cn("w-full h-full object-cover")}
+            />
+          ) : Icon ? (
+            <Icon
+              className={cn(
+                "transition-colors",
+                compact ? "w-5 h-5" : "w-7 h-7",
+                featured
+                  ? "text-primary-foreground"
+                  : "text-primary group-hover:text-primary-foreground"
+              )}
+            />
+          ) : null}
         </div>
         <div className="flex items-center gap-1 text-sm">
           <Star className="w-4 h-4 text-accent fill-accent" />
@@ -92,18 +112,31 @@ const ServiceCard = ({
         <span>{duration}</span>
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-baseline gap-2">
-          <span className={cn("font-bold text-foreground", compact ? "text-lg" : "text-xl")}>{price}</span>
-          {originalPrice && (
-            <span className="text-sm text-muted-foreground line-through">
-              {originalPrice}
-            </span>
-          )}
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-2">
+            <span className={cn("font-bold text-foreground", compact ? "text-lg" : "text-xl")}>{price}</span>
+            {originalPrice && (
+              <span className="text-sm text-muted-foreground line-through">
+                {originalPrice}
+              </span>
+            )}
+          </div>
         </div>
-        <Button variant={featured ? "default" : "default"} size="sm">
-          {activeT("bookNow")}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex-1 gap-2"
+            onClick={handleAddToCart}
+          >
+            <ShoppingCart className="w-4 h-4" />
+            {activeT("addToCart")}
+          </Button>
+          <Button variant={featured ? "default" : "default"} size="sm" className="flex-1">
+            {activeT("bookNow")}
+          </Button>
+        </div>
       </div>
     </div>
   );

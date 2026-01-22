@@ -4,6 +4,10 @@ import { Bell, Search, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Cart } from "@/components/Cart";
+import { ProfileMenu } from "@/components/dashboard/ProfileMenu";
+import { NotificationsMenu } from "@/components/dashboard/NotificationsMenu";
+import { useAuth } from "@/components/auth-provider";
 
 interface DashNavProps {
   setMobileOpen: (open: boolean) => void;
@@ -38,9 +42,18 @@ const getPageConfig = (pathname: string) => {
   return { title: 'Dashboard', subtitle: 'Welcome back, John!' };
 };
 
-const DashNav = ({ setMobileOpen }: DashNavProps) => {
+const DashNav = ({ setMobileOpen, title: propTitle, subtitle: propSubtitle }: DashNavProps) => {
   const pathname = usePathname();
-  const { title, subtitle } = getPageConfig(pathname);
+  const config = getPageConfig(pathname);
+  const { user } = useAuth();
+
+  const title = propTitle || config.title;
+  // If config returns the default static message, replace it with dynamic one
+  const dynamicSubtitle = config.subtitle === 'Welcome back, John!'
+    ? `Welcome back, ${user?.name || 'User'}!`
+    : config.subtitle;
+
+  const subtitle = propSubtitle || dynamicSubtitle;
 
 
   return (
@@ -81,14 +94,11 @@ const DashNav = ({ setMobileOpen }: DashNavProps) => {
           <Search className="w-5 h-5" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
-        </Button>
+        <Cart />
 
-        <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-          <span className="text-sm font-medium text-primary">JD</span>
-        </div>
+        <NotificationsMenu />
+
+        <ProfileMenu />
       </div>
     </header>
   );
