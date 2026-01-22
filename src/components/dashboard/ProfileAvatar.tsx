@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -12,14 +12,21 @@ import { toast } from "sonner";
 interface ProfileAvatarProps {
     src?: string | null;
     alt?: string;
+    initials?: string;
     size?: number;
     editable?: boolean;
     onImageUpdate?: (file: Blob) => void;
     className?: string; // Allow external styling
 }
 
-export function ProfileAvatar({ src, alt, size = 100, editable = false, onImageUpdate, className }: ProfileAvatarProps) {
+export function ProfileAvatar({ src, alt, initials, size = 100, editable = false, onImageUpdate, className }: ProfileAvatarProps) {
     const [imageSrc, setImageSrc] = useState<string | null>(src || null);
+
+    // Sync local state with prop when prop updates (e.g. optimistic update from parent)
+    useEffect(() => {
+        setImageSrc(src || null);
+    }, [src]);
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
@@ -77,20 +84,21 @@ export function ProfileAvatar({ src, alt, size = 100, editable = false, onImageU
         }
     };
 
-    // If no src, show initials or placeholder logic handled by parent OR this component
-    // Assuming this component handles the visual circle.
-
     // Display Logic
     const hasImage = !!imageSrc;
 
     return (
         <div className={`relative inline-block ${className}`}>
             <div
-                className="relative overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center group"
+                className="relative overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center group select-none"
                 style={{ width: size, height: size }}
             >
                 {hasImage ? (
-                    <img src={imageSrc} alt={alt || "Profile"} className="w-full h-full object-cover" />
+                    <img src={imageSrc as string} alt={alt || "Profile"} className="w-full h-full object-cover" />
+                ) : initials ? (
+                    <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary font-bold" style={{ fontSize: size * 0.4 }}>
+                        {initials}
+                    </div>
                 ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center bg-primary/10 text-primary">
                         <Camera className="w-1/3 h-1/3 opacity-50" />
